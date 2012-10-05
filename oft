@@ -116,6 +116,7 @@ import time
 import os
 import imp
 import random
+import signal
 
 root_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -572,6 +573,14 @@ if config["random_seed"] is not None:
     logging.info("Random seed: %d" % config["random_seed"])
     random.seed(config["random_seed"])
 
+# Python's default sigint handler translates SIGINT into a KeyboardInterrupt
+# exception. When exiting (including dying from an exception) python joins
+# on all its threads. OFTest had long-standing issues with SIGINT because
+# we were never able to ensure the controller thread would exit, so
+# oft would hang forever when exiting on SIGINT.
+# If the user presses ctrl-c he wants oft to exit, period. Setting the handler
+# to SIG_DFL means the process exits immediately regardless of hung threads.
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 if __name__ == "__main__":
     logging.info("*** TEST RUN START: " + time.asctime())
