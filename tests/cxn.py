@@ -10,6 +10,7 @@ import logging
 import unittest
 import random
 
+from oftest import config
 import oftest.controller as controller
 import oftest.cstruct as ofp
 import oftest.message as message
@@ -17,25 +18,6 @@ import oftest.dataplane as dataplane
 import oftest.action as action
 
 from oftest.testutils import *
-
-#@var cxn_port_map Local copy of the configuration map from OF port
-# numbers to OS interfaces
-cxn_port_map = None
-#@var cxn_config Local copy of global configuration data
-cxn_config = None
-
-def test_set_init(config):
-    """
-    Set up function for connection test classes
-
-    @param config The configuration dictionary; see oft
-    """
-
-    global cxn_port_map
-    global cxn_config
-
-    cxn_port_map = config["port_map"]
-    cxn_config = config
 
 class BaseHandshake(unittest.TestCase):
     """
@@ -62,10 +44,10 @@ class BaseHandshake(unittest.TestCase):
                         "Controller startup failed, no switch addr")
 
     def setUp(self):
-        self.config = cxn_config
+        self.config = config
         logging.info("** START TEST CASE " + str(self))
 
-        self.test_timeout = test_param_get(cxn_config,
+        self.test_timeout = test_param_get(config,
                                            'handshake_timeout') or 60
 
     def inheritSetup(self, parent):
@@ -109,8 +91,8 @@ class HandshakeNoHello(BaseHandshake):
     and wait for disconnect.
     """
     def runTest(self):
-        self.controllerSetup(cxn_config["controller_host"],
-                             cxn_config["controller_port"])
+        self.controllerSetup(config["controller_host"],
+                             config["controller_port"])
 
         logging.info("TCP Connected " + 
                         str(self.controller.switch_addr))
@@ -130,8 +112,8 @@ class HandshakeNoFeaturesRequest(BaseHandshake):
     and wait for disconnect.
     """
     def runTest(self):
-        self.controllerSetup(cxn_config["controller_host"],
-                             cxn_config["controller_port"])
+        self.controllerSetup(config["controller_host"],
+                             config["controller_port"])
 
         logging.info("TCP Connected " + 
                                     str(self.controller.switch_addr))
@@ -157,8 +139,8 @@ class HandshakeAndKeepalive(BaseHandshake):
     priority = -1
 
     def runTest(self):
-        self.controllerSetup(cxn_config["controller_host"],
-                             cxn_config["controller_port"])
+        self.controllerSetup(config["controller_host"],
+                             config["controller_port"])
 
         logging.info("TCP Connected " + 
                                     str(self.controller.switch_addr))
