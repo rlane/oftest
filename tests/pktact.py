@@ -2552,7 +2552,7 @@ class DirectLlcPackets(DirectBadPacketBase):
                             "Could not generate flow match from pkt")
             match.wildcards &= ~ofp.OFPFW_IN_PORT
             pkts = []
-            if is_snap == IS_NOT_SNAP:
+            if is_snap == IS_NOT_SNAP or llc.payload.code < 1536:
                 result = self.RESULT_MATCH
             else:
                 result = self.RESULT_NOMATCH
