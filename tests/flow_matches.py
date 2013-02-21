@@ -411,6 +411,82 @@ class IpTos(base_tests.SimpleDataPlane):
         (response, raw) = self.controller.poll(ofp.OFPT_PACKET_IN,timeout=4)
         self.assertTrue(response is not None, "PacketIn not received for non matching packet")
 
+class IpSrc(base_tests.SimpleDataPlane):
+
+    """"Verify match on single Header Field -- IP src"""
+
+    def runTest(self):
+        of_ports = config["port_map"].keys()
+        of_ports.sort()
+        self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
+
+        #Clear Switch State
+        delete_all_flows(self.controller)
+
+        egress_port=of_ports[1]
+        no_ports=set(of_ports).difference([egress_port])
+        yes_ports = of_ports[1]
+
+        logging.info("Inserting a flow with match on IP src ")
+        logging.info("Sending matching and non-matching tcp/ip packets")
+        logging.info("Verifying only matching packets implements the action specified in the flow")
+
+        #Create a flow matching on IP src
+        pkt= simple_tcp_packet(ip_src="192.168.1.1")
+        match = parse.packet_to_flow_match(pkt)
+        match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_NW_SRC_MASK
+        match_send_flowadd(self, match, None, egress_port)
+
+        #Send Packet matching the flow
+        self.dataplane.send(of_ports[0], str(pkt))
+
+        #Verify packet implements the action specified in the flow
+        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+
+        #Create a non-matching packet, verify packet_in gets generated
+        pkt2 = simple_tcp_packet(ip_src="192.168.1.2");
+        self.dataplane.send(of_ports[0], str(pkt2))
+        (response, raw) = self.controller.poll(ofp.OFPT_PACKET_IN)
+        self.assertTrue(response is not None, "PacketIn not received for non matching packet")
+
+class IpDst(base_tests.SimpleDataPlane):
+
+    """"Verify match on single Header Field -- IP dst"""
+
+    def runTest(self):
+        of_ports = config["port_map"].keys()
+        of_ports.sort()
+        self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
+
+        #Clear Switch State
+        delete_all_flows(self.controller)
+
+        egress_port=of_ports[1]
+        no_ports=set(of_ports).difference([egress_port])
+        yes_ports = of_ports[1]
+
+        logging.info("Inserting a flow with match on IP dst ")
+        logging.info("Sending matching and non-matching tcp/ip packets")
+        logging.info("Verifying only matching packets implements the action specified in the flow")
+
+        #Create a flow matching on IP dst
+        pkt= simple_tcp_packet(ip_dst="192.168.1.1")
+        match = parse.packet_to_flow_match(pkt)
+        match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_NW_DST_MASK
+        match_send_flowadd(self, match, None, egress_port)
+
+        #Send Packet matching the flow
+        self.dataplane.send(of_ports[0], str(pkt))
+
+        #Verify packet implements the action specified in the flow
+        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+
+        #Create a non-matching packet, verify packet_in gets generated
+        pkt2 = simple_tcp_packet(ip_dst="192.168.1.2");
+        self.dataplane.send(of_ports[0], str(pkt2))
+        (response, raw) = self.controller.poll(ofp.OFPT_PACKET_IN)
+        self.assertTrue(response is not None, "PacketIn not received for non matching packet")
+
 class IpProtocol(base_tests.SimpleDataPlane):
 
     """"Verify match on single Header Field Field -- Ip Protocol"""
