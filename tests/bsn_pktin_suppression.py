@@ -11,17 +11,19 @@ from oftest.testutils import *
 class BaseTest(base_tests.SimpleDataPlane):
     def setUp(self):
         super(BaseTest, self).setUp()
-        m = ofp.message.bsn_set_pktin_suppression(
+        request = ofp.message.bsn_set_pktin_suppression_request(
             enabled=1,
             priority=0,
             cookie=0xffffffffffffffff,
             idle_timeout=0,
             hard_timeout=5)
-        self.controller.message_send(m)
+        reply, _ = self.controller.transact(request)
+        self.assertEquals(0, reply.status)
 
     def tearDown(self):
-        m = ofp.message.bsn_set_pktin_suppression(enabled=0)
-        self.controller.message_send(m)
+        request = ofp.message.bsn_set_pktin_suppression_request(enabled=0)
+        reply, _ = self.controller.transact(request)
+        self.assertEquals(0, reply.status)
         super(BaseTest, self).tearDown()
 
 @nonstandard
