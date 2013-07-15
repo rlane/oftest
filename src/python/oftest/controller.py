@@ -36,6 +36,7 @@ from threading import Thread
 from threading import Lock
 from threading import Condition
 import ofp
+import loxi
 import ofutils
 
 
@@ -211,6 +212,7 @@ class Controller(Thread):
 
             # Parse the header to get type
             hdr_version, hdr_type, hdr_length, hdr_xid = ofp.message.parse_header(pkt[offset:])
+            ofp2 = loxi.protocol(hdr_version)
 
             # Extract the raw message bytes
             if (offset + hdr_length) > len(pkt):
@@ -223,7 +225,7 @@ class Controller(Thread):
 
             self.logger.debug("Msg in: version %d type %s (%d) len %d xid %d",
                               hdr_version,
-                              ofp.ofp_type_map.get(hdr_type, "unknown"), hdr_type,
+                              ofp2.ofp_type_map.get(hdr_type, "unknown"), hdr_type,
                               hdr_length, hdr_version)
             if hdr_version < ofp.OFP_VERSION:
                 self.logger.error("Switch only supports up to OpenFlow version %d (OFTest version is %d)",
@@ -233,7 +235,7 @@ class Controller(Thread):
                 self.disconnect()
                 return
 
-            msg = ofp.message.parse_message(rawmsg)
+            msg = ofp2.message.parse_message(rawmsg)
             if not msg:
                 self.parse_errors += 1
                 self.logger.warn("Could not parse message")
@@ -251,34 +253,34 @@ class Controller(Thread):
 
                 # Check if keep alive is set; if so, respond to echo requests
                 if self.keep_alive:
-                    if hdr_type == ofp.OFPT_ECHO_REQUEST:
+                    if hdr_type == ofp2.OFPT_ECHO_REQUEST:
                         self.logger.debug("Responding to echo request")
-                        rep = ofp.message.echo_reply()
+                        rep = ofp2.message.echo_reply()
                         rep.xid = hdr_xid
                         # Ignoring additional data
                         self.message_send(rep.pack())
                         continue
 
                 # Generalize to counters for all packet types?
-                if msg.type == ofp.OFPT_PACKET_IN:
+                if msg.type == ofp2.OFPT_PACKET_IN:
                     self.packet_in_count += 1
 
                 # Log error messages
-                if hdr_type == ofp.OFPT_ERROR:
-                    if msg.err_type in ofp.ofp_error_type_map:
-                        type_str = ofp.ofp_error_type_map[msg.err_type]
-                        if msg.err_type == ofp.OFPET_HELLO_FAILED:
-                            code_map = ofp.ofp_hello_failed_code_map
-                        elif msg.err_type == ofp.OFPET_BAD_REQUEST:
-                            code_map = ofp.ofp_bad_request_code_map
-                        elif msg.err_type == ofp.OFPET_BAD_ACTION:
-                            code_map = ofp.ofp_bad_action_code_map
-                        elif msg.err_type == ofp.OFPET_FLOW_MOD_FAILED:
-                            code_map = ofp.ofp_flow_mod_failed_code_map
-                        elif msg.err_type == ofp.OFPET_PORT_MOD_FAILED:
-                            code_map = ofp.ofp_port_mod_failed_code_map
-                        elif msg.err_type == ofp.OFPET_QUEUE_OP_FAILED:
-                            code_map = ofp.ofp_queue_op_failed_code_map
+                if hdr_type == ofp2.OFPT_ERROR:
+                    if msg.err_type in ofp2.ofp_error_type_map:
+                        type_str = ofp2.ofp_error_type_map[msg.err_type]
+                        if msg.err_type == ofp2.OFPET_HELLO_FAILED:
+                            code_map = ofp2.ofp_hello_failed_code_map
+                        elif msg.err_type == ofp2.OFPET_BAD_REQUEST:
+                            code_map = ofp2.ofp_bad_request_code_map
+                        elif msg.err_type == ofp2.OFPET_BAD_ACTION:
+                            code_map = ofp2.ofp_bad_action_code_map
+                        elif msg.err_type == ofp2.OFPET_FLOW_MOD_FAILED:
+                            code_map = ofp2.ofp_flow_mod_failed_code_map
+                        elif msg.err_type == ofp2.OFPET_PORT_MOD_FAILED:
+                            code_map = ofp2.ofp_port_mod_failed_code_map
+                        elif msg.err_type == ofp2.OFPET_QUEUE_OP_FAILED:
+                            code_map = ofp2.ofp_queue_op_failed_code_map
                         else:
                             code_map = None
 
@@ -302,7 +304,7 @@ class Controller(Thread):
 
                 if not handled: # Not handled, enqueue
                     self.logger.debug("Enqueuing pkt type %s (%d)",
-                                      ofp.ofp_type_map.get(hdr_type, "unknown"),
+                                      ofp2.ofp_type_map.get(hdr_type, "unknown"),
                                       hdr_type)
                     with self.packets_cv:
                         if len(self.packets) >= self.max_pkts:
