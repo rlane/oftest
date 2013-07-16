@@ -27,7 +27,7 @@ class EchoWithData(base_tests.SimpleProtocol):
     def runTest(self):
         request = ofp.message.echo_request()
         request.data = 'OpenFlow Will Rule The World'
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
                          'response is not echo_reply')
         self.assertEqual(request.xid, response.xid,
@@ -43,7 +43,7 @@ class FeaturesRequest(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.features_request()
-        response,_ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response,"Got no features_reply to features_request")
         self.assertEqual(response.type, ofp.OFPT_FEATURES_REPLY,
                          'response is not features_reply')
@@ -151,7 +151,7 @@ class FlowRemoveAll(base_tests.SimpleProtocol):
         request.out_port = ofp.OFPP_ANY
         request.out_group = ofp.OFPG_ANY
         request.table_id = 0xff
-        response, _ = self.controller.transact(request, timeout=2)
+        response = self.controller.transact(request, timeout=2)
         self.assertTrue(response is not None, "Did not get response")
         self.assertTrue(isinstance(response,ofp.message.flow_stats_reply),"Not a flow_stats_reply")
         self.assertEqual(len(response.entries),0)
@@ -188,7 +188,7 @@ class TableStatsGet(base_tests.SimpleProtocol):
         logging.info("Running TableStatsGet")
         logging.info("Sending table stats request")
         request = ofp.message.table_stats_request()
-        response, _ = self.controller.transact(request, timeout=2)
+        response = self.controller.transact(request, timeout=2)
         self.assertTrue(response is not None, "Did not get response")
         logging.debug(response.show())
 

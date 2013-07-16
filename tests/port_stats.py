@@ -64,7 +64,7 @@ def getStats(obj, port):
     stat_req.port_no = port
 
     logging.info("Sending stats request")
-    response, pkt = obj.controller.transact(stat_req, timeout=2)
+    response = obj.controller.transact(stat_req, timeout=2)
     obj.assertTrue(response is not None, 
                     "No response to stats request")
     obj.assertTrue(len(response.entries) == 1,
@@ -81,7 +81,7 @@ def getAllStats(obj):
     stat_req.port_no = ofp.OFPP_NONE
 
     logging.info("Sending all port stats request")
-    response, pkt = obj.controller.transact(stat_req, timeout=2)
+    response = obj.controller.transact(stat_req, timeout=2)
     obj.assertTrue(response is not None, 
                     "No response to stats request")
     obj.assertTrue(len(response.entries) >= 3,
@@ -100,8 +100,7 @@ def verifyStats(obj, port, test_timeout, packet_sent, packet_recv):
     sent = recv = 0
     for i in range(0,test_timeout):
         logging.info("Sending stats request")
-        response, pkt = obj.controller.transact(stat_req,
-                                                timeout=test_timeout)
+        response = obj.controller.transact(stat_req, timeout=test_timeout)
         obj.assertTrue(response is not None, 
                        "No response to stats request")
         obj.assertTrue(len(response.entries) == 1,

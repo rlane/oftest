@@ -24,7 +24,7 @@ class Echo(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.echo_request()
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get echo reply")
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
@@ -40,7 +40,7 @@ class EchoWithData(base_tests.SimpleProtocol):
     def runTest(self):
         data = 'OpenFlow Will Rule The World'
         request = ofp.message.echo_request(data=data)
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get echo reply")
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
@@ -58,7 +58,7 @@ class FeaturesRequest(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.features_request()
-        response,_ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         'Did not get features reply')
 
@@ -303,7 +303,7 @@ class DescStats(base_tests.SimpleProtocol):
     def runTest(self):
         request = ofp.message.desc_stats_request()
         logging.info("Sending desc stats request")
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response != None, "No response to desc stats request")
         logging.info(response.show())
         self.assertEquals(response.flags, 0, "Unexpected bit set in desc stats reply flags")
@@ -335,7 +335,7 @@ class AggregateStats(base_tests.SimpleProtocol):
             cookie=0,
             cookie_mask=0)
         logging.info("Sending aggregate flow stats request")
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response != None, "No response to aggregate stats request")
         logging.info(response.show())
         self.assertEquals(response.flags, 0, "Unexpected bit set in aggregate stats reply flags")
@@ -419,7 +419,7 @@ class GroupFeaturesStats(base_tests.SimpleProtocol):
     def runTest(self):
         request = ofp.message.group_features_stats_request()
         logging.info("Sending group features stats request")
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response != None, "No response to group features stats request")
         logging.info(response.show())
         self.assertEquals(response.flags, 0, "Unexpected bit set in group features stats reply flags")
@@ -461,7 +461,7 @@ class MeterFeaturesStats(base_tests.SimpleProtocol):
     def runTest(self):
         request = ofp.message.meter_features_stats_request()
         logging.info("Sending meter features stats request")
-        response, _ = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response != None, "No response to meter features stats request")
         logging.info(response.show())
         self.assertEquals(response.flags, 0, "Unexpected bit set in meter features stats reply flags")
@@ -541,7 +541,7 @@ class AsyncConfigGet(base_tests.SimpleProtocol):
 
     def runTest(self):
         logging.info("Sending get async config request")
-        response, _ = self.controller.transact(ofp.message.async_get_request())
+        response = self.controller.transact(ofp.message.async_get_request())
         self.assertTrue(response != None, "No response to get async config request")
         logging.info(response.show())
         self.assertEquals(response.packet_in_mask_equal_master & 0x07, 0x07)

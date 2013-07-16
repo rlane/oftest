@@ -128,7 +128,7 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
         expected_duration = 3
         sleep(expected_duration)
 
-        response, pkt = self.controller.transact(stat_req)
+        response = self.controller.transact(stat_req)
         
         self.assertTrue(response is not None,"No response to stats request")
         self.assertTrue(len(response.entries) == 1,"Did not receive flow stats reply")
@@ -358,7 +358,7 @@ class TxPktPerQueue(base_tests.SimpleDataPlane):
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
         
         # Get queue stats from switch (retrieve current state)
-        (queue_stats,p) = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
+        queue_stats = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
   
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]
@@ -396,7 +396,7 @@ class TxBytPerQueue(base_tests.SimpleDataPlane):
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
         
         # Get queue stats from switch (retrieve current state)
-        (queue_stats,p) = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
+        queue_stats = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
   
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]

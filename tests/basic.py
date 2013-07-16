@@ -38,7 +38,7 @@ class Echo(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.echo_request()
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get echo reply")
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
@@ -53,7 +53,7 @@ class EchoWithData(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.echo_request(data='OpenFlow Will Rule The World')
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get echo reply (with data)")
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
@@ -228,7 +228,7 @@ class FlowStatsGet(base_tests.SimpleProtocol):
         request = ofp.message.flow_stats_request(out_port=ofp.OFPP_NONE,
                                              table_id=0xff)
         request.match.wildcards = 0 # ofp.OFPFW_ALL
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get response for flow stats")
         logging.debug(response.show())
@@ -247,7 +247,7 @@ class TableStatsGet(base_tests.SimpleProtocol):
         
         logging.info("Sending table stats request")
         request = ofp.message.table_stats_request()
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get reply for table stats")
         logging.debug(response.show())
@@ -263,7 +263,7 @@ class DescStatsGet(base_tests.SimpleProtocol):
         
         logging.info("Sending stats request")
         request = ofp.message.desc_stats_request()
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get reply for desc stats")
         logging.debug(response.show())
@@ -370,8 +370,7 @@ class BadMessage(base_tests.SimpleProtocol):
         logging.info("Running " + str(self))
         request = illegal_message.illegal_message_type()
 
-        reply, pkt = self.controller.transact(request)
-        logging.info(repr(pkt))
+        reply = self.controller.transact(request)
         self.assertTrue(reply is not None, "Did not get response to bad req")
         self.assertTrue(reply.type == ofp.OFPT_ERROR,
                         "reply not an error message")
@@ -396,7 +395,7 @@ class TableModConfig(base_tests.SimpleProtocol):
 
         def get_table_config():
             request = ofp.message.table_stats_request()
-            response, _ = self.controller.transact(request)
+            response = self.controller.transact(request)
             try:
                 table_stats = [x for x in response.entries if x.table_id == table_id][0]
             except IndexError:

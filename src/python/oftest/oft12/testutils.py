@@ -367,7 +367,7 @@ def port_config_get(controller, port_no, logger):
     advertised values
     """
     request = ofp.message.features_request()
-    reply, _ = controller.transact(request, timeout=2)
+    reply = controller.transact(request, timeout=2)
     if reply is None:
         logger.warn("Get feature request failed")
         return None, None, None
@@ -389,7 +389,7 @@ def port_config_set(controller, port_no, config, mask, logger):
     """
     logger.info("Setting port " + str(port_no) + " to config " + str(config))
     request = ofp.message.features_request()
-    reply, _ = controller.transact(request, timeout=2)
+    reply = controller.transact(request, timeout=2)
     if reply is None:
         return -1
     logger.debug(reply.show())
@@ -1188,7 +1188,7 @@ def skip_message_emit(parent, s):
 
 def do_echo_request_reply_test(test,controller):
         request = ofp.message.echo_request()
-        response, _ = controller.transact(request)
+        response = controller.transact(request)
         test.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
                          'response is not echo_reply')
         test.assertEqual(request.xid, response.xid,
@@ -1495,7 +1495,7 @@ def flow_stats_get(parent, match_fields = None):
     request.table_id = 0xff
     if match_fields != None:
         request.match_fields = match_fields
-    response, _ = parent.controller.transact(request, timeout=2)
+    response = parent.controller.transact(request, timeout=2)
     parent.assertTrue(response is not None, "Did not get response")
     parent.assertTrue(isinstance(response,ofp.message.flow_stats_reply),
                       "Expected a flow_stats_reply, but didn't get it")

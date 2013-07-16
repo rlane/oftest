@@ -68,7 +68,7 @@ def flow_caps_common(obj, is_exact=True):
         flow_count += 1
         if flow_count % count_check == 0:
             do_barrier(obj.controller, timeout=10)
-            response, pkt = obj.controller.transact(tstats)
+            response = obj.controller.transact(tstats)
             obj.assertTrue(response is not None, "Get tab stats failed")
             logging.info(response.show())
             if table_idx == -1:  # Accumulate for all tables

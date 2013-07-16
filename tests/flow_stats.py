@@ -80,8 +80,7 @@ class SingleFlowStats(base_tests.SimpleDataPlane):
         all_packets_received = 0
         for i in range(0,test_timeout):
             logging.info("Sending stats request")
-            response, pkt = self.controller.transact(stat_req,
-                                                     timeout=test_timeout)
+            response = self.controller.transact(stat_req, timeout=test_timeout)
             self.assertTrue(response is not None, 
                             "No response to stats request")
             self.assertTrue(len(response.entries) == 1,
@@ -216,8 +215,7 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
         for i in range(0,test_timeout):
             logging.info("Sending stats request")
             # TODO: move REPLY_MORE handling to controller.transact?
-            response, pkt = self.controller.transact(stat_req,
-                                                     timeout=test_timeout)
+            response = self.controller.transact(stat_req, timeout=test_timeout)
             self.assertTrue(response is not None,
                             "No response to stats request")
             total_packets = self.sumStatsReplyCounts(response)
@@ -327,8 +325,7 @@ class AggregateStats(base_tests.SimpleDataPlane):
         all_packets_received = 0
         for i in range(0,test_timeout):
             logging.info("Sending stats request")
-            response, pkt = self.controller.transact(stat_req,
-                                                     timeout=test_timeout)
+            response = self.controller.transact(stat_req, timeout=test_timeout)
             self.assertTrue(response is not None, 
                             "No response to stats request")
             self.assertTrue(response.flow_count == flow_count,
@@ -407,7 +404,7 @@ class EmptyFlowStats(base_tests.SimpleDataPlane):
         stat_req.table_id = 0xff
         stat_req.out_port = ofp.OFPP_NONE
 
-        response, pkt = self.controller.transact(stat_req)
+        response = self.controller.transact(stat_req)
         self.assertTrue(response is not None,
                         "No response to stats request")
         self.assertEquals(len(response.entries), 0)
@@ -427,7 +424,7 @@ class EmptyAggregateStats(base_tests.SimpleDataPlane):
         stat_req.table_id = 0xff
         stat_req.out_port = ofp.OFPP_NONE
 
-        response, pkt = self.controller.transact(stat_req)
+        response = self.controller.transact(stat_req)
         self.assertTrue(response is not None,
                         "No response to stats request")
         self.assertEquals(response.flow_count, 0)

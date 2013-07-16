@@ -347,7 +347,7 @@ def do_barrier(ctrl, timeout=-1):
     Return 0 on success, -1 on error
     """
     b = ofp.message.barrier_request()
-    (resp, pkt) = ctrl.transact(b, timeout=timeout)
+    resp = ctrl.transact(b, timeout=timeout)
     if resp is None:
         raise AssertionError("barrier failed")
     # We'll trust the transaction processing in the controller that xid matched
@@ -366,7 +366,7 @@ def port_config_get(controller, port_no):
 
     if ofp.OFP_VERSION <= 3:
         request = ofp.message.features_request()
-        reply, _ = controller.transact(request)
+        reply = controller.transact(request)
         if reply is None:
             logging.warn("Get feature request failed")
             return None, None, None
@@ -375,7 +375,7 @@ def port_config_get(controller, port_no):
     else:
         request = ofp.message.port_desc_stats_request()
         # TODO do multipart correctly
-        reply, _ = controller.transact(request)
+        reply = controller.transact(request)
         if reply is None:
             logging.warn("Port desc stats request failed")
             return None, None, None
@@ -1024,7 +1024,7 @@ def all_stats_get(parent):
 
     rv = {}
 
-    (reply, pkt) = parent.controller.transact(stat_req)
+    reply = parent.controller.transact(stat_req)
     parent.assertTrue(len(reply.entries) == 1, "Did not receive flow stats reply")
 
     for obj in reply.entries:
@@ -1033,7 +1033,7 @@ def all_stats_get(parent):
         break
 
     request = ofp.message.table_stats_request()
-    (reply , pkt) = parent.controller.transact(request)
+    reply = parent.controller.transact(request)
 
     
     (rv["active"], rv["lookups"], rv["matched"]) = (0,0,0)
@@ -1163,7 +1163,7 @@ def get_stats(test, req):
     else:
         more_flag = ofp.OFPMPF_REPLY_MORE
     stats = []
-    reply, _ = test.controller.transact(req)
+    reply = test.controller.transact(req)
     test.assertTrue(reply is not None, "No response to stats request")
     stats.extend(reply.entries)
     while reply.flags & more_flag != 0:

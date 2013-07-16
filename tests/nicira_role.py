@@ -21,7 +21,7 @@ def set_role(test, role, con=None):
     if con == None:
         con = test.controller
     request = ofp.message.nicira_controller_role_request(role=role)
-    response, _ = con.transact(request)
+    response = con.transact(request)
     test.assertTrue(isinstance(response, ofp.message.nicira_controller_role_reply), "Expected a role reply")
     test.assertEquals(response.role, role)
 
@@ -34,7 +34,7 @@ class AnyReply(base_tests.SimpleDataPlane):
     """
     def runTest(self):
         request = ofp.message.nicira_controller_role_request(role=NX_ROLE_MASTER)
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None, "No reply to Nicira role request")
         if isinstance(response, ofp.message.nicira_controller_role_reply):
             logging.info("Role reply received")
@@ -55,7 +55,7 @@ class RolePermissions(base_tests.SimpleDataPlane):
     a master or equal can.
     """
     def runTest(self):
-        self.features_reply, _ = self.controller.transact(ofp.message.features_request())
+        self.features_reply = self.controller.transact(ofp.message.features_request())
         delete_all_flows(self.controller)
         self.verify_permission(True)
 
@@ -135,7 +135,7 @@ class RoleSwitch(unittest.TestCase):
             con.start()
             if not con.connect():
                 raise AssertionError("failed to connect controller %s" % str(con))
-            reply, _ = con.transact(ofp.message.features_request())
+            reply = con.transact(ofp.message.features_request())
             self.assertTrue(isinstance(reply, ofp.message.features_reply))
 
         # Initial role assignment, controller 0 is master
@@ -211,7 +211,7 @@ class EqualAsyncMessages(unittest.TestCase):
             con.start()
             if not con.connect():
                 raise AssertionError("failed to connect controller %s" % str(con))
-            reply, _ = con.transact(ofp.message.features_request())
+            reply = con.transact(ofp.message.features_request())
             self.assertTrue(isinstance(reply, ofp.message.features_reply))
 
         delete_all_flows(self.controllers[0])

@@ -124,7 +124,7 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         # Sending Features_Request
         logging.info("Sending Features_Request...")
         request = ofp.message.features_request()
-        (reply, pkt) = self.controller.transact(request)
+        reply = self.controller.transact(request)
         self.assertTrue(reply is not None, "Failed to get any reply")
         self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY,'Response is not Features_reply')
         self.assertEqual(reply.xid,request.xid,'Transaction id does not match')
@@ -206,7 +206,7 @@ class GetConfigReply(base_tests.SimpleProtocol):
         #Send get_config_request
         logging.info("Sending Get Config Request...")
         request = ofp.message.get_config_request()
-        (reply, pkt) = self.controller.transact(request)
+        reply = self.controller.transact(request)
 
         #Verify get_config_reply is recieved
         logging.info("Expecting GetConfigReply ")
@@ -242,7 +242,7 @@ class SetConfigRequest(base_tests.SimpleProtocol):
         #Send get_config_request -- retrive miss_send_len field
         logging.info("Sending Get Config Request ")
         request = ofp.message.get_config_request()
-        (reply, pkt) = self.controller.transact(request)
+        reply = self.controller.transact(request)
         self.assertTrue(reply is not None, "Failed to get any reply")
         self.assertEqual(reply.type, ofp.OFPT_GET_CONFIG_REPLY,'Response is not Config Reply')
 
@@ -275,7 +275,7 @@ class SetConfigRequest(base_tests.SimpleProtocol):
         logging.info("Sending Get Config Request...")
         request = ofp.message.get_config_request()
 
-        (rep, pkt) = self.controller.transact(request)
+        rep = self.controller.transact(request)
         self.assertTrue(rep is not None, "Failed to get any reply")
         self.assertEqual(rep.type, ofp.OFPT_GET_CONFIG_REPLY,'Response is not Config Reply')
         self.assertEqual(rep.miss_send_len,new_miss_send_len, "miss_send_len configuration parameter could not be set")
@@ -650,7 +650,7 @@ class DescStatsReplyBody(base_tests.SimpleDataPlane):
         
         logging.info("Sending stats request")
         request = ofp.message.desc_stats_request()
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get reply for desc stats")
 
@@ -677,7 +677,7 @@ class QueueConfigReply(base_tests.SimpleProtocol):
         logging.info("Sending Queue Config Request ...")
         request = ofp.message.queue_get_config_request()
         request.port = of_ports[0]
-        response, pkt = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertTrue(response is not None,
                         "Did not get reply ")
         self.assertTrue(response.type == ofp.OFPT_QUEUE_GET_CONFIG_REPLY, "Reply is not Queue Config Reply")

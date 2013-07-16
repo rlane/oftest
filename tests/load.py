@@ -193,14 +193,14 @@ class PacketOutLoad(base_tests.SimpleDataPlane):
 class FlowModLoad(base_tests.SimpleProtocol):
 
     def checkBarrier(self):
-        msg, pkt = self.controller.transact(ofp.message.barrier_request(), timeout=60)
+        msg = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
            msg = self.controller.packets.pop(0)[0]
            self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
 
     def runTest(self):
-        msg, pkt = self.controller.transact(ofp.message.table_stats_request())
+        msg = self.controller.transact(ofp.message.table_stats_request())
 
         # Some switches report an extremely high max_entries that would cause
         # us to run out of memory attempting to create all the flow-mods.
@@ -246,7 +246,7 @@ class FlowRemovedLoad(base_tests.SimpleDataPlane):
     """
 
     def checkBarrier(self):
-        msg, pkt = self.controller.transact(ofp.message.barrier_request(), timeout=60)
+        msg = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
            msg = self.controller.packets.pop(0)[0]
@@ -255,7 +255,7 @@ class FlowRemovedLoad(base_tests.SimpleDataPlane):
     def runTest(self):
         delete_all_flows(self.controller)
         self.checkBarrier()
-        msg, _ = self.controller.transact(ofp.message.table_stats_request())
+        msg = self.controller.transact(ofp.message.table_stats_request())
 
         # Some switches report an extremely high max_entries that would cause
         # us to run out of memory attempting to create all the flow-mods.

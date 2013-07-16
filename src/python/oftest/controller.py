@@ -15,7 +15,6 @@ poll calls.
 
 Callbacks and polling support specifying the message type
 
-@todo Support transaction semantics via xid
 @todo Support select and listen on an administrative socket (or
 use a timeout to support clean shutdown).
 
@@ -245,7 +244,7 @@ class Controller(Thread):
                 with self.xid_cv:
                     if self.xid and hdr_xid == self.xid:
                         self.logger.debug("Matched expected XID " + str(hdr_xid))
-                        self.xid_response = (msg, rawmsg)
+                        self.xid_response = msg
                         self.xid = None
                         self.xid_cv.notify()
                         continue
@@ -647,8 +646,7 @@ class Controller(Thread):
 
         with self.xid_cv:
             if self.xid:
-                self.logger.error("Can only run one transaction at a time")
-                return (None, None)
+                raise RuntimeError("Can only run one transaction at a time")
 
             self.xid = msg.xid
             self.xid_response = None
@@ -658,14 +656,14 @@ class Controller(Thread):
             ofutils.timed_wait(self.xid_cv, lambda: self.xid_response, timeout=timeout)
 
             if self.xid_response:
-                (resp, pkt) = self.xid_response
+                resp = self.xid_response
                 self.xid_response = None
             else:
-                (resp, pkt) = (None, None)
+                resp = None
 
         if resp is None:
             self.logger.warning("No response for xid " + str(self.xid))
-        return (resp, pkt)
+        return resp
 
     def message_send(self, msg):
         """

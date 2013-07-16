@@ -238,7 +238,7 @@ class DirectPacketQueue(base_tests.SimpleDataPlane):
         request = ofp.message.queue_stats_request()
         request.port_no  = ofp.OFPP_ALL
         request.queue_id = ofp.OFPQ_ALL
-        (queue_stats, p) = self.controller.transact(request)
+        queue_stats = self.controller.transact(request)
         self.assertNotEqual(queue_stats, None, "Queue stats request failed")
 
         act = ofp.action.enqueue()
@@ -274,7 +274,7 @@ class DirectPacketQueue(base_tests.SimpleDataPlane):
                 request = ofp.message.queue_stats_request()
                 request.port_no  = egress_port
                 request.queue_id = egress_queue_id
-                (qs_before, p) = self.controller.transact(request)
+                qs_before = self.controller.transact(request)
                 self.assertNotEqual(qs_before, None, "Queue stats request failed")
 
                 logging.info("Sending packet to dp port " + 
@@ -306,7 +306,7 @@ class DirectPacketQueue(base_tests.SimpleDataPlane):
                 request = ofp.message.queue_stats_request()
                 request.port_no  = egress_port
                 request.queue_id = egress_queue_id
-                (qs_after, p) = self.controller.transact(request)
+                qs_after = self.controller.transact(request)
                 self.assertNotEqual(qs_after, None, "Queue stats request failed")
 
                 # Make sure that tx packet counter for selected egress queue was
@@ -360,7 +360,7 @@ class DirectPacketControllerQueue(base_tests.SimpleDataPlane):
         request = ofp.message.queue_stats_request()
         request.port_no  = ofp.OFPP_CONTROLLER
         request.queue_id = ofp.OFPQ_ALL
-        (queue_stats, p) = self.controller.transact(request)
+        queue_stats = self.controller.transact(request)
         self.assertNotEqual(queue_stats, None, "Queue stats request failed")
         if queue_stats.type == ofp.OFPT_ERROR:
             skip_message_emit(self, "Enqueue packet to controller")
@@ -403,7 +403,7 @@ class DirectPacketControllerQueue(base_tests.SimpleDataPlane):
                 request = ofp.message.queue_stats_request()
                 request.port_no  = egress_port
                 request.queue_id = egress_queue_id
-                (qs_before, p) = self.controller.transact(request)
+                qs_before = self.controller.transact(request)
                 self.assertNotEqual(qs_before, None, "Queue stats request failed")
 
                 logging.info("Sending packet to dp port " + 
@@ -422,7 +422,7 @@ class DirectPacketControllerQueue(base_tests.SimpleDataPlane):
                 request = ofp.message.queue_stats_request()
                 request.port_no  = egress_port
                 request.queue_id = egress_queue_id
-                (qs_after, p) = self.controller.transact(request)
+                qs_after = self.controller.transact(request)
                 self.assertNotEqual(qs_after, None, "Queue stats request failed")
 
                 # Make sure that tx packet counter for selected egress queue was

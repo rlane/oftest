@@ -56,7 +56,7 @@ class BSNConfigIPMask(base_tests.SimpleDataPlane):
         for the given wildcard index
         """
         request = ofp.message.bsn_get_ip_mask_request(index=index)
-        reply, _ = self.controller.transact(request)
+        reply = self.controller.transact(request)
         self.assertTrue(isinstance(reply, ofp.message.bsn_get_ip_mask_reply), "Wrong reply type")
         self.assertEqual(reply.index, index, "Wrong index")
         return reply.mask

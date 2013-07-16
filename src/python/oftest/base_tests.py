@@ -41,7 +41,7 @@ class SimpleProtocol(unittest.TestCase):
                 raise Exception("Controller startup failed (no switch addr)")
             logging.info("Connected " + str(self.controller.switch_addr))
             request = ofp.message.features_request()
-            reply, pkt = self.controller.transact(request)
+            reply = self.controller.transact(request)
             self.assertTrue(reply is not None,
                             "Did not complete features_request for handshake")
             if reply.version == 1:

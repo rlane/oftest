@@ -317,7 +317,7 @@ class EchoWithoutBody(base_tests.SimpleProtocol):
 
         # Send echo_request
         request = ofp.message.echo_request()
-        (response, pkt) = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,'response is not echo_reply')
         self.assertEqual(request.xid, response.xid,
                          'response xid != request xid')
@@ -340,7 +340,7 @@ class BarrierRequestReply(base_tests.SimpleProtocol):
 
         #Send Barrier Request
         request = ofp.message.barrier_request()
-        (response,pkt) = self.controller.transact(request)
+        response = self.controller.transact(request)
         self.assertEqual(response.type, ofp.OFPT_BARRIER_REPLY,'response is not barrier_reply')
         self.assertEqual(request.xid, response.xid,
                          'response xid != request xid')

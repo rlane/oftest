@@ -404,8 +404,7 @@ def get_flowstats(self,match):
     stat_req.out_port = ofp.OFPP_NONE
 
     logging.info("Sending stats request")
-    response, pkt = self.controller.transact(stat_req,
-                                                     timeout=5)
+    response = self.controller.transact(stat_req, timeout=5)
     self.assertTrue(response is not None,"No response to stats request")
 
 
@@ -414,7 +413,7 @@ def get_portstats(self,port_num):
 # Return all the port counters in the form a tuple 
     port_stats_req = ofp.message.port_stats_request()
     port_stats_req.port_no = port_num  
-    response,pkt = self.controller.transact(port_stats_req)
+    response = self.controller.transact(port_stats_req)
     self.assertTrue(response is not None,"No response received for port stats request") 
     rx_pkts=0
     tx_pkts=0
@@ -453,17 +452,16 @@ def get_queuestats(self,port_num,queue_id):
     request = ofp.message.queue_stats_request()
     request.port_no  = port_num
     request.queue_id = queue_id
-    (queue_stats, p) = self.controller.transact(request)
+    queue_stats = self.controller.transact(request)
     self.assertNotEqual(queue_stats, None, "Queue stats request failed")
 
-    return (queue_stats,p)
+    return queue_stats
 
 def get_tablestats(self):
 # Send Table_Stats request (retrieve current table counters )
 
     stat_req = ofp.message.table_stats_request()
-    response, pkt = self.controller.transact(stat_req,
-                                                     timeout=5)
+    response = self.controller.transact(stat_req, timeout=5)
     self.assertTrue(response is not None, 
                             "No response to stats request")
     current_lookedup = 0
@@ -487,8 +485,7 @@ def verify_tablestats(self,expect_lookup=None,expect_match=None,expect_active=No
 
         logging.info("Sending stats request")
         # TODO: move REPLY_MORE handling to controller.transact?
-        response, pkt = self.controller.transact(stat_req,
-                                                     timeout=5)
+        response = self.controller.transact(stat_req, timeout=5)
         self.assertTrue(response is not None,"No response to stats request")
 
         lookedup = 0 
@@ -580,7 +577,7 @@ def sw_supported_actions(parent,use_cache=False):
     cache_supported_actions = None
     if cache_supported_actions is None or not use_cache:
         request = ofp.message.features_request()
-        (reply, pkt) = parent.controller.transact(request)
+        reply = parent.controller.transact(request)
         parent.assertTrue(reply is not None, "Did not get response to ftr req")
         cache_supported_actions = reply.actions
     return cache_supported_actions

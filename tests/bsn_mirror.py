@@ -32,7 +32,7 @@ class BSNMirrorAction(base_tests.SimpleDataPlane):
         enabled/disabled state of mirror action support
         """
         request = ofp.message.bsn_get_mirroring_request()
-        reply, _ = self.controller.transact(request)
+        reply = self.controller.transact(request)
         self.assertTrue(isinstance(reply, ofp.message.bsn_get_mirroring_reply), "Unexpected reply type")
         return reply.report_mirror_ports
 
@@ -46,7 +46,7 @@ class BSNMirrorAction(base_tests.SimpleDataPlane):
 
         logging.info("Checking that mirror ports are not reported")
         self.assertEqual(bool(self.bsn_get_mirroring()), False)
-        m, r = self.controller.transact(ofp.message.features_request(), 2)
+        m = self.controller.transact(ofp.message.features_request(), 2)
         p = dict([(pt.port_no, pt) for pt in m.ports])
         self.assertFalse(mirror_ports[0] in p or mirror_ports[1] in p,
                          "Mirror port in features reply")
@@ -56,7 +56,7 @@ class BSNMirrorAction(base_tests.SimpleDataPlane):
 
         logging.info("Checking that mirror ports are reported")
         self.assertEqual(bool(self.bsn_get_mirroring()), True)
-        m, r = self.controller.transact(ofp.message.features_request(), 2)
+        m = self.controller.transact(ofp.message.features_request(), 2)
         p = dict([(pt.port_no, pt) for pt in m.ports])
         self.assertTrue(mirror_ports[0] in p and mirror_ports[1] in p,
                         "Mirror port not in features reply")
