@@ -78,7 +78,7 @@ class RolePermissions(base_tests.SimpleDataPlane):
 
         err_count = 0
         while self.controller.packets:
-            msg = self.controller.packets.pop(0)[0]
+            msg = self.controller.packets.pop(0)
             if isinstance(msg, ofp.message.error_msg):
                 self.assertEquals(msg.err_type, ofp.OFPET_BAD_REQUEST)
                 self.assertEquals(msg.code, ofp.OFPBRC_EPERM)

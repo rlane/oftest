@@ -42,8 +42,8 @@ class FeaturesRequest(base_tests.SimpleProtocol):
         request = ofp.message.features_request()
         self.controller.message_send(request)
         
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
-                                               timeout=2)
+        response = self.controller.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
+                                        timeout=2)
         self.assertTrue(response is not None, 
                         'Did not receive Features Reply')
 
@@ -70,8 +70,8 @@ class ConfigurationRequest(base_tests.SimpleProtocol):
         request = ofp.message.get_config_request()
         self.controller.message_send(request)
         
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_GET_CONFIG_REPLY,
-                                               timeout=2)
+        response = self.controller.poll(exp_msg=ofp.OFPT_GET_CONFIG_REPLY,
+                                        timeout=2)
         self.assertTrue(response is not None, 
                         'Did not receive OFPT_GET_CONFIG_REPLY')
 
@@ -294,8 +294,8 @@ class Hello(base_tests.SimpleDataPlane):
         
         #Send Hello message
         request = ofp.message.hello()
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_HELLO,
-                                               timeout=1)
+        response = self.controller.poll(exp_msg=ofp.OFPT_HELLO,
+                                        timeout=1)
         self.assertTrue(response is not None, 
                                'Switch did not exchange hello message in return') 
         self.assertTrue(response.version == 0x01, 'switch openflow-version field is not 1.0.0')

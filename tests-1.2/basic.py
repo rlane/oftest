@@ -68,7 +68,7 @@ class PacketIn(base_tests.SimpleDataPlane):
             pkt = testutils.simple_tcp_packet()
             self.dataplane.send(of_port, str(pkt))
             #@todo Check for unexpected messages?
-            (response, _) = self.controller.poll(ofp.OFPT_PACKET_IN)
+            response = self.controller.poll(ofp.OFPT_PACKET_IN)
 
             self.assertTrue(response is not None, 
                             'Packet in message not received on port ' + 

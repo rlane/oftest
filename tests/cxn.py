@@ -212,8 +212,7 @@ class CompleteHandshake(BaseHandshake):
                         con.cstate = 1
                         con.count = 0
                     elif con.cstate == 1:
-                        reply, pkt = con.poll(exp_msg=ofp.OFPT_HELLO,
-                                              timeout=0)
+                        reply = con.poll(exp_msg=ofp.OFPT_HELLO, timeout=0)
                         if reply is not None:
                             logging.info(condesc + 
                                          "Hello received from " +
@@ -234,8 +233,8 @@ class CompleteHandshake(BaseHandshake):
                         con.cstate = 3
                         con.count = 0
                     elif con.cstate == 3:
-                        reply, pkt = con.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
-                                              timeout=0)
+                        reply = con.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
+                                         timeout=0)
                         if reply is not None:
                             logging.info(condesc + 
                                          "Features reply received from " +

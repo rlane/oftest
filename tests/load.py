@@ -129,7 +129,7 @@ class PacketInLoad(base_tests.SimpleDataPlane):
                    out_count += 1
                    self.dataplane.send(of_port, str(pkt))
         while True:
-            (response, raw) = self.controller.poll(ofp.OFPT_PACKET_IN)
+            response = self.controller.poll(ofp.OFPT_PACKET_IN)
             if not response:
                 break
             in_count += 1
@@ -196,7 +196,7 @@ class FlowModLoad(base_tests.SimpleProtocol):
         msg = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
-           msg = self.controller.packets.pop(0)[0]
+           msg = self.controller.packets.pop(0)
            self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
 
     def runTest(self):
@@ -249,7 +249,7 @@ class FlowRemovedLoad(base_tests.SimpleDataPlane):
         msg = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
-           msg = self.controller.packets.pop(0)[0]
+           msg = self.controller.packets.pop(0)
            self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
 
     def runTest(self):
@@ -291,7 +291,7 @@ class FlowRemovedLoad(base_tests.SimpleDataPlane):
 
         count = 0
         while True:
-            (response, raw) = self.controller.poll(ofp.OFPT_FLOW_REMOVED)
+            response = self.controller.poll(ofp.OFPT_FLOW_REMOVED)
             if not response:
                 break
             count += 1

@@ -110,7 +110,7 @@ class GroupTest(base_tests.SimpleDataPlane):
         self.assertTrue(rv != -1, 'Error sending!')
 
         logging.info('Waiting for error messages...')
-        (response, raw) = self.controller.poll(ofp.OFPT_ERROR, 1)
+        response = self.controller.poll(ofp.OFPT_ERROR, 1)
 
         self.assertTrue(response is None, 'Unexpected error message received')
 
@@ -125,7 +125,7 @@ class GroupTest(base_tests.SimpleDataPlane):
         self.assertTrue(rv != -1, 'Error sending!')
 
         logging.info('Waiting for error messages...')
-        (response, raw) = self.controller.poll(ofp.OFPT_ERROR, 1)
+        response = self.controller.poll(ofp.OFPT_ERROR, 1)
 
         self.assertTrue(response is not None, 
                         'Did not receive an error message')
@@ -152,7 +152,7 @@ class GroupTest(base_tests.SimpleDataPlane):
         self.assertTrue(rv != -1, 'Error sending!')
 
         logging.info('Waiting for error messages...')
-        (response, raw) = self.controller.poll(resp_type, 1)
+        response = self.controller.poll(resp_type, 1)
 
         self.assertTrue(response is not None, 'Did not receive expected message')
 

@@ -1167,7 +1167,7 @@ def get_stats(test, req):
     test.assertTrue(reply is not None, "No response to stats request")
     stats.extend(reply.entries)
     while reply.flags & more_flag != 0:
-        reply, pkt = test.controller.poll(exp_msg=ofp.OFPT_STATS_REPLY)
+        reply = test.controller.poll(exp_msg=ofp.OFPT_STATS_REPLY)
         test.assertTrue(reply is not None, "No response to stats request")
         stats.extend(reply.entries)
     return stats
@@ -1416,7 +1416,7 @@ def verify_packet_in(test, data, in_port, reason, controller=None):
     end_time = time.time() + oftest.ofutils.default_timeout
 
     while True:
-        msg, _ = controller.poll(ofp.OFPT_PACKET_IN, end_time - time.time())
+        msg = controller.poll(ofp.OFPT_PACKET_IN, end_time - time.time())
         if not msg:
             # Timeout
             break
@@ -1447,7 +1447,7 @@ def verify_no_packet_in(test, data, in_port, controller=None):
 
     # Check every packet_in queued in the controller
     while True:
-        msg, _ = controller.poll(ofp.OFPT_PACKET_IN, timeout=0)
+        msg = controller.poll(ofp.OFPT_PACKET_IN, timeout=0)
         if msg == None:
             # No more queued packet_in messages
             break

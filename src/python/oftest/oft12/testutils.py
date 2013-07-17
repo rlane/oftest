@@ -484,7 +484,7 @@ def packetin_verify(parent, exp_pkt):
     """
     Receive packet_in and verify it matches an expected value
     """
-    (response, _) = parent.controller.poll(ofp.OFPT_PACKET_IN, 2)
+    response = parent.controller.poll(ofp.OFPT_PACKET_IN, 2)
 
     parent.assertTrue(response is not None, 'Packet in ofp.message not received')
     if str(exp_pkt) != response.data:
@@ -561,7 +561,7 @@ def flow_removed_verify(parent, request=None, pkt_count=-1, byte_count=-1):
     @param pkt_count If >= 0, verify packet count
     @param byte_count If >= 0, verify byte count
     """
-    (response, _) = parent.controller.poll(ofp.OFPT_FLOW_REMOVED, 2)
+    response = parent.controller.poll(ofp.OFPT_FLOW_REMOVED, 2)
     parent.assertTrue(response is not None, 'No flow removed ofp.message received')
 
     if request is None:
@@ -699,7 +699,7 @@ def error_verify(parent, exp_type, exp_code):
     @param exp_type Expected error type
     @param exp_code Expected error code
     """
-    (response, raw) = parent.controller.poll(ofp.OFPT_ERROR, 2)
+    response = parent.controller.poll(ofp.OFPT_ERROR, 2)
     parent.assertTrue(response is not None, 'No error ofp.message received')
 
     if (exp_type is None) or (exp_code is None):

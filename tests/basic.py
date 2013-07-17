@@ -346,7 +346,7 @@ class PortConfigModErr(base_tests.SimpleProtocol):
 
         # poll for error message
         while True:
-            (response, raw) = self.controller.poll(ofp.OFPT_ERROR)
+            response = self.controller.poll(ofp.OFPT_ERROR)
             if not response:  # Timeout
                 break
             if response.code == ofp.OFPPMFC_BAD_PORT:

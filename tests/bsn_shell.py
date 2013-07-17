@@ -26,7 +26,7 @@ class BSNShellCommand(base_tests.SimpleDataPlane):
         self.controller.message_send(m)
         out = ""
         while True:
-            m, _ = self.controller.poll(ofp.OFPT_VENDOR, 60)
+            m = self.controller.poll(ofp.OFPT_VENDOR, 60)
             if isinstance(m, ofp.message.bsn_shell_output):
                 out += m.data
             elif isinstance(m, ofp.message.bsn_shell_status):

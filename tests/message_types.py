@@ -40,8 +40,7 @@ class HelloWithBody(base_tests.SimpleDataPlane):
 
         #Verify Hello message in response 
         logging.info("Waiting for a Hello on the control plane with same xid,version--1.0.0 and data field empty")
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_HELLO,
-                                               timeout=1)
+        response = self.controller.poll(exp_msg=ofp.OFPT_HELLO, timeout=1)
         self.assertTrue(response is not None, 
                                'Switch did not exchange hello message in return') 
         self.assertEqual(len(response.data), 0, 'Response data field non-empty')
@@ -65,8 +64,7 @@ class EchoWithData(base_tests.SimpleProtocol):
 
         #Verify Echo Reply is recieved 
         logging.info("Waiting for Echo Reply with data field copied from Echo Request")
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_ECHO_REPLY,
-                                               timeout=1)
+        response = self.controller.poll(exp_msg=ofp.OFPT_ECHO_REPLY, timeout=1)
         self.assertTrue(response is not None,
                         "Did not get echo reply (with data)")
         self.assertEqual(response.type, ofp.OFPT_ECHO_REPLY,
@@ -99,8 +97,7 @@ class ErrorMsg(base_tests.SimpleProtocol):
         self.controller.message_send(request)
 
         logging.info("Waiting for a OFPT_ERROR msg on the control plane...") 
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_ERROR,         
-                                               timeout=5)
+        response = self.controller.poll(exp_msg=ofp.OFPT_ERROR, timeout=5)
         self.assertTrue(response is not None, 
                                'Switch did not reply with error message')
         self.assertTrue(response.err_type==ofp.OFPET_BAD_REQUEST, 
@@ -490,7 +487,7 @@ class PortStatusMessage(base_tests.SimpleDataPlane):
         
             #Verify Port Status message is recieved with reason-- Port Deleted
             logging.info("Verify PortStatus-Down message is recieved on the control plane ")
-            (response, raw) = self.controller.poll(ofp.OFPT_PORT_STATUS, timeout=15)
+            response = self.controller.poll(ofp.OFPT_PORT_STATUS, timeout=15)
             self.assertTrue(response is not None,
                         'Port Status Message not generated')
             self.assertEqual(response.reason,ofp.OFPPR_DELETE,"The reason field of Port Status Message is incorrect")
@@ -502,7 +499,7 @@ class PortStatusMessage(base_tests.SimpleDataPlane):
 
         #Verify Port Status message is recieved with reason-- Port Added
         logging.info("Verify Port Status Up message is received")
-        (response, raw) = self.controller.poll(ofp.OFPT_PORT_STATUS, timeout=15)
+        response = self.controller.poll(ofp.OFPT_PORT_STATUS, timeout=15)
         
         self.assertTrue(response is not None,
                         'Port Status Message not generated')

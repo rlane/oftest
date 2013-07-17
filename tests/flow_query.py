@@ -1332,7 +1332,7 @@ class Switch:
         # </TBD>
         n = 0
         while True:
-            (resp, pkt) = self.controller.poll(ofp.OFPT_STATS_REPLY)
+            resp = self.controller.poll(ofp.OFPT_STATS_REPLY)
             if resp is None:
                 return False            # Did not get expected response
             if n == 0:

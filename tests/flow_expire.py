@@ -68,8 +68,8 @@ class FlowExpire(base_tests.SimpleDataPlane):
         self.controller.message_send(request)
         do_barrier(self.controller)
 
-        (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_FLOW_REMOVED,
-                                               timeout=test_timeout)
+        response = self.controller.poll(exp_msg=ofp.OFPT_FLOW_REMOVED,
+                                        timeout=test_timeout)
 
         self.assertTrue(response is not None, 
                         'Did not receive flow removed message ')

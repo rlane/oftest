@@ -221,9 +221,8 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
             total_packets = self.sumStatsReplyCounts(response)
 
             while response.flags == ofp.OFPSF_REPLY_MORE:
-               response, pkt = self.controller.poll(exp_msg=
-                                                    ofp.OFPT_STATS_REPLY,
-                                                    timeout=test_timeout)
+               response = self.controller.poll(exp_msg=ofp.OFPT_STATS_REPLY,
+                                               timeout=test_timeout)
                total_packets += self.sumStatsReplyCounts(response)
 
             if total_packets == packet_count:
@@ -498,7 +497,7 @@ class DeletedFlowStats(base_tests.SimpleDataPlane):
         delete_all_flows(self.controller)
 
         # wait for flow_removed message
-        flow_removed, _ = self.controller.poll(
+        flow_removed = self.controller.poll(
             exp_msg=ofp.OFPT_FLOW_REMOVED, timeout=test_timeout)
 
         self.assertTrue(flow_removed != None, "Did not receive flow_removed message")

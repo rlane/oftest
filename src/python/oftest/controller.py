@@ -308,7 +308,7 @@ class Controller(Thread):
                         if len(self.packets) >= self.max_pkts:
                             self.packets.pop(0)
                             self.packets_expired += 1
-                        self.packets.append((msg, rawmsg))
+                        self.packets.append(msg)
                         self.packets_cv.notify_all()
                     self.packets_total += 1
                 else:
@@ -579,12 +579,9 @@ class Controller(Thread):
         @param timeout Maximum number of seconds to wait for the message.
         Pass -1 for the default timeout.
 
-        @retval A pair (msg, pkt) where msg is a message object and pkt
-        the string representing the packet as received from the socket.
-        This allows additional parsing by the receiver if necessary.
+        @retval The message object
 
-        The data members in the message are in host endian order.
-        If an error occurs, (None, None) is returned
+        If an error occurs, None is returned
         """
 
         exp_msg_str = "unspecified"
@@ -602,30 +599,27 @@ class Controller(Thread):
             if len(self.packets) > 0:
                 if exp_msg is None:
                     self.logger.debug("Looking for any packet")
-                    (msg, pkt) = self.packets.pop(0)
-                    return (msg, pkt)
+                    return self.packets.pop(0)
                 else:
                     self.logger.debug("Looking for %s", exp_msg_str)
                     for i in range(len(self.packets)):
-                        msg = self.packets[i][0]
+                        msg = self.packets[i]
                         msg_str = ofp.ofp_type_map.get(msg.type, "unknown (%d)" % msg.type)
                         self.logger.debug("Checking packets[%d] %s) against %s", i, msg_str, exp_msg_str)
                         if msg.type == exp_msg:
-                            (msg, pkt) = self.packets.pop(i)
-                            return (msg, pkt)
+                            self.packets.pop(i)
+                            return msg
             # Not found
             self.logger.debug("Packet not in queue")
             return None
 
         with self.packets_cv:
-            ret = ofutils.timed_wait(self.packets_cv, grab, timeout=timeout)
+            msg = ofutils.timed_wait(self.packets_cv, grab, timeout=timeout)
 
-        if ret != None:
-            (msg, pkt) = ret
+        if msg != None:
             self.logger.debug("Got message %s" % str(msg))
-            return (msg, pkt)
-        else:
-            return (None, None)
+
+        return msg
 
     def transact(self, msg, timeout=-1):
         """
