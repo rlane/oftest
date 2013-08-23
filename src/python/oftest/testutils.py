@@ -1270,9 +1270,12 @@ def parse_version(ver):
         if not ver[:-1] in allowed_versions:
             raise ValueError("invalid OpenFlow version %s" % ver[:-1])
         versions = set()
-        if ver != "1.1+": versions.add("1.0")
-        if ver != "1.2+": versions.add("1.1")
-        if ver != "1.3+": versions.add("1.2")
+        if ver != "1.1+":
+            versions.add("1.0")
+        if ver != "1.2+":
+            versions.add("1.1")
+        if ver != "1.3+":
+            versions.add("1.2")
         versions.add("1.3")
     else:
         versions = set(ver.split(', '))

@@ -27,10 +27,14 @@ class illegal_message_type(object):
         raise NotImplementedError()
 
     def __eq__(self, other):
-        if type(self) != type(other): return False
-        if self.version != other.version: return False
-        if self.type != other.type: return False
-        if self.xid != other.xid: return False
+        if type(self) != type(other):
+            return False
+        if self.version != other.version:
+            return False
+        if self.type != other.type:
+            return False
+        if self.xid != other.xid:
+            return False
         return True
 
     def __ne__(self, other):
