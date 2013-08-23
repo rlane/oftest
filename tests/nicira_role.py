@@ -125,8 +125,8 @@ class RoleSwitch(unittest.TestCase):
     def setUp(self):
         host = config["controller_host"]
         self.controllers = [
-            controller.Controller(host=host,port=6633),
-            controller.Controller(host=host,port=6634)
+            controller.Controller(host=host, port=6633),
+            controller.Controller(host=host, port=6634)
         ]
 
     def runTest(self):
@@ -199,8 +199,8 @@ class EqualAsyncMessages(unittest.TestCase):
     def setUp(self):
         host = config["controller_host"]
         self.controllers = [
-            controller.Controller(host=host,port=6633),
-            controller.Controller(host=host,port=6634)
+            controller.Controller(host=host, port=6633),
+            controller.Controller(host=host, port=6634)
         ]
         self.dataplane = oftest.dataplane_instance
         self.dataplane.flush()

@@ -58,10 +58,10 @@ class NoAction(base_tests.SimpleDataPlane):
 
         #Sending N packets matching the flow inserted
         for pkt_cnt in range(5):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
         
         #Verify packets not recieved on any of the dataplane ports 
-        (rcv_port, rcv_pkt, pkt_time) = self.dataplane.poll(timeout=1,exp_pkt=pkt)
+        (rcv_port, rcv_pkt, pkt_time) = self.dataplane.poll(timeout=1, exp_pkt=pkt)
         self.assertTrue(rcv_pkt is None,
                 "Packet received on port " + str(rcv_port))
 
@@ -85,7 +85,7 @@ class Announcement(base_tests.SimpleDataPlane):
         request = ofp.message.features_request()
         (reply, pkt) = self.controller.transact(request)
         self.assertTrue(reply is not None, "Failed to get any reply")
-        self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY,'Response is not Features_reply')
+        self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY, 'Response is not Features_reply')
         
         supported_actions =[]
         if(reply.actions &1<<ofp.OFPAT_OUTPUT):
@@ -361,7 +361,7 @@ class ForwardInport(base_tests.SimpleDataPlane):
         yes_ports = [ingress_port]
 
         #Verfying packet recieved on expected dataplane ports
-        receive_pkt_check(self.dataplane, pkt, yes_ports,set(of_ports).difference([ingress_port]),
+        receive_pkt_check(self.dataplane, pkt, yes_ports, set(of_ports).difference([ingress_port]),
                           self)
 
 class ForwardTable(base_tests.SimpleDataPlane):
@@ -386,7 +386,7 @@ class ForwardTable(base_tests.SimpleDataPlane):
         logging.info("Expecting packet on the egress_port")
         
         #Insert a all wildcarded flow
-        (pkt,match) = wildcard_all(self,of_ports)
+        (pkt, match) = wildcard_all(self, of_ports)
         
         #Create a packet out message
         pkt_out =ofp.message.packet_out();
@@ -400,7 +400,7 @@ class ForwardTable(base_tests.SimpleDataPlane):
 
         #Verifying packet out message recieved on the expected dataplane port. 
         (of_port, pkt, pkt_time) = self.dataplane.poll(port_number=of_ports[1],
-                                                             exp_pkt=pkt,timeout=3)
+                                                             exp_pkt=pkt, timeout=3)
         self.assertTrue(pkt is not None, 'Packet not received')
 
 
@@ -435,7 +435,7 @@ class AddVlanTag(base_tests.SimpleDataPlane):
         len_w_vid = 104
         pkt = simple_tcp_packet(pktlen=len_wo_vid)
         exp_pkt = simple_tcp_packet(pktlen=len_w_vid, dl_vlan_enable=True, 
-                                    vlan_vid=new_vid,vlan_pcp=0)
+                                    vlan_vid=new_vid, vlan_pcp=0)
         vid_act = ofp.action.set_vlan_vid()
         vid_act.vlan_vid = new_vid
 
@@ -510,7 +510,7 @@ class VlanPrio1(base_tests.SimpleDataPlane):
         vlan_pcp = 1
         pktlen = 64 if config["minsize"] < 64 else config["minsize"]
         pkt = simple_tcp_packet(pktlen=pktlen)
-        exp_pkt = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vlan_id,vlan_pcp=vlan_pcp, pktlen=pktlen + 4)
+        exp_pkt = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vlan_id, vlan_pcp=vlan_pcp, pktlen=pktlen + 4)
         act = ofp.action.set_vlan_pcp()
         act.vlan_pcp = vlan_pcp
 
@@ -539,7 +539,7 @@ class VlanPrio2(base_tests.SimpleDataPlane):
         logging.info("Send tagged packet matching the flow, verify recieved packet has vlan priority rewritten")
         
         #Verify set_vlan_priority is a supported action
-        sup_acts = sw_supported_actions(self,"true")
+        sup_acts = sw_supported_actions(self, "true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_VLAN_PCP):
             skip_message_emit(self, "modify_vlan_prio test skipped")
             return
@@ -578,7 +578,7 @@ class ModifyL2Src(base_tests.SimpleDataPlane):
         logging.info("Send packet matching the flow, verify recieved packet src address rewritten ")
 
         #Verify set_dl_src is a supported action
-        sup_acts = sw_supported_actions(self,use_cache="true")
+        sup_acts = sw_supported_actions(self, use_cache="true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_DL_SRC):
             skip_message_emit(self, "modify_l2_src test skipped")
             return
@@ -678,7 +678,7 @@ class ModifyL3Dst(base_tests.SimpleDataPlane):
         logging.info("Send packet matching the flow, verify recieved packet network dst address rewritten ")
 
         #Verify set_nw_dst is a supported action
-        sup_acts = sw_supported_actions(self,use_cache="true")
+        sup_acts = sw_supported_actions(self, use_cache="true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_NW_DST):
             skip_message_emit(self, "modify_l3_dst test skipped")
             return
@@ -712,7 +712,7 @@ class ModifyL4Src(base_tests.SimpleDataPlane):
         logging.info("Send packet matching the flow, verify recieved packet src tcp port is rewritten ")
         
         #Verify set_tp_src is a supported action
-        sup_acts = sw_supported_actions(self,use_cache="true")
+        sup_acts = sw_supported_actions(self, use_cache="true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_TP_SRC):
             skip_message_emit(self, "modify_l4_src test skipped")
             return
@@ -745,7 +745,7 @@ class ModifyL4Dst(base_tests.SimpleDataPlane):
         logging.info("Send packet matching the flow, verify recieved packet dst tcp port is rewritten ")
        
         #Verify set_tp_dst is a supported action
-        sup_acts = sw_supported_actions(self,use_cache="true")
+        sup_acts = sw_supported_actions(self, use_cache="true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_TP_DST):
             skip_message_emit(self, "ModifyL4Dst test")
             return
@@ -778,7 +778,7 @@ class ModifyTos(base_tests.SimpleDataPlane):
         logging.info("Send packet matching the flow, verify recieved packet has TOS rewritten ")
        
         #Verify set_tos is a supported action
-        sup_acts = sw_supported_actions(self,use_cache="true")
+        sup_acts = sw_supported_actions(self, use_cache="true")
         if not (sup_acts & 1 << ofp.OFPAT_SET_NW_TOS):
             skip_message_emit(self, "ModifyTOS test")
             return

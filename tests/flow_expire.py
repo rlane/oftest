@@ -57,7 +57,7 @@ class FlowExpire(base_tests.SimpleDataPlane):
         
         request = ofp.message.flow_add()
         request.match = match
-        request.cookie = random.randint(0,9007199254740992)
+        request.cookie = random.randint(0, 9007199254740992)
         request.buffer_id = 0xffffffff
         request.idle_timeout = 1
         request.flags |= ofp.OFPFF_SEND_FLOW_REM

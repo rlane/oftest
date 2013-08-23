@@ -39,7 +39,7 @@ class HelloWithBody(base_tests.SimpleDataPlane):
         self.controller.message_send(request)
 
         #Verify Hello message in response 
-        logging.info("Waiting for a Hello on the control plane with same xid,version--1.0.0 and data field empty")
+        logging.info("Waiting for a Hello on the control plane with same xid, version--1.0.0 and data field empty")
         (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_HELLO,
                                                timeout=1)
         self.assertTrue(response is not None, 
@@ -126,8 +126,8 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         request = ofp.message.features_request()
         (reply, pkt) = self.controller.transact(request)
         self.assertTrue(reply is not None, "Failed to get any reply")
-        self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY,'Response is not Features_reply')
-        self.assertEqual(reply.xid,request.xid,'Transaction id does not match')
+        self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY, 'Response is not Features_reply')
+        self.assertEqual(reply.xid, request.xid, 'Transaction id does not match')
         
         supported_actions =[]
         if(reply.actions &1<<ofp.OFPAT_OUTPUT):
@@ -155,9 +155,9 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         if(reply.actions &1<<ofp.OFPAT_ENQUEUE):
             supported_actions.append('OFPAT_ENQUEUE')
 
-        self.assertTrue(len(supported_actions) != 0,"Features Reply did not contain actions supported by sw")
+        self.assertTrue(len(supported_actions) != 0, "Features Reply did not contain actions supported by sw")
         #Verify switch supports the Required Actions i.e Forward 
-        self.assertTrue('OFPAT_OUTPUT' in supported_actions,"Required Action--Forward is not supported ")
+        self.assertTrue('OFPAT_OUTPUT' in supported_actions, "Required Action--Forward is not supported ")
         logging.info("Supported Actions: " + str(supported_actions))
 
         supported_capabilities = []
@@ -191,7 +191,7 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         ports=0
         ports = len(reply.ports)
         self.assertTrue(ports != 0, "Features Reply does not contain no. of ports and their ports definitions")
-        self.assertTrue(ports >= len(of_ports),"No. of openflow ports in the features Reply is incorrect")
+        self.assertTrue(ports >= len(of_ports), "No. of openflow ports in the features Reply is incorrect")
         logging.info("No. of openflow ports: " + str(ports))
 
 
@@ -211,8 +211,8 @@ class GetConfigReply(base_tests.SimpleProtocol):
         #Verify get_config_reply is recieved
         logging.info("Expecting GetConfigReply ")
         self.assertTrue(reply is not None, "Failed to get any reply")
-        self.assertEqual(reply.type, ofp.OFPT_GET_CONFIG_REPLY,'Response is not Config Reply')
-        self.assertEqual(reply.xid,request.xid,'Transaction id does not match')
+        self.assertEqual(reply.type, ofp.OFPT_GET_CONFIG_REPLY, 'Response is not Config Reply')
+        self.assertEqual(reply.xid, request.xid, 'Transaction id does not match')
 
         if reply.miss_send_len == 0 :
            logging.info ("the switch must send zero-size packet_in message")
@@ -244,7 +244,7 @@ class SetConfigRequest(base_tests.SimpleProtocol):
         request = ofp.message.get_config_request()
         (reply, pkt) = self.controller.transact(request)
         self.assertTrue(reply is not None, "Failed to get any reply")
-        self.assertEqual(reply.type, ofp.OFPT_GET_CONFIG_REPLY,'Response is not Config Reply')
+        self.assertEqual(reply.type, ofp.OFPT_GET_CONFIG_REPLY, 'Response is not Config Reply')
 
         miss_send_len = 0
         miss_send_len = reply.miss_send_len
@@ -277,9 +277,9 @@ class SetConfigRequest(base_tests.SimpleProtocol):
 
         (rep, pkt) = self.controller.transact(request)
         self.assertTrue(rep is not None, "Failed to get any reply")
-        self.assertEqual(rep.type, ofp.OFPT_GET_CONFIG_REPLY,'Response is not Config Reply')
-        self.assertEqual(rep.miss_send_len,new_miss_send_len, "miss_send_len configuration parameter could not be set")
-        self.assertEqual(rep.flags,new_flags, "frag flags could not be set")
+        self.assertEqual(rep.type, ofp.OFPT_GET_CONFIG_REPLY, 'Response is not Config Reply')
+        self.assertEqual(rep.miss_send_len, new_miss_send_len, "miss_send_len configuration parameter could not be set")
+        self.assertEqual(rep.flags, new_flags, "frag flags could not be set")
       
 
 
@@ -299,7 +299,7 @@ class PacketInSizeMiss(base_tests.SimpleDataPlane):
         delete_all_flows(self.controller)
 
         #Send a set_config_request message 
-        miss_send_len = [0 ,32 ,64,100]
+        miss_send_len = [0 , 32 , 64, 100]
         
         for bytes in miss_send_len :
             req = ofp.message.set_config()
@@ -313,18 +313,18 @@ class PacketInSizeMiss(base_tests.SimpleDataPlane):
             self.assertTrue(match is not None, "Could not generate flow match from pkt")
             match.wildcards=ofp.OFPFW_ALL
             match.in_port = of_ports[0]
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
             #Verify packet_in generated
             response = verify_packet_in(self, str(pkt), of_ports[0], ofp.OFPR_NO_MATCH)
 
             #Verify buffer_id field and data field
             if response.buffer_id == 0xFFFFFFFF:
-                self.assertTrue(len(response.data)==len(str(pkt)),"Buffer None here but packet_in is not a complete packet")
+                self.assertTrue(len(response.data)==len(str(pkt)), "Buffer None here but packet_in is not a complete packet")
             elif (bytes==0):
-                self.assertEqual(len(response.data),bytes,"PacketIn Size is not equal to miss_send_len") 
+                self.assertEqual(len(response.data), bytes, "PacketIn Size is not equal to miss_send_len") 
             else:
-                self.assertTrue(len(response.data)>=bytes,"PacketIn Size is not atleast miss_send_len bytes") 
+                self.assertTrue(len(response.data)>=bytes, "PacketIn Size is not atleast miss_send_len bytes") 
                 
 
 class PacketInSizeAction(base_tests.SimpleDataPlane):
@@ -351,7 +351,7 @@ class PacketInSizeAction(base_tests.SimpleDataPlane):
         match.in_port = of_ports[0]
 
 
-        max_len = [0 ,32 ,64,100]
+        max_len = [0 , 32 , 64, 100]
         
         for bytes in max_len :
 
@@ -377,9 +377,9 @@ class PacketInSizeAction(base_tests.SimpleDataPlane):
 
             #Verify buffer_id field and data field
             if response.buffer_id != 0xFFFFFFFF :
-                self.assertTrue(len(response.data)<=bytes,"Packet_in size is greater than max_len field")
+                self.assertTrue(len(response.data)<=bytes, "Packet_in size is greater than max_len field")
             else:
-                self.assertTrue(len(response.data)==len(str(pkt)),"Buffer None here but packet_in is not a complete packet")
+                self.assertTrue(len(response.data)==len(str(pkt)), "Buffer None here but packet_in is not a complete packet")
 
            
 class PacketInBodyMiss(base_tests.SimpleDataPlane):
@@ -409,13 +409,13 @@ class PacketInBodyMiss(base_tests.SimpleDataPlane):
         self.assertTrue(match is not None, "Could not generate flow match from pkt")
         match.wildcards=ofp.OFPFW_ALL
         match.in_port = of_ports[0]
-        self.dataplane.send(of_ports[0],str(pkt))
+        self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet_in generated
         response = verify_packet_in(self, str(pkt), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Verify Frame Total Length Field in Packet_in 
-        self.assertEqual(response.total_len,len(str(pkt)), "PacketIn total_len field is incorrect")
+        self.assertEqual(response.total_len, len(str(pkt)), "PacketIn total_len field is incorrect")
 
         #Verify data field 
         self.assertTrue(len(response.data) == len(str(pkt)), "Complete Data packet was not sent")
@@ -461,10 +461,10 @@ class PacketInBodyAction(base_tests.SimpleDataPlane):
         response = verify_packet_in(self, str(pkt), of_ports[0], ofp.OFPR_ACTION)
 
         #Verify Frame Total Length Field in Packet_in 
-        self.assertEqual(response.total_len,len(str(pkt)), "PacketIn total_len field is incorrect")
+        self.assertEqual(response.total_len, len(str(pkt)), "PacketIn total_len field is incorrect")
 
         #verify the data field
-        self.assertEqual(len(response.data),len(str(pkt)),"Complete Data Packet was not sent")
+        self.assertEqual(len(response.data), len(str(pkt)), "Complete Data Packet was not sent")
 
 
 @nonstandard
@@ -485,7 +485,7 @@ class PortStatusMessage(base_tests.SimpleDataPlane):
         try:
             logging.info("Bringing down the interface ..")
             default_port_num = 0
-            num = test_param_get('port',default=default_port_num)
+            num = test_param_get('port', default=default_port_num)
             self.dataplane.port_down(of_ports[num])  
         
             #Verify Port Status message is recieved with reason-- Port Deleted
@@ -493,7 +493,7 @@ class PortStatusMessage(base_tests.SimpleDataPlane):
             (response, raw) = self.controller.poll(ofp.OFPT_PORT_STATUS, timeout=15)
             self.assertTrue(response is not None,
                         'Port Status Message not generated')
-            self.assertEqual(response.reason,ofp.OFPPR_DELETE,"The reason field of Port Status Message is incorrect")
+            self.assertEqual(response.reason, ofp.OFPPR_DELETE, "The reason field of Port Status Message is incorrect")
 
         #Bring up the port by starting the interface connected
         finally:
@@ -506,7 +506,7 @@ class PortStatusMessage(base_tests.SimpleDataPlane):
         
         self.assertTrue(response is not None,
                         'Port Status Message not generated')
-        self.assertEqual(response.reason,ofp.OFPPR_ADD,"The reason field of Port Status Message is incorrect")
+        self.assertEqual(response.reason, ofp.OFPPR_ADD, "The reason field of Port Status Message is incorrect")
 
 
 class PortModFlood(base_tests.SimpleDataPlane):
@@ -547,7 +547,7 @@ class PortModFlood(base_tests.SimpleDataPlane):
                         port_config & ofp.OFPPC_NO_FLOOD,
                         "Bit change did not take")
         # Set it back
-        rv = port_config_set(self.controller, of_ports[0],port_config,
+        rv = port_config_set(self.controller, of_ports[0], port_config,
                              ofp.OFPPC_NO_FLOOD)
         self.assertTrue(rv != -1, "Error sending port mod")
         do_barrier(self.controller)
@@ -591,7 +591,7 @@ class PortModFwd(base_tests.SimpleDataPlane):
                         port_config & ofp.OFPPC_NO_FWD,
                         "Bit change did not take")
         # Set it back
-        rv = port_config_set(self.controller, of_ports[0],port_config,
+        rv = port_config_set(self.controller, of_ports[0], port_config,
                              ofp.OFPPC_NO_FWD)
         self.assertTrue(rv != -1, "Error sending port mod")
         do_barrier(self.controller)
@@ -635,7 +635,7 @@ class PortModPacketIn(base_tests.SimpleDataPlane):
                         port_config & ofp.OFPPC_NO_PACKET_IN,
                         "Bit change did not take")
         # Set it back
-        rv = port_config_set(self.controller, of_ports[0],port_config,
+        rv = port_config_set(self.controller, of_ports[0], port_config,
                              ofp.OFPPC_NO_PACKET_IN)
         self.assertTrue(rv != -1, "Error sending port mod")
         do_barrier(self.controller)
@@ -684,7 +684,7 @@ class QueueConfigReply(base_tests.SimpleProtocol):
 
         #Verify Reply Body
         self.assertEqual(response.xid, request.xid , "Transaction Id in reply is not same as request")
-        self.assertEqual(response.port,request.port , "Port queried does not match ")
+        self.assertEqual(response.port, request.port , "Port queried does not match ")
         queues = []
         queues = response.queues
         logging.info ("Queues Configured for port " + str(of_ports[0]) + str(queues))

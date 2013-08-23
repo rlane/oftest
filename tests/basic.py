@@ -84,7 +84,7 @@ class PacketIn(base_tests.SimpleDataPlane):
         for of_port in config["port_map"].keys():
             for pkt, pt in [
                (simple_tcp_packet(), "simple TCP packet"),
-               (simple_tcp_packet(dl_vlan_enable=True,vlan_vid=vid,pktlen=108), 
+               (simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vid, pktlen=108), 
                 "simple tagged TCP packet"),
                (simple_eth_packet(), "simple Ethernet packet"),
                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
@@ -189,7 +189,7 @@ class PacketOutMC(base_tests.SimpleDataPlane):
         # These will get put into function
         of_ports = config["port_map"].keys()
         random.shuffle(of_ports)
-        for num_ports in range(1,len(of_ports)+1):
+        for num_ports in range(1, len(of_ports)+1):
             for outpkt, opt in [
                (simple_tcp_packet(), "simple TCP packet"),
                (simple_eth_packet(), "simple Ethernet packet"),

@@ -52,12 +52,12 @@ class PktPerFlow(base_tests.SimpleDataPlane):
         logging.info("Verify packet counters increment in accordance")
         
         #Create a Match on Ingress flow
-        (pkt,match) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match) = wildcard_all_except_ingress(self, of_ports)
        
         #Send Packets matching the flow 
         num_pkts = 5 
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
         # Verify the packet counter was updated
         verify_flow_stats(self, match, pkts=num_pkts)
@@ -84,13 +84,13 @@ class BytPerFlow(base_tests.SimpleDataPlane):
         logging.info("Verify byte counters increment in accordance")
         
         #Create a Match on Ingress flow
-        (pkt,match) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match) = wildcard_all_except_ingress(self, of_ports)
        
         #Send Packets matching the flow 
         num_pkts = 5 
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
         # Verify the byte counter was updated
         verify_flow_stats(self, match, bytes=byte_count)
@@ -117,7 +117,7 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
         logging.info("Verify duration_sec and nsec counters are incrementing in accordance with the life of flow")
 
         #Create a flow with match on ingress_port
-        (pkt,match) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match) = wildcard_all_except_ingress(self, of_ports)
     
         #Create flow_stats request 
         stat_req = ofp.message.flow_stats_request()
@@ -130,8 +130,8 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
 
         response, pkt = self.controller.transact(stat_req)
         
-        self.assertTrue(response is not None,"No response to stats request")
-        self.assertTrue(len(response.entries) == 1,"Did not receive flow stats reply")
+        self.assertTrue(response is not None, "No response to stats request")
+        self.assertTrue(len(response.entries) == 1, "Did not receive flow stats reply")
         
         stat = response.entries[0]
         logging.info("Duration of flow is %d s %d ns", stat.duration_sec, stat.duration_nsec) 
@@ -159,7 +159,7 @@ class RxPktPerPort(base_tests.SimpleDataPlane):
         logging.info("Send Port_Stats Request for Port P , verify recieved packets counters are incrementing in accordance")
         
         #Insert a flow with match on all ingress port
-        (pkt, match ) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         # Send Port_Stats request for the ingress port (retrieve old counter state)
         initial_stats = get_port_stats(self, of_ports[0])
@@ -167,7 +167,7 @@ class RxPktPerPort(base_tests.SimpleDataPlane):
         # Send packets matching the flow
         num_pkts = 5 
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify recieved packet counters 
         verify_port_stats(self, of_ports[0], initial=initial_stats, rx_pkts=num_pkts)
@@ -192,7 +192,7 @@ class TxPktPerPort(base_tests.SimpleDataPlane):
         logging.info("Send Port_Stats Request for Port T , verify transmitted packets counters are incrementing in accordance")
         
         #Insert a flow with match on all ingress port
-        (pkt,match) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match) = wildcard_all_except_ingress(self, of_ports)
         
         # Send Port_Stats request for the egress port (retrieve old counter state)
         initial_stats = get_port_stats(self, of_ports[1])
@@ -200,7 +200,7 @@ class TxPktPerPort(base_tests.SimpleDataPlane):
         #Send packets matching the flow
         num_pkts = 5
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
         
         #Verify transmitted_packet counters 
         verify_port_stats(self, of_ports[1], initial=initial_stats,
@@ -228,7 +228,7 @@ class RxBytPerPort(base_tests.SimpleDataPlane):
         logging.info("Send Port_Stats Request for Port P , verify recieved bytes counters are incrementing in accordance")
         
         #Insert a flow with match on all ingress port
-        (pkt, match ) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         initial_stats = get_port_stats(self, of_ports[0])
@@ -237,7 +237,7 @@ class RxBytPerPort(base_tests.SimpleDataPlane):
         num_pkts = 5
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify recieved_bytes counters 
         verify_port_stats(self, of_ports[0], initial=initial_stats,
@@ -259,12 +259,12 @@ class TxBytPerPort(base_tests.SimpleDataPlane):
         #Clear switch State        
         delete_all_flows(self.controller)
 
-        logging.info("Insert any flow matching on in_port=ingress_port,action = output to egress_port T")
+        logging.info("Insert any flow matching on in_port=ingress_port, action = output to egress_port T")
         logging.info("Send N Packets matching the flow on ingress_port P ")
         logging.info("Send Port_Stats Request for Port T , verify trasmitted bytes counters are incrementing in accordance")
         
         #Insert a flow with match on all ingress port
-        (pkt, match ) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         # Send Port_Stats request for the egress port (retrieve current counter state)
         initial_stats = get_port_stats(self, of_ports[1])
@@ -273,7 +273,7 @@ class TxBytPerPort(base_tests.SimpleDataPlane):
         num_pkts = 5
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
         
         #Verify trasmitted_bytes counters 
         verify_port_stats(self, of_ports[1], initial=initial_stats,
@@ -294,14 +294,14 @@ class ActiveCount(base_tests.SimpleDataPlane):
         #Clear Switch state
         delete_all_flows(self.controller)
 
-        logging.info("Insert any flow matching on in_port=ingress_port,action = output to egress_port T ")
+        logging.info("Insert any flow matching on in_port=ingress_port, action = output to egress_port T ")
         logging.info("Send Table_Stats, verify active_count counter is incremented in accordance")
 
         #Insert a flow with match on all ingress port
-        (pkt, match ) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         #Generate  Table_Stats
-        verify_tablestats(self,expect_active=1)
+        verify_tablestats(self, expect_active=1)
 
 
 class LookupMatchedCount(base_tests.SimpleDataPlane):
@@ -320,31 +320,31 @@ class LookupMatchedCount(base_tests.SimpleDataPlane):
         #Clear Switch state
         delete_all_flows(self.controller)
 
-        logging.info("Insert any flow matching on in_port=ingress_port,action = output to egress_port")
+        logging.info("Insert any flow matching on in_port=ingress_port, action = output to egress_port")
         logging.info("Send N packets matching the flow, N' packets not matching the flow")
         logging.info("Send Table_Stats, verify lookup_count = N+N' & matched_count=N ")
 
         #Get Current Table Stats
-        (current_lookedup,current_matched,current_active) = get_tablestats(self)
+        (current_lookedup, current_matched, current_active) = get_tablestats(self)
 
         #Insert a flow with match on all ingress port
-        (pkt, match ) = wildcard_all_except_ingress(self,of_ports)
+        (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         #send packet pkt N times (pkt matches the flow)
         num_sends = 5
         for pkt_cnt in range(num_sends):
-            self.dataplane.send(of_ports[0],str(pkt))
+            self.dataplane.send(of_ports[0], str(pkt))
 
         #send packet pkt N' (pkt does not match the flow)
         num_sends2 = 5
         for pkt_cnt in range(num_sends):
-            self.dataplane.send(of_ports[1],str(pkt))
+            self.dataplane.send(of_ports[1], str(pkt))
 
         new_lookup = num_sends+num_sends2+current_lookedup
         new_matched = num_sends+current_matched
 
         #Verify lookup_count and matched_count counters.
-        verify_tablestats(self,expect_lookup=new_lookup,expect_match=new_matched)
+        verify_tablestats(self, expect_lookup=new_lookup, expect_match=new_matched)
 
 class TxPktPerQueue(base_tests.SimpleDataPlane):
 
@@ -358,13 +358,13 @@ class TxPktPerQueue(base_tests.SimpleDataPlane):
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
         
         # Get queue stats from switch (retrieve current state)
-        (queue_stats,p) = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
+        (queue_stats, p) = get_queuestats(self, ofp.OFPP_ALL, ofp.OFPQ_ALL)
   
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]
             egress_port = of_ports[(idx + 1) % len(of_ports)]
 
-            queue_id = port_queues_get(self,queue_stats,egress_port)
+            queue_id = port_queues_get(self, queue_stats, egress_port)
 
             for egress_queue_id in queue_id:
 
@@ -375,10 +375,10 @@ class TxPktPerQueue(base_tests.SimpleDataPlane):
                 initial_stats = get_queue_stats(self, egress_port, egress_queue_id)
 
                 #Insert a flow with enqueue action to queues configured on egress_port
-                (pkt,match) = enqueue(self,ingress_port,egress_port,egress_queue_id)
+                (pkt, match) = enqueue(self, ingress_port, egress_port, egress_queue_id)
               
                 #Send packet on the ingress_port and verify its received on egress_port
-                send_packet(self,pkt,ingress_port,egress_port)
+                send_packet(self, pkt, ingress_port, egress_port)
                 
                 verify_queue_stats(self, egress_port, egress_queue_id,
                                    initial=initial_stats, pkts=1)
@@ -396,13 +396,13 @@ class TxBytPerQueue(base_tests.SimpleDataPlane):
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
         
         # Get queue stats from switch (retrieve current state)
-        (queue_stats,p) = get_queuestats(self,ofp.OFPP_ALL,ofp.OFPQ_ALL)
+        (queue_stats, p) = get_queuestats(self, ofp.OFPP_ALL, ofp.OFPQ_ALL)
   
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]
             egress_port = of_ports[(idx + 1) % len(of_ports)]
 
-            queue_id = port_queues_get(self,queue_stats,egress_port)
+            queue_id = port_queues_get(self, queue_stats, egress_port)
 
             for egress_queue_id in queue_id:
 
@@ -413,10 +413,10 @@ class TxBytPerQueue(base_tests.SimpleDataPlane):
                 initial_stats = get_queue_stats(self, egress_port, egress_queue_id)
 
                 #Insert a flow with enqueue action to queues configured on egress_port
-                (pkt,match) = enqueue(self,ingress_port,egress_port,egress_queue_id)
+                (pkt, match) = enqueue(self, ingress_port, egress_port, egress_queue_id)
               
                 #Send packet on the ingress_port and verify its received on egress_port
-                send_packet(self,pkt,ingress_port,egress_port)
+                send_packet(self, pkt, ingress_port, egress_port)
                 
                 verify_queue_stats(self, egress_port, egress_queue_id,
                                    initial=initial_stats,
@@ -442,7 +442,7 @@ class RxDrops(base_tests.SimpleDataPlane):
         logging.info("Verify reply has rx_dropped count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
 
         rx_drp = counter[4]
         logging.info("recieved dropped count is :" + str(rx_drp))
@@ -468,7 +468,7 @@ class TxDrops(base_tests.SimpleDataPlane):
         logging.info("Verify reply has tx_dropped count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[1])
+        (counter) = get_portstats(self, of_ports[1])
         
         tx_drp = counter[5]
         logging.info("Transmitted dropped count is :" + str(tx_drp))
@@ -495,7 +495,7 @@ class RxErrors(base_tests.SimpleDataPlane):
         logging.info("Verify reply has rx_errors count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
 
         rx_err = counter[6]    
         logging.info("Recieve Errors count is :" + str(rx_err))
@@ -520,7 +520,7 @@ class TxErrors(base_tests.SimpleDataPlane):
         logging.info("Verify reply has Tx_errors count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
         
         tx_err = counter[7]
         logging.info("Trasmit Error count is :" + str(tx_err))
@@ -545,7 +545,7 @@ class RxFrameErr(base_tests.SimpleDataPlane):
         logging.info("Verify reply has rx_frame_err count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
         
         rx_fr_err = counter[8]
         logging.info("Recieve Frame Errors count is :" + str(rx_fr_err))
@@ -571,7 +571,7 @@ class RxOErr(base_tests.SimpleDataPlane):
         logging.info("Verify reply has rx_over_err count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
         
         rx_over_err = counter[9]
         logging.info("Recieve Overrun Errors  count is :" + str(rx_over_err))
@@ -598,7 +598,7 @@ class RxCrcErr(base_tests.SimpleDataPlane):
         logging.info("Verify reply has rx_crc_err count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
 
         rx_crc_err = counter[10]   
         logging.info("Recieve CRC Errors  count is :" + str(rx_crc_err))
@@ -624,7 +624,7 @@ class Collisions(base_tests.SimpleDataPlane):
         logging.info("Verify reply has Collisions count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
 
         collisions = counter[11]
         logging.info("collisions count is :" + str(collisions))
@@ -651,7 +651,7 @@ class TxErrorPerQueue(base_tests.SimpleDataPlane):
         logging.info("Verify reply has Tramitted Overrun errors count ")
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
-        (counter) = get_portstats(self,of_ports[0])
+        (counter) = get_portstats(self, of_ports[0])
 
         tx_err = counter[12]
         logging.info("Transmit Overrun Error count is :" + str(tx_err))

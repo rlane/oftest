@@ -58,7 +58,7 @@ class FeaturesRequest(base_tests.SimpleProtocol):
     """
     def runTest(self):
         request = ofp.message.features_request()
-        response,_ = self.controller.transact(request)
+        response, _ = self.controller.transact(request)
         self.assertTrue(response is not None,
                         'Did not get features reply')
 
@@ -290,7 +290,7 @@ class FlowRemoveAll(base_tests.SimpleProtocol):
     delete_strict vs. delete)
     """
     def runTest(self):
-        for i in range(1,5):
+        for i in range(1, 5):
             logging.debug("Adding flow %d", i)
             request = ofp.message.flow_add(
                 buffer_id=ofp.OFP_NO_BUFFER,

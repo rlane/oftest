@@ -78,7 +78,7 @@ class SingleFlowStats(base_tests.SimpleDataPlane):
         stat_req.out_port = out_port
 
         all_packets_received = 0
-        for i in range(0,test_timeout):
+        for i in range(0, test_timeout):
             logging.info("Sending stats request")
             response, pkt = self.controller.transact(stat_req,
                                                      timeout=test_timeout)
@@ -131,7 +131,7 @@ class SingleFlowStats(base_tests.SimpleDataPlane):
         match.in_port = ingress_port
         flow_mod_msg = ofp.message.flow_add()
         flow_mod_msg.match = copy.deepcopy(match)
-        flow_mod_msg.cookie = random.randint(0,9007199254740992)
+        flow_mod_msg.cookie = random.randint(0, 9007199254740992)
         flow_mod_msg.buffer_id = 0xffffffff
         flow_mod_msg.idle_timeout = 60000
         flow_mod_msg.hard_timeout = 65000
@@ -148,9 +148,9 @@ class SingleFlowStats(base_tests.SimpleDataPlane):
         self.verifyStats(flow_mod_msg, match, ofp.OFPP_NONE, test_timeout, 0)
 
         # send packet N times
-        num_sends = random.randint(10,20)
+        num_sends = random.randint(10, 20)
         logging.info("Sending " + str(num_sends) + " test packets")
-        for i in range(0,num_sends):
+        for i in range(0, num_sends):
             sendPacket(self, pkt, ingress_port, egress_port,
                        test_timeout)
 
@@ -183,7 +183,7 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
         
         flow_mod_msg = ofp.message.flow_add()
         flow_mod_msg.match = match
-        flow_mod_msg.cookie = random.randint(0,9007199254740992)
+        flow_mod_msg.cookie = random.randint(0, 9007199254740992)
         flow_mod_msg.buffer_id = 0xffffffff
         flow_mod_msg.idle_timeout = 0
         flow_mod_msg.hard_timeout = 0
@@ -213,7 +213,7 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
         stat_req.out_port = out_port
 
         all_packets_received = 0
-        for i in range(0,test_timeout):
+        for i in range(0, test_timeout):
             logging.info("Sending stats request")
             # TODO: move REPLY_MORE handling to controller.transact?
             response, pkt = self.controller.transact(stat_req,
@@ -262,13 +262,13 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
         self.controller.message_send(flow_mod_msg2)
         do_barrier(self.controller)
 
-        num_pkt1s = random.randint(10,30)
+        num_pkt1s = random.randint(10, 30)
         logging.info("Sending " + str(num_pkt1s) + " pkt1s")
-        num_pkt2s = random.randint(10,30)
+        num_pkt2s = random.randint(10, 30)
         logging.info("Sending " + str(num_pkt2s) + " pkt2s")
-        for i in range(0,num_pkt1s):
+        for i in range(0, num_pkt1s):
             sendPacket(self, pkt1, ingress_port, egress_port1, test_timeout)
-        for i in range(0,num_pkt2s):
+        for i in range(0, num_pkt2s):
             sendPacket(self, pkt2, ingress_port, egress_port2, test_timeout)
             
         match1 = packet_to_flow_match(self, pkt1)
@@ -304,7 +304,7 @@ class AggregateStats(base_tests.SimpleDataPlane):
         
         flow_mod_msg = ofp.message.flow_add()
         flow_mod_msg.match = match
-        flow_mod_msg.cookie = random.randint(0,9007199254740992)
+        flow_mod_msg.cookie = random.randint(0, 9007199254740992)
         flow_mod_msg.buffer_id = 0xffffffff
         flow_mod_msg.idle_timeout = 0
         flow_mod_msg.hard_timeout = 0
@@ -325,7 +325,7 @@ class AggregateStats(base_tests.SimpleDataPlane):
         stat_req.out_port = out_port
 
         all_packets_received = 0
-        for i in range(0,test_timeout):
+        for i in range(0, test_timeout):
             logging.info("Sending stats request")
             response, pkt = self.controller.transact(stat_req,
                                                      timeout=test_timeout)
@@ -370,13 +370,13 @@ class AggregateStats(base_tests.SimpleDataPlane):
         self.controller.message_send(flow_mod_msg2)
         do_barrier(self.controller)
 
-        num_pkt1s = random.randint(10,30)
+        num_pkt1s = random.randint(10, 30)
         logging.info("Sending " + str(num_pkt1s) + " pkt1s")
-        num_pkt2s = random.randint(10,30)
+        num_pkt2s = random.randint(10, 30)
         logging.info("Sending " + str(num_pkt2s) + " pkt2s")
-        for i in range(0,num_pkt1s):
+        for i in range(0, num_pkt1s):
             sendPacket(self, pkt1, ingress_port, egress_port1, test_timeout)
-        for i in range(0,num_pkt2s):
+        for i in range(0, num_pkt2s):
             sendPacket(self, pkt2, ingress_port, egress_port2, test_timeout)
             
         # loop on flow stats request until timeout
@@ -471,7 +471,7 @@ class DeletedFlowStats(base_tests.SimpleDataPlane):
         match.in_port = ingress_port
         flow_mod_msg = ofp.message.flow_add()
         flow_mod_msg.match = copy.deepcopy(match)
-        flow_mod_msg.cookie = random.randint(0,9007199254740992)
+        flow_mod_msg.cookie = random.randint(0, 9007199254740992)
         flow_mod_msg.buffer_id = 0xffffffff
         flow_mod_msg.idle_timeout = 0
         flow_mod_msg.hard_timeout = 0
@@ -486,9 +486,9 @@ class DeletedFlowStats(base_tests.SimpleDataPlane):
         do_barrier(self.controller)
 
         # send packet N times
-        num_sends = random.randint(10,20)
+        num_sends = random.randint(10, 20)
         logging.info("Sending " + str(num_sends) + " test packets")
-        for i in range(0,num_sends):
+        for i in range(0, num_sends):
             sendPacket(self, pkt, ingress_port, egress_port,
                        test_timeout)
 

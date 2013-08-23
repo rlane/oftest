@@ -1168,7 +1168,7 @@ def all_stats_get(parent):
     (reply , pkt) = parent.controller.transact(request)
 
     
-    (rv["active"], rv["lookups"], rv["matched"]) = (0,0,0)
+    (rv["active"], rv["lookups"], rv["matched"]) = (0, 0, 0)
     for obj in reply.entries:
         rv["active"] += obj.active_count
         rv["lookups"] += obj.lookup_count
@@ -1253,7 +1253,7 @@ def version(ver):
 
     Supported syntax:
     1.0 -> 1.0
-    1.0,1.2,1.3 -> 1.0, 1.2, 1.3
+    1.0, 1.2, 1.3 -> 1.0, 1.2, 1.3
     1.0+ -> 1.0, 1.1, 1.2, 1.3
     """
     versions = parse_version(ver)
@@ -1275,7 +1275,7 @@ def parse_version(ver):
         if ver != "1.3+": versions.add("1.2")
         versions.add("1.3")
     else:
-        versions = set(ver.split(','))
+        versions = set(ver.split(', '))
 
     for version in versions:
         if not version in allowed_versions:
@@ -1284,7 +1284,7 @@ def parse_version(ver):
     return versions
 
 assert(parse_version("1.0") == set(["1.0"]))
-assert(parse_version("1.0,1.2,1.3") == set(["1.0", "1.2", "1.3"]))
+assert(parse_version("1.0, 1.2, 1.3") == set(["1.0", "1.2", "1.3"]))
 assert(parse_version("1.0+") == set(["1.0", "1.1", "1.2", "1.3"]))
 
 def get_stats(test, req):
@@ -1434,9 +1434,9 @@ def verify_port_stats(test, port,
         time.sleep(0.1)
 
     if (tx_pkts != None):
-        test.assertEqual(tx_pkts,tx_pkts_diff,"Port TX packet counter is not updated correctly (expected increase of %d, got increase of %d)" % (tx_pkts, tx_pkts_diff))
+        test.assertEqual(tx_pkts, tx_pkts_diff, "Port TX packet counter is not updated correctly (expected increase of %d, got increase of %d)" % (tx_pkts, tx_pkts_diff))
     if (rx_pkts != None):
-        test.assertEqual(rx_pkts,rx_pkts_diff,"Port RX packet counter is not updated correctly (expected increase of %d, got increase of %d)" % (rx_pkts, rx_pkts_diff))
+        test.assertEqual(rx_pkts, rx_pkts_diff, "Port RX packet counter is not updated correctly (expected increase of %d, got increase of %d)" % (rx_pkts, rx_pkts_diff))
     if (tx_bytes != None):
         test.assertTrue(tx_bytes_diff >= tx_bytes and tx_bytes_diff <= tx_bytes*1.1,
                         "Port TX byte counter is not updated correctly (expected increase of %d, got increase of %d)" % (tx_bytes, tx_bytes_diff))

@@ -230,7 +230,7 @@ class EthSrc(MatchTest):
     """
     def runTest(self):
         match = ofp.match([
-            ofp.oxm.eth_src([0,1,2,3,4,5])
+            ofp.oxm.eth_src([0, 1, 2, 3, 4, 5])
         ])
 
         matching = {

@@ -489,7 +489,7 @@ class Flow_Cfg:
             elif a.type == ofp.OFPAT_SET_TP_SRC or a.type == ofp.OFPAT_SET_TP_DST:
                 result = result + ("(%d)" % (a.tp_port))
             elif a.type == ofp.OFPAT_ENQUEUE:
-                result = result + ("(port=%d,queue=%d)" % (a.port, a.queue_id))
+                result = result + ("(port=%d, queue=%d)" % (a.port, a.queue_id))
         return result
 
     def rand_actions_ordered(self, fi, valid_actions, valid_ports, valid_queues):
@@ -1368,7 +1368,7 @@ class Switch:
             flow_mod_msg.flags = flow_mod_msg.flags | ofp.OFPFF_CHECK_OVERLAP
         if flow_cfg.send_rem:
             flow_mod_msg.flags = flow_mod_msg.flags | ofp.OFPFF_SEND_FLOW_REM
-        flow_mod_msg.xid = random.randrange(1,0xffffffff)
+        flow_mod_msg.xid = random.randrange(1, 0xffffffff)
         logging.info("Sending flow_mod(add), xid=%d"
                         % (flow_mod_msg.xid)
                         )
@@ -1382,7 +1382,7 @@ class Switch:
             flow_mod_msg = ofp.message.flow_modify()
         flow_mod_msg.buffer_id   = 0xffffffff
         flow_cfg.to_flow_mod_msg(flow_mod_msg)
-        flow_mod_msg.xid = random.randrange(1,0xffffffff)
+        flow_mod_msg.xid = random.randrange(1, 0xffffffff)
         logging.info("Sending flow_mod(mod), xid=%d"
                         % (flow_mod_msg.xid)
                         )
@@ -1398,7 +1398,7 @@ class Switch:
         # TBD - "out_port" filtering of deletes needs to be tested
         flow_mod_msg.out_port    = ofp.OFPP_NONE
         flow_cfg.to_flow_mod_msg(flow_mod_msg)
-        flow_mod_msg.xid = random.randrange(1,0xffffffff)
+        flow_mod_msg.xid = random.randrange(1, 0xffffffff)
         logging.info("Sending flow_mod(del), xid=%d"
                         % (flow_mod_msg.xid)
                         )

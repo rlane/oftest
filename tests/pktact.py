@@ -900,9 +900,9 @@ class ExactMatchTaggedMany(BaseMatchCase):
     """
 
     def runTest(self):
-        for vid in range(2,100,10):
+        for vid in range(2, 100, 10):
             flow_match_test(self, config["port_map"], vlan_vid=vid, max_test=5)
-        for vid in range(100,4000,389):
+        for vid in range(100, 4000, 389):
             flow_match_test(self, config["port_map"], vlan_vid=vid, max_test=5)
         flow_match_test(self, config["port_map"], vlan_vid=4094, max_test=5)
 
@@ -950,7 +950,7 @@ class SingleWildcardMatchPriority(BaseMatchCase):
             self._ClearTable()
 
         # Sanity check flow at lower priority from pA to pB
-        logging.info("runPrioFlows(pA=%d,pB=%d,pC=%d,ph=%d,pl=%d"
+        logging.info("runPrioFlows(pA=%d, pB=%d, pC=%d, ph=%d, pl=%d"
                          % (portA, portB, portC, prioHigher, prioLower))
 
         # Sanity check flow at lower priority from pA to pC

@@ -7,8 +7,8 @@
 # scapy.contrib.description = MPLS
 # scapy.contrib.status = loads
 
-from scapy.packet import Packet,bind_layers
-from scapy.fields import BitField,ByteField
+from scapy.packet import Packet, bind_layers
+from scapy.fields import BitField, ByteField
 from scapy.layers.l2 import Ether
 
 class MPLS(Packet): 

@@ -12,7 +12,7 @@ import logging
 default_timeout = None # set by oft
 
 def gen_xid():
-    return random.randrange(1,0xffffffff)
+    return random.randrange(1, 0xffffffff)
 
 """
 Wait on a condition variable until the given function returns non-None or a timeout expires.

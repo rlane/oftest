@@ -47,36 +47,36 @@ class AllWildcardMatch(base_tests.SimpleDataPlane):
         yes_ports = of_ports[1]
     
         #Insert an All Wildcarded flow.
-        wildcard_all(self,of_ports)
+        wildcard_all(self, of_ports)
 
         #check for different  match fields and verify packet implements the action specified in the flow
         pkt1 = simple_tcp_packet(eth_src="00:01:01:01:01:01");
         self.dataplane.send(of_ports[0], str(pkt1))
-        receive_pkt_check(self.dataplane,pkt1,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt1, [yes_ports], no_ports, self)
        
         pkt2 = simple_tcp_packet(eth_dst="00:01:01:01:01:01");    
         self.dataplane.send(of_ports[0], str(pkt2))
-        receive_pkt_check(self.dataplane,pkt2,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt2, [yes_ports], no_ports, self)
         
         pkt3 = simple_tcp_packet(ip_src="192.168.2.1");
         self.dataplane.send(of_ports[0], str(pkt3))
-        receive_pkt_check(self.dataplane,pkt3,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt3, [yes_ports], no_ports, self)
         
         pkt4 = simple_tcp_packet(ip_dst="192.168.2.2");
         self.dataplane.send(of_ports[0], str(pkt4))
-        receive_pkt_check(self.dataplane,pkt4,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt4, [yes_ports], no_ports, self)
         
         pkt5 = simple_tcp_packet(ip_tos=2);
         self.dataplane.send(of_ports[0], str(pkt5))
-        receive_pkt_check(self.dataplane,pkt5,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt5, [yes_ports], no_ports, self)
        
         pkt6 = simple_tcp_packet(tcp_sport=8080);
         self.dataplane.send(of_ports[0], str(pkt6))
-        receive_pkt_check(self.dataplane,pkt6,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt6, [yes_ports], no_ports, self)
               
         pkt7 = simple_tcp_packet(tcp_dport=8081);
         self.dataplane.send(of_ports[0], str(pkt7))
-        receive_pkt_check(self.dataplane,pkt7,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt7, [yes_ports], no_ports, self)
 
 
 
@@ -104,13 +104,13 @@ class EthernetSrcAddress(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Insert a Match On Ethernet Src Address flow
-        (pkt,match) = match_ethernet_src_address(self,of_ports)   
+        (pkt, match) = match_ethernet_src_address(self, of_ports)   
 
         #Sending packet matching the flow, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_eth_packet(eth_src='00:01:01:01:01:02');
@@ -141,13 +141,13 @@ class EthernetDstAddress(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
         
         #Insert a Match on Destination Address flow   
-        (pkt,match) = match_ethernet_dst_address(self,of_ports)
+        (pkt, match) = match_ethernet_dst_address(self, of_ports)
         
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send Non-matching packet
         pkt2 = simple_eth_packet(eth_dst='00:01:01:01:01:02');
@@ -181,13 +181,13 @@ class EthernetType(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Insert a Match on Ethernet-Type flow
-        (pkt,match) = match_ethernet_type(self,of_ports)   
+        (pkt, match) = match_ethernet_type(self, of_ports)   
 
         #Sending packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , 
         pkt2 = simple_eth_packet(eth_type=0x0806);
@@ -221,16 +221,16 @@ class IngressPort(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
         
         #Insert a Match on Ingress Port FLow
-        (pkt,match) = wildcard_all_except_ingress(self,of_ports,priority=0)
+        (pkt, match) = wildcard_all_except_ingress(self, of_ports, priority=0)
         
         #Send Packet matching the flow i.e on in_port specified in the flow
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Send Non-Matching Packet 
-        self.dataplane.send(of_ports[1],str(pkt))
+        self.dataplane.send(of_ports[1], str(pkt))
 
         #Verify PacketIn event gets triggered
         verify_packet_in(self, str(pkt), of_ports[1], ofp.OFPR_NO_MATCH)
@@ -257,16 +257,16 @@ class VlanId(base_tests.SimpleDataPlane):
         logging.info("Verifying matching packets implements the action specified in the flow")
     
         #Create a flow with match on Vlan Id
-        (pkt,match) = match_vlan_id(self,of_ports)
+        (pkt, match) = match_vlan_id(self, of_ports)
 
         #Send tagged packet matching the flow i.e packet with same vlan id as in flow
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send Non-matching packet, i.e packet with different Vlan Id
-        pkt2 = simple_tcp_packet(dl_vlan_enable=True,vlan_vid=4);
+        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=4);
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #Verify PacketIn event gets triggered
@@ -296,16 +296,16 @@ class VlanPCP(base_tests.SimpleDataPlane):
         logging.info("Verifying matching packet implements the action specified in the flow")
 
         #Create a flow matching on VLAN Priority
-        (pkt,match) = match_vlan_pcp(self,of_ports)
+        (pkt, match) = match_vlan_pcp(self, of_ports)
 
         #Send tagged Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send tagged packet with same vlan_id but different vlan priority
-        pkt2 = simple_tcp_packet(dl_vlan_enable=True,vlan_vid=1,vlan_pcp=20);
+        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=1, vlan_pcp=20);
         self.dataplane.send(of_ports[0], str(pkt2))
 
         #Verify Packet_In event gets triggered
@@ -334,26 +334,26 @@ class MultipleHeaderFieldL2(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_mul_l2(self,of_ports)   
+        (pkt, match) = match_mul_l2(self, of_ports)   
 
         #Send eth packet matching the eth_type field, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet (only eth_dst is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x88cc,eth_src='00:01:01:01:01:01',eth_dst='00:01:01:02:01:01');
+        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:02:01:01');
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (only eth_src is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x88cc,eth_src='00:01:01:01:01:02',eth_dst='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:02', eth_dst='00:01:01:01:01:02');
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (only ether_type is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x0806,eth_src='00:01:01:01:01:01',eth_dst='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_type=0x0806, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:01:01:02');
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #Verify packet_in event gets triggered
@@ -383,13 +383,13 @@ class IpTos(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Create a flow matching on VLAN Priority
-        (pkt,match) = match_ip_tos(self,of_ports)
+        (pkt, match) = match_ip_tos(self, of_ports)
 
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
         pkt2 = simple_tcp_packet(ip_tos=4);
@@ -420,13 +420,13 @@ class IpProtocol(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Create a flow matching on VLAN Priority
-        (pkt,match) = match_ip_protocol(self,of_ports)
+        (pkt, match) = match_ip_protocol(self, of_ports)
 
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
         pkt2 = simple_icmp_packet();
@@ -457,13 +457,13 @@ class TcpSrcPort(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching tcp packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_tcp_src(self,of_ports)   
+        (pkt, match) = match_tcp_src(self, of_ports)   
 
         #Sending packet matching the tcp_sport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_tcp_packet(tcp_sport=540);
@@ -493,13 +493,13 @@ class TcpDstPort(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_tcp_dst(self,of_ports)   
+        (pkt, match) = match_tcp_dst(self, of_ports)   
 
         #Sending packet matching the tcp_dport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_tcp_packet(tcp_dport=541);
@@ -529,13 +529,13 @@ class UdpSrcPort(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching tcp packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_udp_src(self,of_ports)   
+        (pkt, match) = match_udp_src(self, of_ports)   
 
         #Sending packet matching the tcp_sport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_udp_packet(udp_sport=540);
@@ -565,13 +565,13 @@ class UdpDstPort(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_udp_dst(self,of_ports)   
+        (pkt, match) = match_udp_dst(self, of_ports)   
 
         #Sending packet matching the tcp_dport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_udp_packet(udp_dport=541);
@@ -601,13 +601,13 @@ class ICMPType(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching ICMP packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_icmp_type(self,of_ports)   
+        (pkt, match) = match_icmp_type(self, of_ports)   
 
         #Sending packet matching the tcp_sport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_icmp_packet(icmp_type=10);
@@ -637,13 +637,13 @@ class ICMPCode(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching ICMP packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_icmp_code(self,of_ports)   
+        (pkt, match) = match_icmp_code(self, of_ports)   
 
         #Sending packet matching the tcp_dport, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_icmp_packet(icmp_code=10);
@@ -674,13 +674,13 @@ class ArpOpcode(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Create a flow matching on ARP Opcode 
-        (pkt,match) = match_arp_opcode(self,of_ports)
+        (pkt, match) = match_arp_opcode(self, of_ports)
 
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
         pkt2 = simple_arp_packet(arp_op=2)
@@ -711,13 +711,13 @@ class ArpSenderIP(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Create a flow matching on ARP sender IP
-        (pkt,match) = match_arp_sender(self,of_ports)
+        (pkt, match) = match_arp_sender(self, of_ports)
 
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
         pkt2 = simple_arp_packet(ip_snd="10.10.0.10");
@@ -748,13 +748,13 @@ class ArpTargetIP(base_tests.SimpleDataPlane):
         logging.info("Verifying only matching packets implements the action specified in the flow")
 
         #Create a flow matching on ARP target IP
-        (pkt,match) = match_arp_target(self,of_ports)
+        (pkt, match) = match_arp_target(self, of_ports)
 
         #Send Packet matching the flow 
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
         pkt2 = simple_arp_packet(ip_tgt="10.10.0.10");
@@ -785,13 +785,13 @@ class ExactMatch(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = exact_match(self,of_ports)   
+        (pkt, match) = exact_match(self, of_ports)   
 
         #Sending packet matching all the fields of a tcp_packet, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
         pkt2 = simple_tcp_packet(tcp_sport=540);
@@ -822,21 +822,21 @@ class MultipleHeaderFieldL4(base_tests.SimpleDataPlane):
         logging.info("Sending matching and non-matching packets")
         logging.info("Verifying matching packets implements the action specified in the flow")
 
-        (pkt,match) = match_mul_l4(self,of_ports)   
+        (pkt, match) = match_mul_l4(self, of_ports)   
 
         #Sending packet matching the tcp_sport and tcp_dport field, verify it implements the action
         self.dataplane.send(of_ports[0], str(pkt))
 
         #Verify packet implements the action specified in the flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet (tcp_dport different), verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=111,tcp_dport=541);
+        pkt2 = simple_tcp_packet(tcp_sport=111, tcp_dport=541);
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (tcp_sport different), verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=100,tcp_dport=112);
+        pkt2 = simple_tcp_packet(tcp_sport=100, tcp_dport=112);
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -866,14 +866,14 @@ class ExactMatchPrio(base_tests.SimpleDataPlane):
         logging.info("Verifying matching packets implements the action specified in the exact match flow")
 
         #Insert two Overlapping Flows : Exact Match and Wildcard All.
-        (pkt,match) = exact_match_with_prio(self,of_ports,priority=10) 
-        (pkt2,match2) = wildcard_all(self,of_ports,priority=20);  
+        (pkt, match) = exact_match_with_prio(self, of_ports, priority=10) 
+        (pkt2, match2) = wildcard_all(self, of_ports, priority=20);  
         
         #Sending packet matching both the flows , 
         self.dataplane.send(of_ports[0], str(pkt2))
 
         #verify it implements the action specified in Exact Match Flow
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
 
 class WildcardMatchPrio(base_tests.SimpleDataPlane):
@@ -899,12 +899,12 @@ class WildcardMatchPrio(base_tests.SimpleDataPlane):
         logging.info("Sending packets matching the flows")
         logging.info("Verifying matching packets implements the action specified in the flow with higher priority")
 
-        (pkt,match) = wildcard_all(self,of_ports,priority=20) 
-        (pkt1,match1) =  wildcard_all_except_ingress1(self,of_ports,priority=10)  
+        (pkt, match) = wildcard_all(self, of_ports, priority=20) 
+        (pkt1, match1) =  wildcard_all_except_ingress1(self, of_ports, priority=10)  
 
         #Sending packet matching both the flows , verify it implements the action specified by Higher Priority flow
         self.dataplane.send(of_ports[0], str(pkt1))
-        receive_pkt_check(self.dataplane,pkt,[yes_ports],no_ports,self)
+        receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
 
 

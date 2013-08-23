@@ -199,7 +199,7 @@ class SetEthDst(BaseModifyPacketTest):
     Set Eth Dst address 
     """
     def runTest(self):
-        actions = [ofp.action.set_field(ofp.oxm.eth_dst([0x00,0xA1,0xCD,0x53,0xC6,0x55]))]
+        actions = [ofp.action.set_field(ofp.oxm.eth_dst([0x00, 0xA1, 0xCD, 0x53, 0xC6, 0x55]))]
         pkt = simple_tcp_packet()
         exp_pkt = simple_tcp_packet(eth_dst="00:A1:CD:53:C6:55")
         self.verify_modify(actions, pkt, exp_pkt)
@@ -209,7 +209,7 @@ class SetEthSrc(BaseModifyPacketTest):
     Set Eth Src address 
     """
     def runTest(self):
-        actions = [ofp.action.set_field(ofp.oxm.eth_src([0x00,0xA1,0xCD,0x53,0xC6,0x55]))]
+        actions = [ofp.action.set_field(ofp.oxm.eth_src([0x00, 0xA1, 0xCD, 0x53, 0xC6, 0x55]))]
         pkt = simple_tcp_packet()
         exp_pkt = simple_tcp_packet(eth_src="00:A1:CD:53:C6:55")
         self.verify_modify(actions, pkt, exp_pkt)

@@ -24,7 +24,7 @@ class BaseHandshake(unittest.TestCase):
     """
 
     def controllerSetup(self, host, port):
-        con = controller.Controller(host=host,port=port)
+        con = controller.Controller(host=host, port=port)
 
         # clean_shutdown should be set to False to force quit app
         self.clean_shutdown = True
@@ -108,7 +108,7 @@ class CompleteHandshake(BaseHandshake):
         if con_list is not None:
             self.controller_list = []
             for controller in con_list:
-                ip,portstr = controller.split(':')
+                ip, portstr = controller.split(':')
                 try:
                     port = int(portstr)
                 except:

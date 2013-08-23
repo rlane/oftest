@@ -119,7 +119,7 @@ class PacketInLoad(base_tests.SimpleDataPlane):
         for of_port in of_ports:
             for pkt, pt in [
                (simple_tcp_packet(), "simple TCP packet"),
-               (simple_tcp_packet(dl_vlan_enable=True,pktlen=108), 
+               (simple_tcp_packet(dl_vlan_enable=True, pktlen=108), 
                 "simple tagged TCP packet"),
                (simple_eth_packet(), "simple Ethernet packet"),
                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
