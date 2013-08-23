@@ -426,8 +426,8 @@ class AddVlanTag(base_tests.SimpleDataPlane):
         #Verify set_vlan_id is a supported action
         sup_acts = sw_supported_actions(self)
         if not(sup_acts & 1<<ofp.OFPAT_SET_VLAN_VID):
-           skip_message_emit(self, "Add VLAN tag test skipped")
-           return
+            skip_message_emit(self, "Add VLAN tag test skipped")
+            return
         
         #Create packet to be sent and an expected packet with vid set
         new_vid = 2

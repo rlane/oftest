@@ -273,7 +273,7 @@ class PacketIn(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         self.dataplane.send(ingress_port, str(pkt))
         logging.info("Sending packet to dp port " + str(ingress_port) +
-                   ", expecting packet_in on control plane" )
+                    ", expecting packet_in on control plane" )
       
         verify_packet_in(self, str(pkt), ingress_port, ofp.OFPR_NO_MATCH)
 

@@ -7,7 +7,7 @@ similar identifiers.
 
 Current Assumptions:
 
-  The switch is actively attempting to contact the controller at the address
+    The switch is actively attempting to contact the controller at the address
 indicated in oftest.config.
 
 """
@@ -83,15 +83,15 @@ class PacketIn(base_tests.SimpleDataPlane):
 
         for of_port in config["port_map"].keys():
             for pkt, pt in [
-               (simple_tcp_packet(), "simple TCP packet"),
-               (simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vid, pktlen=108), 
+                (simple_tcp_packet(), "simple TCP packet"),
+                (simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vid, pktlen=108), 
                 "simple tagged TCP packet"),
-               (simple_eth_packet(), "simple Ethernet packet"),
-               (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
+                (simple_eth_packet(), "simple Ethernet packet"),
+                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
 
-               logging.info("PKT IN test with %s, port %s" % (pt, of_port))
-               self.dataplane.send(of_port, str(pkt))
-               verify_packet_in(self, str(pkt), of_port, ofp.OFPR_NO_MATCH)
+                logging.info("PKT IN test with %s, port %s" % (pt, of_port))
+                self.dataplane.send(of_port, str(pkt))
+                verify_packet_in(self, str(pkt), of_port, ofp.OFPR_NO_MATCH)
 
 class PacketInBroadcastCheck(base_tests.SimpleDataPlane):
     """
@@ -140,36 +140,36 @@ class PacketOut(base_tests.SimpleDataPlane):
         of_ports.sort()
         for dp_port in of_ports:
             for outpkt, opt in [
-               (simple_tcp_packet(), "simple TCP packet"),
-               (simple_eth_packet(), "simple Ethernet packet"),
-               (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
+                (simple_tcp_packet(), "simple TCP packet"),
+                (simple_eth_packet(), "simple Ethernet packet"),
+                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
 
-               logging.info("PKT OUT test with %s, port %s" % (opt, dp_port))
-               msg = ofp.message.packet_out(in_port=ofp.OFPP_NONE,
+                logging.info("PKT OUT test with %s, port %s" % (opt, dp_port))
+                msg = ofp.message.packet_out(in_port=ofp.OFPP_NONE,
                                         data=str(outpkt),
                                         actions=[ofp.action.output(port=dp_port)],
                                         buffer_id=0xffffffff)
 
-               logging.info("PacketOut to: " + str(dp_port))
-               self.controller.message_send(msg)
+                logging.info("PacketOut to: " + str(dp_port))
+                self.controller.message_send(msg)
 
-               exp_pkt_arg = None
-               exp_port = None
-               if config["relax"]:
-                   exp_pkt_arg = outpkt
-                   exp_port = dp_port
-               (of_port, pkt, pkt_time) = self.dataplane.poll(port_number=exp_port,
+                exp_pkt_arg = None
+                exp_port = None
+                if config["relax"]:
+                    exp_pkt_arg = outpkt
+                    exp_port = dp_port
+                (of_port, pkt, pkt_time) = self.dataplane.poll(port_number=exp_port,
                                                               exp_pkt=exp_pkt_arg)
 
-               self.assertTrue(pkt is not None, 'Packet not received')
-               logging.info("PacketOut: got pkt from " + str(of_port))
-               if of_port is not None:
-                   self.assertEqual(of_port, dp_port, "Unexpected receive port")
-               if not dataplane.match_exp_pkt(outpkt, pkt):
-                   logging.debug("Sent %s" % format_packet(outpkt))
-                   logging.debug("Resp %s" % format_packet(
+                self.assertTrue(pkt is not None, 'Packet not received')
+                logging.info("PacketOut: got pkt from " + str(of_port))
+                if of_port is not None:
+                    self.assertEqual(of_port, dp_port, "Unexpected receive port")
+                if not dataplane.match_exp_pkt(outpkt, pkt):
+                    logging.debug("Sent %s" % format_packet(outpkt))
+                    logging.debug("Resp %s" % format_packet(
                            str(pkt)[:len(str(outpkt))]))
-               self.assertEqual(str(outpkt), str(pkt)[:len(str(outpkt))],
+                self.assertEqual(str(outpkt), str(pkt)[:len(str(outpkt))],
                                 'Response packet does not match send packet')
 
 class PacketOutMC(base_tests.SimpleDataPlane):
@@ -191,23 +191,23 @@ class PacketOutMC(base_tests.SimpleDataPlane):
         random.shuffle(of_ports)
         for num_ports in range(1, len(of_ports)+1):
             for outpkt, opt in [
-               (simple_tcp_packet(), "simple TCP packet"),
-               (simple_eth_packet(), "simple Ethernet packet"),
-               (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
+                (simple_tcp_packet(), "simple TCP packet"),
+                (simple_eth_packet(), "simple Ethernet packet"),
+                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
 
-               dp_ports = of_ports[0:num_ports]
-               logging.info("PKT OUT test with " + opt +
+                dp_ports = of_ports[0:num_ports]
+                logging.info("PKT OUT test with " + opt +
                                  ", ports " + str(dp_ports))
-               actions = [ofp.action.output(port=port) for port in dp_ports]
-               msg = ofp.message.packet_out(in_port=ofp.OFPP_NONE,
+                actions = [ofp.action.output(port=port) for port in dp_ports]
+                msg = ofp.message.packet_out(in_port=ofp.OFPP_NONE,
                                         data=str(outpkt),
                                         actions=actions,
                                         buffer_id=0xffffffff)
 
-               logging.info("PacketOut to: " + str(dp_ports))
-               self.controller.message_send(msg)
+                logging.info("PacketOut to: " + str(dp_ports))
+                self.controller.message_send(msg)
 
-               receive_pkt_check(self.dataplane, outpkt, dp_ports,
+                receive_pkt_check(self.dataplane, outpkt, dp_ports,
                                  set(of_ports).difference(dp_ports),
                                  self)
 

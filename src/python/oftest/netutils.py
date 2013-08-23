@@ -43,19 +43,19 @@ PACKET_MR_PROMISC      = 1
 SOL_PACKET = 263
 
 def get_if(iff, cmd):
-  s=socket.socket()
-  ifreq = ioctl(s, cmd, struct.pack("16s16x", iff))
-  s.close()
-  return ifreq
+    s=socket.socket()
+    ifreq = ioctl(s, cmd, struct.pack("16s16x", iff))
+    s.close()
+    return ifreq
 
 def get_if_index(iff):
-  return int(struct.unpack("I", get_if(iff, SIOCGIFINDEX)[16:20])[0])
+    return int(struct.unpack("I", get_if(iff, SIOCGIFINDEX)[16:20])[0])
 
 def set_promisc(s, iff, val=1):
-  mreq = struct.pack("IHH8s", get_if_index(iff), PACKET_MR_PROMISC, 0, "")
-  if val:
-      cmd = PACKET_ADD_MEMBERSHIP
-  else:
-      cmd = PACKET_DROP_MEMBERSHIP
-  s.setsockopt(SOL_PACKET, cmd, mreq)
+    mreq = struct.pack("IHH8s", get_if_index(iff), PACKET_MR_PROMISC, 0, "")
+    if val:
+        cmd = PACKET_ADD_MEMBERSHIP
+    else:
+        cmd = PACKET_DROP_MEMBERSHIP
+    s.setsockopt(SOL_PACKET, cmd, mreq)
 

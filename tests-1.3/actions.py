@@ -136,7 +136,7 @@ class PushVlanVid(BaseModifyPacketTest):
     """
     def runTest(self):
         actions = [ofp.action.push_vlan(ethertype=0x8100),
-                   ofp.action.set_field(ofp.oxm.vlan_vid(2))]
+                    ofp.action.set_field(ofp.oxm.vlan_vid(2))]
         pkt = simple_tcp_packet()
         exp_pkt = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=2, pktlen=104)
         self.verify_modify(actions, pkt, exp_pkt)
@@ -147,8 +147,8 @@ class PushVlanVidPcp(BaseModifyPacketTest):
     """
     def runTest(self):
         actions = [ofp.action.push_vlan(ethertype=0x8100),
-                   ofp.action.set_field(ofp.oxm.vlan_vid(2)),
-                   ofp.action.set_field(ofp.oxm.vlan_pcp(3))]
+                    ofp.action.set_field(ofp.oxm.vlan_vid(2)),
+                    ofp.action.set_field(ofp.oxm.vlan_pcp(3))]
         pkt = simple_tcp_packet()
         exp_pkt = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=2, vlan_pcp=3, pktlen=104)
         self.verify_modify(actions, pkt, exp_pkt)
@@ -159,7 +159,7 @@ class PushVlanPcp(BaseModifyPacketTest):
     """
     def runTest(self):
         actions = [ofp.action.push_vlan(ethertype=0x8100),
-                   ofp.action.set_field(ofp.oxm.vlan_pcp(3))]
+                    ofp.action.set_field(ofp.oxm.vlan_pcp(3))]
         pkt = simple_tcp_packet()
         exp_pkt = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=0, vlan_pcp=3, pktlen=104)
         self.verify_modify(actions, pkt, exp_pkt)

@@ -23,12 +23,12 @@ from FuncUtils import*
 
 
 def port_queues_get(self, queue_stats, port_num):
-            result = []
-            for qs in queue_stats.entries:
-                if qs.port_no != port_num:
-                    continue
-                result.append(qs.queue_id)
-            return result
+    result = []
+    for qs in queue_stats.entries:
+        if qs.port_no != port_num:
+            continue
+        result.append(qs.queue_id)
+    return result
 
 
 class PktPerFlow(base_tests.SimpleDataPlane):
@@ -478,7 +478,7 @@ class RxErrors(base_tests.SimpleDataPlane):
 
     """Verify that rx_errors counters in the Port_Stats reply increments in accordance with number of recieved error  
           This is a super-set of more specific receive errors and should be greater than or equal to the sum of all
-                  rx_*_err values"""
+                    rx_*_err values"""
 
     def runTest(self):
         

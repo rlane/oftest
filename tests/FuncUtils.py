@@ -505,8 +505,8 @@ def verify_tablestats(self, expect_lookup=None, expect_match=None, expect_active
         logging.info("Active flow entries: %d", active)
 
         if (expect_lookup == None or lookedup >= expect_lookup) and \
-           (expect_match == None or matched >= expect_match) and \
-           (expect_active == None or active >= expect_active):
+            (expect_match == None or matched >= expect_match) and \
+            (expect_active == None or active >= expect_active):
             break
 
         sleep(0.1)
@@ -566,7 +566,7 @@ def send_packet(obj, pkt, ingress_port, egress_port):
                                                        port_number=exp_port,
                                                        exp_pkt=exp_pkt_arg)
     obj.assertTrue(rcv_pkt is not None,
-                   "Packet not received on port " + str(egress_port))
+                    "Packet not received on port " + str(egress_port))
     obj.assertEqual(rcv_port, egress_port,
                     "Packet received on port " + str(rcv_port) +
                     ", expected port " + str(egress_port))

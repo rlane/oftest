@@ -215,7 +215,7 @@ class GetConfigReply(base_tests.SimpleProtocol):
         self.assertEqual(reply.xid, request.xid, 'Transaction id does not match')
 
         if reply.miss_send_len == 0 :
-           logging.info ("the switch must send zero-size packet_in message")
+            logging.info ("the switch must send zero-size packet_in message")
         else :
             logging.info("miss_send_len: " + str(reply.miss_send_len))
         

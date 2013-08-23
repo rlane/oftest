@@ -24,11 +24,11 @@ def fancy_ip_mask(index):
     """
     Return the IP mask for the given wildcard index 0 - 31 per the OF 1.0 spec.
     For wildcard index 32 - 63, return a "negative" IP mask:
-      32 : wildcard the first bit, mask 127.255.255.255
-      33 : wildcard all first 2 bits, mask 63.255.255.255
-      ...
-      62 : wildcard all but last bit, mask 0.0.0.1
-      63 : wildcard all bits, mask 0.0.0.0
+        32 : wildcard the first bit, mask 127.255.255.255
+        33 : wildcard all first 2 bits, mask 63.255.255.255
+        ...
+        62 : wildcard all but last bit, mask 0.0.0.1
+        63 : wildcard all bits, mask 0.0.0.0
     """
     if index < 32:
         return ((1 << 32) - 1) ^ ((1 << index) - 1)
@@ -119,30 +119,30 @@ class BSNConfigIPMask(base_tests.SimpleDataPlane):
         ip3 = scapy.utils.ltoa(0x00000000 ^ mask)
 
         if source:
-           wildcards = ((ofp.OFPFW_ALL ^ ofp.OFPFW_DL_TYPE ^ ofp.OFPFW_NW_SRC_MASK)
+            wildcards = ((ofp.OFPFW_ALL ^ ofp.OFPFW_DL_TYPE ^ ofp.OFPFW_NW_SRC_MASK)
                         | (index << ofp.OFPFW_NW_SRC_SHIFT))
-           pkt0 = simple_tcp_packet(ip_src=ip0)
-           pkt1 = simple_tcp_packet(ip_src=ip1)
-           pkt2 = simple_tcp_packet(ip_src=ip2)
-           pkt3 = simple_tcp_packet(ip_src=ip3)
-           msg = lambda ip: logging.info("Testing source IP %s" % ip)
+            pkt0 = simple_tcp_packet(ip_src=ip0)
+            pkt1 = simple_tcp_packet(ip_src=ip1)
+            pkt2 = simple_tcp_packet(ip_src=ip2)
+            pkt3 = simple_tcp_packet(ip_src=ip3)
+            msg = lambda ip: logging.info("Testing source IP %s" % ip)
         else:
-           wildcards = ((ofp.OFPFW_ALL ^ ofp.OFPFW_DL_TYPE ^ ofp.OFPFW_NW_DST_MASK)
+            wildcards = ((ofp.OFPFW_ALL ^ ofp.OFPFW_DL_TYPE ^ ofp.OFPFW_NW_DST_MASK)
                         | (index << ofp.OFPFW_NW_DST_SHIFT))
-           pkt0 = simple_tcp_packet(ip_dst=ip0)
-           pkt1 = simple_tcp_packet(ip_dst=ip1)
-           pkt2 = simple_tcp_packet(ip_dst=ip2)
-           pkt3 = simple_tcp_packet(ip_dst=ip3)
-           msg = lambda ip: logging.info("Testing dest IP %s" % ip)
+            pkt0 = simple_tcp_packet(ip_dst=ip0)
+            pkt1 = simple_tcp_packet(ip_dst=ip1)
+            pkt2 = simple_tcp_packet(ip_dst=ip2)
+            pkt3 = simple_tcp_packet(ip_dst=ip3)
+            msg = lambda ip: logging.info("Testing dest IP %s" % ip)
 
         delete_all_flows(self.controller)
 
         self.controller.message_send(flow_msg_create(
-              self, pkt0, ing_port=ports[0], egr_ports=[ports[1]],
-              wildcards=wildcards))
+                self, pkt0, ing_port=ports[0], egr_ports=[ports[1]],
+                wildcards=wildcards))
         self.controller.message_send(flow_msg_create(
-              self, pkt1, ing_port=ports[0], egr_ports=[ports[2]],
-              wildcards=wildcards))
+                self, pkt1, ing_port=ports[0], egr_ports=[ports[2]],
+                wildcards=wildcards))
 
         do_barrier(self.controller)
             

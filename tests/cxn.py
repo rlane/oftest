@@ -282,12 +282,12 @@ class CompleteHandshake(BaseHandshake):
                 self.assertTrue(disconnected_count < self.disconnected_timeout/tick,
                                 "Timeout expired connecting to controller")
             else:
-               # on first cycle, allow more time for initial connect
-               self.assertTrue(disconnected_count < 2*self.disconnected_timeout/tick,
+                # on first cycle, allow more time for initial connect
+                self.assertTrue(disconnected_count < 2*self.disconnected_timeout/tick,
                                "Timeout expired connecting to controller on init")
 
             if cycle > self.cxn_cycles:
-               break
+                break
             time.sleep(tick)
         self.periodic_task_done()
 
@@ -299,7 +299,7 @@ class HandshakeAndKeepalive(CompleteHandshake):
     """
 
     def __init__(self):
-       CompleteHandshake.__init__(self, keep_alive=True)
+        CompleteHandshake.__init__(self, keep_alive=True)
 
 @disabled
 class MonitorPacketIn(CompleteHandshake):
@@ -309,7 +309,7 @@ class MonitorPacketIn(CompleteHandshake):
     """
 
     def __init__(self):
-       CompleteHandshake.__init__(self, keep_alive=True, report_pkts=True)
+        CompleteHandshake.__init__(self, keep_alive=True, report_pkts=True)
 
 @disabled
 class HandshakeNoEcho(CompleteHandshake):
@@ -318,7 +318,7 @@ class HandshakeNoEcho(CompleteHandshake):
     """
 
     def __init__(self):
-       CompleteHandshake.__init__(self, keep_alive=False)
+        CompleteHandshake.__init__(self, keep_alive=False)
 
 @disabled
 class HandshakeAndDrop(CompleteHandshake):
@@ -327,5 +327,5 @@ class HandshakeAndDrop(CompleteHandshake):
     """
 
     def __init__(self):
-       CompleteHandshake.__init__(self, keep_alive=True, controller_timeout=10)
+        CompleteHandshake.__init__(self, keep_alive=True, controller_timeout=10)
 

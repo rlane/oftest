@@ -146,16 +146,16 @@ class Flow_Info:
             i = i + 1
     
         if test_param_get("vlans", []) != []:
-           self.vlans = test_param_get("vlans", [])
+            self.vlans = test_param_get("vlans", [])
 
-           logging.info("Overriding VLAN ids to:")
-           logging.info(self.vlans)
+            logging.info("Overriding VLAN ids to:")
+            logging.info(self.vlans)
         else:
-           self.vlans = []
-           i = 0
-           while i < n:
-              self.vlans.append(random.randint(1, 4094))
-              i = i + 1
+            self.vlans = []
+            i = 0
+            while i < n:
+                self.vlans.append(random.randint(1, 4094))
+                i = i + 1
     
         self.ethertypes = [0x0800, 0x0806]
         i = 0
@@ -350,28 +350,28 @@ class Flow_Cfg:
         if self.match.wildcards != x.match.wildcards:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_IN_PORT) == 0 \
-           and self.match.in_port != x.match.in_port:
+            and self.match.in_port != x.match.in_port:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_DL_DST) == 0 \
-           and self.match.eth_dst != x.match.eth_dst:
+            and self.match.eth_dst != x.match.eth_dst:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_DL_SRC) == 0 \
-           and self.match.eth_src != x.match.eth_src:
+            and self.match.eth_src != x.match.eth_src:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_DL_VLAN) == 0 \
-           and self.match.vlan_vid != x.match.vlan_vid:
+            and self.match.vlan_vid != x.match.vlan_vid:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_DL_VLAN_PCP) == 0 \
-           and self.match.vlan_pcp != x.match.vlan_pcp:
+            and self.match.vlan_pcp != x.match.vlan_pcp:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_DL_TYPE) == 0 \
-           and self.match.eth_type != x.match.eth_type:
+            and self.match.eth_type != x.match.eth_type:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_NW_TOS) == 0 \
-           and self.match.ip_dscp != x.match.ip_dscp:
+            and self.match.ip_dscp != x.match.ip_dscp:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_NW_PROTO) == 0 \
-           and self.match.ip_proto != x.match.ip_proto:
+            and self.match.ip_proto != x.match.ip_proto:
             return False
         n = wildcard_get(self.match.wildcards, ofp.OFPFW_NW_SRC_MASK)
         if n < 32:
@@ -384,10 +384,10 @@ class Flow_Cfg:
             if (self.match.ipv4_dst & m) != (x.match.ipv4_dst & m):
                 return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_TP_SRC) == 0 \
-               and self.match.tcp_src != x.match.tcp_src:
+                and self.match.tcp_src != x.match.tcp_src:
             return False
         if wildcard_get(self.match.wildcards, ofp.OFPFW_TP_DST) == 0 \
-               and self.match.tcp_dst != x.match.tcp_dst:
+                and self.match.tcp_dst != x.match.tcp_dst:
             return False
         return True
 
@@ -524,19 +524,19 @@ class Flow_Cfg:
             if a == ofp.OFPAT_OUTPUT:
                 pass                    # OUTPUT actions must come last
             elif a == ofp.OFPAT_SET_VLAN_VID:
-               if not strip_vlanf:
-                  act = ofp.action.set_vlan_vid()
-                  act.vlan_vid = fi.rand_vlan()
-                  set_vlanf = True
+                if not strip_vlanf:
+                    act = ofp.action.set_vlan_vid()
+                    act.vlan_vid = fi.rand_vlan()
+                    set_vlanf = True
             elif a == ofp.OFPAT_SET_VLAN_PCP:
-               if not strip_vlanf:
-                  act = ofp.action.set_vlan_pcp()
-                  act.vlan_pcp = random.randint(0, (1 << 3) - 1)
-                  set_vlanf = True
+                if not strip_vlanf:
+                    act = ofp.action.set_vlan_pcp()
+                    act.vlan_pcp = random.randint(0, (1 << 3) - 1)
+                    set_vlanf = True
             elif a == ofp.OFPAT_STRIP_VLAN:
-               if not set_vlanf:
-                  act = ofp.action.strip_vlan()
-                  strip_vlanf = True
+                if not set_vlanf:
+                    act = ofp.action.strip_vlan()
+                    strip_vlanf = True
             elif a == ofp.OFPAT_SET_DL_SRC:
                 act = ofp.action.set_dl_src()
                 act.dl_addr = fi.rand_dl_addr()
@@ -565,8 +565,8 @@ class Flow_Cfg:
                 
         p = random.randint(1, 100)
         if (((1 << ofp.OFPAT_ENQUEUE) & actions_force) != 0 or p <= 33) \
-           and len(valid_queues) > 0 \
-           and ofp.OFPAT_ENQUEUE in actions:
+            and len(valid_queues) > 0 \
+            and ofp.OFPAT_ENQUEUE in actions:
             # In not forecd, one third of the time, include ENQUEUE actions
             # at end of list
             # At most 1 ENQUEUE action
@@ -588,7 +588,7 @@ class Flow_Cfg:
                 act = ofp.action.output()
                 act.port = valid_ports[pi]
                 if act.port != ofp.OFPP_IN_PORT \
-                   or wildcard_get(self.match.wildcards, ofp.OFPFW_IN_PORT) == 0:
+                    or wildcard_get(self.match.wildcards, ofp.OFPFW_IN_PORT) == 0:
                     # OUTPUT(IN_PORT) only valid if OFPFW_IN_PORT not wildcarded
                     self.actions.append(act)
         else:
@@ -714,7 +714,7 @@ class Flow_Cfg:
         #      wildcard Q
 
         if wildcard_get(wildcards_force, ofp.OFPFW_IN_PORT) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_IN_PORT) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_IN_PORT) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -726,7 +726,7 @@ class Flow_Cfg:
                                                 )
             
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_DST) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_DST) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_DST) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -738,7 +738,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_SRC) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_SRC) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_SRC) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -750,7 +750,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_VLAN) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_VLAN) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_VLAN) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -762,7 +762,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_VLAN_PCP) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_VLAN_PCP) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_VLAN_PCP) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -774,7 +774,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_TYPE) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_TYPE) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_TYPE) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -834,7 +834,7 @@ class Flow_Cfg:
                                                     )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_NW_TOS) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_NW_TOS) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_NW_TOS) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -854,7 +854,7 @@ class Flow_Cfg:
 
         # Known issue on OVS with specifying ip_proto w/o eth_type as IP
         if wildcard_get(wildcards_force, ofp.OFPFW_NW_PROTO) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_NW_PROTO) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_NW_PROTO) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -873,7 +873,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_TP_SRC) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_TP_SRC) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_TP_SRC) == 0 \
                     or exact\
                     or flip_coin() \
                     ):
@@ -901,7 +901,7 @@ class Flow_Cfg:
                                                 )
 
         if wildcard_get(wildcards_force, ofp.OFPFW_TP_DST) == 0 \
-               and (wildcard_get(valid_wildcards, ofp.OFPFW_TP_DST) == 0 \
+                and (wildcard_get(valid_wildcards, ofp.OFPFW_TP_DST) == 0 \
                     or exact \
                     or flip_coin() \
                     ):
@@ -973,7 +973,7 @@ class Flow_Cfg:
                                                   )
 
         if wildcard_get(result.match.wildcards, ofp.OFPFW_DL_TYPE) != 0 \
-               or result.match.eth_type not in [0x0800, 0x0806]:
+                or result.match.eth_type not in [0x0800, 0x0806]:
             # dl_tyoe is wildcarded, or specified as something other
             # than IP or ARP
             # => ipv4_src, ipv4_dst, ip_proto cannot be specified,
@@ -992,7 +992,7 @@ class Flow_Cfg:
                                                   )
 
         if wildcard_get(result.match.wildcards, ofp.OFPFW_DL_TYPE) != 0 \
-               or result.match.eth_type != 0x0800:
+                or result.match.eth_type != 0x0800:
             # eth_type is wildcarded, or specified as something other than IP
             # => ip_dscp, tcp_src and tcp_dst cannot be specified,
             #    must be wildcarded
@@ -1022,7 +1022,7 @@ class Flow_Cfg:
                                                   )
             
         if wildcard_get(result.match.wildcards, ofp.OFPFW_NW_PROTO) != 0 \
-               or result.match.ip_proto not in [1, 6, 17]:
+                or result.match.ip_proto not in [1, 6, 17]:
             # ip_proto is wildcarded, or specified as something other than ICMP,
             # TCP or UDP
             # => tcp_src and tcp_dst cannot be specified, must be wildcarded

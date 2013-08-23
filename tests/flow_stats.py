@@ -22,24 +22,24 @@ from time import sleep
 
 # TODO: ovs has problems with VLAN id?
 WILDCARD_VALUES = [ofp.OFPFW_IN_PORT,
-                   # (ofp.OFPFW_DL_VLAN | ofp.OFPFW_DL_VLAN_PCP),
-                   ofp.OFPFW_DL_SRC,
-                   ofp.OFPFW_DL_DST,
-                   (ofp.OFPFW_DL_TYPE | ofp.OFPFW_NW_SRC_ALL |
+                    # (ofp.OFPFW_DL_VLAN | ofp.OFPFW_DL_VLAN_PCP),
+                    ofp.OFPFW_DL_SRC,
+                    ofp.OFPFW_DL_DST,
+                    (ofp.OFPFW_DL_TYPE | ofp.OFPFW_NW_SRC_ALL |
                     ofp.OFPFW_NW_DST_ALL | ofp.OFPFW_NW_TOS | ofp.OFPFW_NW_PROTO |
                     ofp.OFPFW_TP_SRC | ofp.OFPFW_TP_DST),
-                   (ofp.OFPFW_NW_PROTO | ofp.OFPFW_TP_SRC | ofp.OFPFW_TP_DST),
-                   ofp.OFPFW_TP_SRC,
-                   ofp.OFPFW_TP_DST,
-                   ofp.OFPFW_NW_SRC_MASK,
-                   ofp.OFPFW_NW_DST_MASK,
-                   ofp.OFPFW_DL_VLAN_PCP,
-                   ofp.OFPFW_NW_TOS]
+                    (ofp.OFPFW_NW_PROTO | ofp.OFPFW_TP_SRC | ofp.OFPFW_TP_DST),
+                    ofp.OFPFW_TP_SRC,
+                    ofp.OFPFW_TP_DST,
+                    ofp.OFPFW_NW_SRC_MASK,
+                    ofp.OFPFW_NW_DST_MASK,
+                    ofp.OFPFW_DL_VLAN_PCP,
+                    ofp.OFPFW_NW_TOS]
 
 def sendPacket(obj, pkt, ingress_port, egress_port, test_timeout):
 
     logging.info("Sending packet to dp port " + str(ingress_port) +
-                   ", expecting output on " + str(egress_port))
+                    ", expecting output on " + str(egress_port))
     obj.dataplane.send(ingress_port, str(pkt))
 
     exp_pkt_arg = None
@@ -51,7 +51,7 @@ def sendPacket(obj, pkt, ingress_port, egress_port, test_timeout):
     (rcv_port, rcv_pkt, pkt_time) = obj.dataplane.poll(port_number=exp_port,
                                                        exp_pkt=exp_pkt_arg)
     obj.assertTrue(rcv_pkt is not None,
-                   "Packet not received on port " + str(egress_port))
+                    "Packet not received on port " + str(egress_port))
     logging.debug("Packet len " + str(len(rcv_pkt)) + " in on " + 
                     str(rcv_port))
     obj.assertEqual(rcv_port, egress_port,
@@ -201,9 +201,9 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
         for obj in response.entries:
             #self.assertEqual(match, obj.match,
             #                 "Matches do not match")
-           logging.info("Received " + str(obj.packet_count)
+            logging.info("Received " + str(obj.packet_count)
                           + " packets")
-           total_packets += obj.packet_count
+            total_packets += obj.packet_count
         return total_packets
 
     def verifyStats(self, match, out_port, test_timeout, packet_count):
@@ -223,10 +223,10 @@ class TwoFlowStats(base_tests.SimpleDataPlane):
             total_packets = self.sumStatsReplyCounts(response)
 
             while response.flags == ofp.OFPSF_REPLY_MORE:
-               response, pkt = self.controller.poll(exp_msg=
+                response, pkt = self.controller.poll(exp_msg=
                                                     ofp.OFPT_STATS_REPLY,
                                                     timeout=test_timeout)
-               total_packets += self.sumStatsReplyCounts(response)
+                total_packets += self.sumStatsReplyCounts(response)
 
             if total_packets == packet_count:
                 all_packets_received = 1

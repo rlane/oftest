@@ -118,16 +118,16 @@ class PacketInLoad(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         for of_port in of_ports:
             for pkt, pt in [
-               (simple_tcp_packet(), "simple TCP packet"),
-               (simple_tcp_packet(dl_vlan_enable=True, pktlen=108), 
+                (simple_tcp_packet(), "simple TCP packet"),
+                (simple_tcp_packet(dl_vlan_enable=True, pktlen=108), 
                 "simple tagged TCP packet"),
-               (simple_eth_packet(), "simple Ethernet packet"),
-               (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
+                (simple_eth_packet(), "simple Ethernet packet"),
+                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
 
-               logging.info("PKT IN test with %s, port %s" % (pt, of_port))
-               for count in range(100):
-                   out_count += 1
-                   self.dataplane.send(of_port, str(pkt))
+                logging.info("PKT IN test with %s, port %s" % (pt, of_port))
+                for count in range(100):
+                    out_count += 1
+                    self.dataplane.send(of_port, str(pkt))
         while True:
             (response, raw) = self.controller.poll(ofp.OFPT_PACKET_IN)
             if not response:
@@ -161,28 +161,28 @@ class PacketOutLoad(base_tests.SimpleDataPlane):
         xid = 100
         for dp_port in of_ports:
             for outpkt, opt in [
-               (simple_tcp_packet(), "simple TCP packet"),
-               (simple_eth_packet(), "simple Ethernet packet"),
-               (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
+                (simple_tcp_packet(), "simple TCP packet"),
+                (simple_eth_packet(), "simple Ethernet packet"),
+                (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
 
-               logging.info("PKT OUT test with %s, port %s" % (opt, dp_port))
-               msg = ofp.message.packet_out()
-               msg.in_port = ofp.OFPP_NONE
-               msg.data = str(outpkt)
-               act = ofp.action.output()
-               act.port = dp_port
-               msg.actions.append(act)
-               msg.buffer_id = 0xffffffff
+                logging.info("PKT OUT test with %s, port %s" % (opt, dp_port))
+                msg = ofp.message.packet_out()
+                msg.in_port = ofp.OFPP_NONE
+                msg.data = str(outpkt)
+                act = ofp.action.output()
+                act.port = dp_port
+                msg.actions.append(act)
+                msg.buffer_id = 0xffffffff
 
-               logging.info("PacketOutLoad to: " + str(dp_port))
-               for count in range(100):
-                   msg.xid = xid
-                   xid += 1
-                   self.controller.message_send(msg)
-                   out_count += 1
+                logging.info("PacketOutLoad to: " + str(dp_port))
+                for count in range(100):
+                    msg.xid = xid
+                    xid += 1
+                    self.controller.message_send(msg)
+                    out_count += 1
 
-               exp_pkt_arg = None
-               exp_port = None
+                exp_pkt_arg = None
+                exp_port = None
         while True:
             (of_port, pkt, pkt_time) = self.dataplane.poll()
             if pkt is None:
@@ -196,8 +196,8 @@ class FlowModLoad(base_tests.SimpleProtocol):
         msg, pkt = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
-           msg = self.controller.packets.pop(0)[0]
-           self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
+            msg = self.controller.packets.pop(0)[0]
+            self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
 
     def runTest(self):
         msg, pkt = self.controller.transact(ofp.message.table_stats_request())
@@ -232,7 +232,7 @@ class FlowModLoad(base_tests.SimpleProtocol):
             logging.info("Iteration %d: add %s flows" % (i, num_flows))
             random.shuffle(requests)
             for request in requests:
-               self.assertNotEqual(self.controller.message_send(request), -1,
+                self.assertNotEqual(self.controller.message_send(request), -1,
                                "Error installing flow mod")
             self.checkBarrier()
 
@@ -249,8 +249,8 @@ class FlowRemovedLoad(base_tests.SimpleDataPlane):
         msg, pkt = self.controller.transact(ofp.message.barrier_request(), timeout=60)
         self.assertNotEqual(msg, None, "Barrier failed")
         while self.controller.packets:
-           msg = self.controller.packets.pop(0)[0]
-           self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
+            msg = self.controller.packets.pop(0)[0]
+            self.assertNotEqual(msg.type, ofp.OFPT_ERROR, "Error received")
 
     def runTest(self):
         delete_all_flows(self.controller)

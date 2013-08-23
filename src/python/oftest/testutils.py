@@ -697,7 +697,7 @@ def packet_to_flow_match(parent, packet):
     return match
 
 def flow_msg_create(parent, pkt, ing_port=None, action_list=None, wildcards=None,
-               egr_ports=None, egr_queue=None, check_expire=False, in_band=False):
+                egr_ports=None, egr_queue=None, check_expire=False, in_band=False):
     """
     Create a flow message
 
@@ -1189,11 +1189,11 @@ def hex_dump_buffer(src, length=16):
     """
     result = ["\n"]
     for i in xrange(0, len(src), length):
-       chars = src[i:i+length]
-       hex = ' '.join(["%02x" % ord(x) for x in chars])
-       printable = ''.join(["%s" % ((ord(x) <= 127 and
+        chars = src[i:i+length]
+        hex = ' '.join(["%02x" % ord(x) for x in chars])
+        printable = ''.join(["%s" % ((ord(x) <= 127 and
                                      FILTER[ord(x)]) or '.') for x in chars])
-       result.append("%04x  %-*s  %s\n" % (i, length*3, hex, printable))
+        result.append("%04x  %-*s  %s\n" % (i, length*3, hex, printable))
     return ''.join(result)
 
 def format_packet(pkt):
@@ -1306,8 +1306,8 @@ def get_stats(test, req):
     return stats
 
 def get_flow_stats(test, match, table_id=None,
-                   out_port=None, out_group=None,
-                   cookie=0, cookie_mask=0):
+                    out_port=None, out_group=None,
+                    cookie=0, cookie_mask=0):
     """
     Retrieve a list of flow stats entries.
     """
@@ -1383,7 +1383,7 @@ def verify_flow_stats(test, match, table_id=0xff,
         pkt_diff = pkts_after - pkts_before
         byte_diff = bytes_after - bytes_before
         if (pkts == None or pkt_diff >= pkts) and \
-           (bytes == None or byte_diff >= bytes):
+            (bytes == None or byte_diff >= bytes):
             break
         time.sleep(0.1)
 
@@ -1427,9 +1427,9 @@ def verify_port_stats(test, port,
         tx_bytes_diff = tx_bytes_after - tx_bytes_before
         rx_bytes_diff = rx_bytes_after - rx_bytes_before
         if (tx_pkts == None or tx_pkts == tx_pkts_diff) and \
-           (rx_pkts == None or rx_pkts == rx_pkts_diff) and \
-           (tx_bytes == None or tx_bytes <= tx_bytes_diff) and \
-           (rx_bytes == None or rx_bytes <= rx_bytes_diff):
+            (rx_pkts == None or rx_pkts == rx_pkts_diff) and \
+            (tx_bytes == None or tx_bytes <= tx_bytes_diff) and \
+            (rx_bytes == None or rx_bytes <= rx_bytes_diff):
             break
         time.sleep(0.1)
 
@@ -1471,7 +1471,7 @@ def verify_queue_stats(test, port_no, queue_id,
         pkt_diff = pkts_after - pkts_before
         byte_diff = bytes_after - bytes_before
         if (pkts == None or pkt_diff >= pkts) and \
-           (bytes == None or byte_diff >= bytes):
+            (bytes == None or byte_diff >= bytes):
             break
         time.sleep(0.1)
 
