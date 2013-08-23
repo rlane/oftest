@@ -43,7 +43,7 @@ PACKET_MR_PROMISC      = 1
 SOL_PACKET = 263
 
 def get_if(iff, cmd):
-    s=socket.socket()
+    s = socket.socket()
     ifreq = ioctl(s, cmd, struct.pack("16s16x", iff))
     s.close()
     return ifreq

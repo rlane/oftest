@@ -175,8 +175,8 @@ class EmerFlowTimeout(base_tests.SimpleProtocol):
         request = ofp.message.flow_add()
         request.match = match
         request.flags = request.flags|ofp.OFPFF_EMERG
-        request.hard_timeout =9
-        request.idle_timeout =9
+        request.hard_timeout = 9
+        request.idle_timeout = 9
         
         act = ofp.action.output()
         act.port = of_ports[1]

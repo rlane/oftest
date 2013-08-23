@@ -1262,7 +1262,7 @@ class ModifyVID(BaseMatchCase):
     """
     def setUp(self):
         BaseMatchCase.setUp(self)
-        self.ing_port=False
+        self.ing_port = False
 
     def runTest(self):
         old_vid = 2
@@ -1287,7 +1287,7 @@ class ModifyVIDToIngress(ModifyVID):
     """
     def setUp(self):
         BaseMatchCase.setUp(self)
-        self.ing_port=True
+        self.ing_port = True
 
 class ModifyVIDWithTagMatchWildcarded(BaseMatchCase):
     """
@@ -1410,10 +1410,10 @@ def init_pkt_args():
     args = {}
     args["eth_src"] = '00:23:45:67:89:AB'
 
-    dl_vlan_enable=False
-    vlan_vid=-1
+    dl_vlan_enable = False
+    vlan_vid = -1
     if config["test-params"]["vid"]:
-        dl_vlan_enable=True
+        dl_vlan_enable = True
         vlan_vid = config["test-params"]["vid"]
 
 # Unpack operator is ** on a dictionary
@@ -2108,13 +2108,13 @@ class DirectBadIpTcpPacketsBase(DirectBadPacketBase):
         pass
 
     def runTestWithProto(self, protoName = 'TCP'):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
         
         # Generate a proper packet for constructing a match
         tp = None
@@ -2312,13 +2312,13 @@ class DirectBadLlcPackets(DirectBadPacketBase):
     Verify LLC/SNAP parsing and matching. Focus on packet corruptions 
     """
     def runTest(self):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
 
         IS_SNAP_IP = 1
         IS_SNAP_IP_CORRUPT = 2
@@ -2465,13 +2465,13 @@ class DirectLlcPackets(DirectBadPacketBase):
     Verify LLC/SNAP parsing (valid and corrupted packets) and matching
     """
     def runTest(self):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
 
         # Test ethertype in face of LLC/SNAP and OFP_DL_TYPE_NOT_ETH_TYPE
         IS_SNAP_NOT_IP = 1
@@ -2578,15 +2578,15 @@ class DirectArpPackets(DirectBadPacketBase):
         self.testArpHandling()
 
     def testArpHandling(self):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_src2='192.168.1.1'
-        ip_dst2='192.168.1.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_src2 = '192.168.1.1'
+        ip_dst2 = '192.168.1.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
 
         def testPacket(title, arp_match, arp_pkt, result):
             pkts = []
@@ -2625,15 +2625,15 @@ class DirectVlanPackets(DirectBadPacketBase):
     Verify VLAN parsing (valid and corrupted packets) and ARP matching
     """
     def runTest(self):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_src2='192.168.1.1'
-        ip_dst2='192.168.1.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_src2 = '192.168.1.1'
+        ip_dst2 = '192.168.1.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
 
         def testPacket(title, match, pkt, result):
             pkts = []
@@ -2722,15 +2722,15 @@ class DirectVlanPacketsDoubleTagged(DirectVlanPackets):
     the treatment of these cases, so broken out to be non-standard
     """
     def runTest(self):
-        eth_dst='00:01:02:03:04:05'
-        eth_src='00:06:07:08:09:0a'
-        ip_src='192.168.0.1'
-        ip_dst='192.168.0.2'
-        ip_src2='192.168.1.1'
-        ip_dst2='192.168.1.2'
-        ip_tos=0
-        tcp_sport=1234
-        tcp_dport=80
+        eth_dst = '00:01:02:03:04:05'
+        eth_src = '00:06:07:08:09:0a'
+        ip_src = '192.168.0.1'
+        ip_dst = '192.168.0.2'
+        ip_src2 = '192.168.1.1'
+        ip_dst2 = '192.168.1.2'
+        ip_tos = 0
+        tcp_sport = 1234
+        tcp_dport = 80
 
         def testPacket(title, match, pkt, result):
             pkts = []

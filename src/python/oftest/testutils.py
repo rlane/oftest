@@ -1177,8 +1177,8 @@ def all_stats_get(parent):
     return rv
 
 _import_blacklist.add('FILTER')
-FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' 
-                for x in range(256)])
+FILTER = ''.join([(len(repr(chr(x)))==3) and chr(x) or '.' 
+                  for x in range(256)])
 
 def hex_dump_buffer(src, length=16):
     """

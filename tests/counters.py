@@ -121,7 +121,7 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
     
         #Create flow_stats request 
         stat_req = ofp.message.flow_stats_request()
-        stat_req.match= match
+        stat_req.match = match
         stat_req.table_id = 0xff
         stat_req.out_port = ofp.OFPP_NONE
 

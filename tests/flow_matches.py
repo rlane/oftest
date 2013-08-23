@@ -42,8 +42,8 @@ class AllWildcardMatch(base_tests.SimpleDataPlane):
         logging.info("Inserting an all wildcarded flow and sending packets with various match fields")
         logging.info("Expecting all sent packets to match")
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         #Insert an All Wildcarded flow.
@@ -95,8 +95,8 @@ class EthernetSrcAddress(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Ethernet Source Address ")
@@ -132,8 +132,8 @@ class EthernetDstAddress(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match on Ethernet Destination Address ")
@@ -172,8 +172,8 @@ class EthernetType(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match on Ethernet Type ")
@@ -212,8 +212,8 @@ class IngressPort(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Ingress Port ")
@@ -248,8 +248,8 @@ class VlanId(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on VLAN ID ")
@@ -287,8 +287,8 @@ class VlanPCP(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on VLAN Priority ")
@@ -326,8 +326,8 @@ class MultipleHeaderFieldL2(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Multiple Header Fields in L2 ")
@@ -374,8 +374,8 @@ class IpTos(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Ip_Tos ")
@@ -411,8 +411,8 @@ class IpProtocol(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Ip Protocol ")
@@ -449,8 +449,8 @@ class TcpSrcPort(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Tcp Tcp Source Port ")
@@ -485,8 +485,8 @@ class TcpDstPort(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match on Tcp Destination Port ")
@@ -521,8 +521,8 @@ class UdpSrcPort(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Udp Udp Source Port ")
@@ -557,8 +557,8 @@ class UdpDstPort(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match on Udp Destination Port ")
@@ -593,8 +593,8 @@ class ICMPType(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on ICMP type")
@@ -629,8 +629,8 @@ class ICMPCode(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on ICMP type")
@@ -665,8 +665,8 @@ class ArpOpcode(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Arp Protocol Opcode")
@@ -702,8 +702,8 @@ class ArpSenderIP(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Arp Protocol ")
@@ -739,8 +739,8 @@ class ArpTargetIP(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting a flow with match on Arp Protocol ")
@@ -777,8 +777,8 @@ class ExactMatch(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match for Exact Match ")
@@ -814,8 +814,8 @@ class MultipleHeaderFieldL4(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
         
         logging.info("Inserting a flow with match on Multiple Header Field L4 ")
@@ -856,8 +856,8 @@ class ExactMatchPrio(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[2]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[2]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = egress_port
     
         logging.info("Inserting a flow with Exact Match (low priority)")
@@ -891,8 +891,8 @@ class WildcardMatchPrio(base_tests.SimpleDataPlane):
         #Clear Switch State
         delete_all_flows(self.controller)
 
-        egress_port=of_ports[1]
-        no_ports=set(of_ports).difference([egress_port])
+        egress_port = of_ports[1]
+        no_ports = set(of_ports).difference([egress_port])
         yes_ports = of_ports[1]
     
         logging.info("Inserting two wildcarded flows with priorities ")

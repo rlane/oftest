@@ -40,7 +40,7 @@ def exact_match(self, of_ports, priority=None):
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
     match.in_port = of_ports[0]
     #match.ipv4_src = 1
-    match.wildcards=0
+    match.wildcards = 0
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_exactflow, match)
 
@@ -53,7 +53,7 @@ def exact_match_with_prio(self, of_ports, priority=None):
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
     match.in_port = of_ports[0]
     #match.ipv4_src = 1
-    match.wildcards=0
+    match.wildcards = 0
     match_send_flowadd(self, match, priority, of_ports[2])
     return (pkt_exactflow, match)         
        
@@ -62,7 +62,7 @@ def match_all_except_source_address(self, of_ports, priority=None):
 # Generate Match_All_Except_Source_Address flow
         
     #Create a simple tcp packet and generate match all except src address flow.
-    pkt_wildcardsrc= simple_tcp_packet()
+    pkt_wildcardsrc = simple_tcp_packet()
     match1 = parse.packet_to_flow_match(pkt_wildcardsrc)
     self.assertTrue(match1 is not None, "Could not generate flow match from pkt")
     match1.in_port = of_ports[0]
@@ -101,7 +101,7 @@ def wildcard_all(self, of_ports, priority=None):
     pkt_wildcard = simple_tcp_packet()
     match2 = parse.packet_to_flow_match(pkt_wildcard)
     self.assertTrue(match2 is not None, "Could not generate flow match from pkt")
-    match2.wildcards=ofp.OFPFW_ALL
+    match2.wildcards = ofp.OFPFW_ALL
     match2.in_port = of_ports[0]
     match_send_flowadd(self, match2, priority, of_ports[1])
     return (pkt_wildcard, match2)
@@ -416,19 +416,19 @@ def get_portstats(self, port_num):
     port_stats_req.port_no = port_num  
     response, pkt = self.controller.transact(port_stats_req)
     self.assertTrue(response is not None, "No response received for port stats request") 
-    rx_pkts=0
-    tx_pkts=0
-    rx_byts=0
-    tx_byts=0
-    rx_drp =0
+    rx_pkts = 0
+    tx_pkts = 0
+    rx_byts = 0
+    tx_byts = 0
+    rx_drp = 0
     tx_drp = 0
-    rx_err=0
-    tx_err =0 
-    rx_fr_err=0
-    rx_ovr_err=0
-    rx_crc_err=0
+    rx_err = 0
+    tx_err = 0 
+    rx_fr_err = 0
+    rx_ovr_err = 0
+    rx_crc_err = 0
     collisions = 0
-    tx_err=0
+    tx_err = 0
 
 
     for obj in response.entries:
@@ -442,7 +442,7 @@ def get_portstats(self, port_num):
         rx_fr_err += obj.rx_frame_err
         rx_ovr_err += obj.rx_over_err
         rx_crc_err += obj.rx_crc_err
-        collisions+= obj.collisions
+        collisions += obj.collisions
         tx_err += obj.tx_errors
 
     return (rx_pkts, tx_pkts, rx_byts, tx_byts, rx_drp, tx_drp, rx_err, tx_err, rx_fr_err, rx_ovr_err, rx_crc_err, collisions, tx_err)

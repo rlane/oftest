@@ -46,7 +46,7 @@ class NoAction(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         match = parse.packet_to_flow_match(pkt)
         self.assertTrue(match is not None, "Could not generate flow match from pkt")
-        match.wildcards=ofp.OFPFW_ALL
+        match.wildcards = ofp.OFPFW_ALL
         match.in_port = of_ports[0]
         
         msg = ofp.message.flow_add()
@@ -87,7 +87,7 @@ class Announcement(base_tests.SimpleDataPlane):
         self.assertTrue(reply is not None, "Failed to get any reply")
         self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY, 'Response is not Features_reply')
         
-        supported_actions =[]
+        supported_actions = []
         if(reply.actions &1<<ofp.OFPAT_OUTPUT):
             supported_actions.append('OFPAT_OUTPUT')
         if(reply.actions &1<<ofp.OFPAT_SET_VLAN_VID):
@@ -143,7 +143,7 @@ class ForwardAll(base_tests.SimpleDataPlane):
 
         #Delete all flows 
         delete_all_flows(self.controller)
-        ingress_port=of_ports[0]
+        ingress_port = of_ports[0]
         match.in_port = ingress_port
 
         #Create a flow mod with action.port = OFPP_ALL
@@ -292,7 +292,7 @@ class ForwardFlood(base_tests.SimpleDataPlane):
 
         #Delete all flows 
         delete_all_flows(self.controller)
-        ingress_port=of_ports[0]
+        ingress_port = of_ports[0]
         match.in_port = ingress_port
 
         #Create a flow mod with action.port = OFPP_ALL
@@ -342,7 +342,7 @@ class ForwardInport(base_tests.SimpleDataPlane):
 
         #Delete the flows
         delete_all_flows(self.controller)
-        ingress_port=of_ports[0]
+        ingress_port = of_ports[0]
         match.in_port = ingress_port
 
         # Create a flow mod message
@@ -389,7 +389,7 @@ class ForwardTable(base_tests.SimpleDataPlane):
         (pkt, match) = wildcard_all(self, of_ports)
         
         #Create a packet out message
-        pkt_out =ofp.message.packet_out();
+        pkt_out = ofp.message.packet_out();
         pkt_out.data = str(pkt)
         pkt_out.in_port = of_ports[0]
         pkt_out.buffer_id = 0xffffffff

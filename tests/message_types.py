@@ -94,8 +94,8 @@ class ErrorMsg(base_tests.SimpleProtocol):
 
         #Send Echo Request
         logging.info("Sending a Echo request with a version which is not supported by the switch")
-        request=ofp.message.echo_request()
-        request.version=0  
+        request = ofp.message.echo_request()
+        request.version = 0  
         self.controller.message_send(request)
 
         logging.info("Waiting for a OFPT_ERROR msg on the control plane...") 
@@ -129,7 +129,7 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         self.assertEqual(reply.type, ofp.OFPT_FEATURES_REPLY, 'Response is not Features_reply')
         self.assertEqual(reply.xid, request.xid, 'Transaction id does not match')
         
-        supported_actions =[]
+        supported_actions = []
         if(reply.actions &1<<ofp.OFPAT_OUTPUT):
             supported_actions.append('OFPAT_OUTPUT')
         if(reply.actions &1<<ofp.OFPAT_SET_VLAN_VID):
@@ -188,7 +188,7 @@ class FeaturesReplyBody(base_tests.SimpleProtocol):
         self.assertTrue(reply.n_tables != 0 , "Features Reply does not contain no. of tables supported by datapath")
         logging.info("No of tables: " + str(reply.n_tables))
         
-        ports=0
+        ports = 0
         ports = len(reply.ports)
         self.assertTrue(ports != 0, "Features Reply does not contain no. of ports and their ports definitions")
         self.assertTrue(ports >= len(of_ports), "No. of openflow ports in the features Reply is incorrect")
@@ -311,7 +311,7 @@ class PacketInSizeMiss(base_tests.SimpleDataPlane):
             pkt = simple_tcp_packet()
             match = parse.packet_to_flow_match(pkt)
             self.assertTrue(match is not None, "Could not generate flow match from pkt")
-            match.wildcards=ofp.OFPFW_ALL
+            match.wildcards = ofp.OFPFW_ALL
             match.in_port = of_ports[0]
             self.dataplane.send(of_ports[0], str(pkt))
 
@@ -347,7 +347,7 @@ class PacketInSizeAction(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         match = parse.packet_to_flow_match(pkt)
         self.assertTrue(match is not None, "Could not generate flow match from pkt")
-        match.wildcards=ofp.OFPFW_ALL
+        match.wildcards = ofp.OFPFW_ALL
         match.in_port = of_ports[0]
 
 
@@ -407,7 +407,7 @@ class PacketInBodyMiss(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         match = parse.packet_to_flow_match(pkt)
         self.assertTrue(match is not None, "Could not generate flow match from pkt")
-        match.wildcards=ofp.OFPFW_ALL
+        match.wildcards = ofp.OFPFW_ALL
         match.in_port = of_ports[0]
         self.dataplane.send(of_ports[0], str(pkt))
 
@@ -438,7 +438,7 @@ class PacketInBodyAction(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         match = parse.packet_to_flow_match(pkt)
         self.assertTrue(match is not None, "Could not generate flow match from pkt")
-        match.wildcards=ofp.OFPFW_ALL
+        match.wildcards = ofp.OFPFW_ALL
         match.in_port = of_ports[0]
 
         #Insert a flow entry with action output to controller 
