@@ -1,6 +1,6 @@
 #!/bin/bash
 cd $(dirname $(readlink -f $0))
-PYLINT_FLAGS="--include-ids=yes "
+#PYLINT_FLAGS="--include-ids=yes "
 PYLINT_FLAGS+="--errors-only " # disable all warnings, only report errors
 PYLINT_FLAGS+="--enable=format " # enable formatting style checks
 PYLINT_FLAGS+="--disable=C0301 " # disable line too long warnings
