@@ -138,13 +138,13 @@ class Flow_Info:
         while i < n:
             self.priorities.append(random.randint(1, 65534))
             i = i + 1
-    
+
         self.dl_addrs = []
         i = 0
         while i < n:
             self.dl_addrs.append(rand_dl_addr())
             i = i + 1
-    
+
         if test_param_get("vlans", []) != []:
             self.vlans = test_param_get("vlans", [])
 
@@ -156,33 +156,33 @@ class Flow_Info:
             while i < n:
                 self.vlans.append(random.randint(1, 4094))
                 i = i + 1
-    
+
         self.ethertypes = [0x0800, 0x0806]
         i = 0
         while i < n:
             self.ethertypes.append(random.randint(0, (1 << 16) - 1))
             i = i + 1
         self.ethertypes = shuffle(self.ethertypes)[0 : n]
-    
+
         self.ip_addrs = []
         i = 0
         while i < n:
             self.ip_addrs.append(rand_nw_addr())
             i = i + 1
-    
+
         self.ip_tos = []
         i = 0
         while i < n:
             self.ip_tos.append(random.randint(0, (1 << 8) - 1) & ~3)
             i = i + 1
-    
+
         self.ip_protos = [1, 6, 17]
         i = 0
         while i < n:
             self.ip_protos.append(random.randint(0, (1 << 8) - 1))
             i = i + 1
         self.ip_protos = shuffle(self.ip_protos)[0 : n]
-    
+
         self.l4_ports = []
         i = 0
         while i < n:
@@ -324,7 +324,7 @@ def ip_addr_to_str(a, n):
     if n is not None:
         result = result + ("/%d" % (n))
     return result
-    
+
 
 class Flow_Cfg:
     # Members:
@@ -394,7 +394,7 @@ class Flow_Cfg:
     def actions_equal(self, x):
         if test_param_get("conservative_ordered_actions", True):
             # Compare actions lists as unordered
-            
+
             aa = copy.deepcopy(x.actions)
             for a in self.actions:
                 i = 0
@@ -418,7 +418,7 @@ class Flow_Cfg:
         if self.hard_timeout != x.hard_timeout:
             return False
         return self.actions_equal(x)
-        
+
     def key_str(self):
         result = "priority=%d" % self.priority
         # TBD - Would be nice if ofp_match.show() was better behaved
@@ -562,7 +562,7 @@ class Flow_Cfg:
                 pass                    # Enqueue actions must come last
             if act:
                 self.actions.append(act)
-                
+
         p = random.randint(1, 100)
         if (((1 << ofp.OFPAT_ENQUEUE) & actions_force) != 0 or p <= 33) \
             and len(valid_queues) > 0 \
@@ -695,7 +695,7 @@ class Flow_Cfg:
         if wildcards_force != 0:
             logging.info("Wildcards forced:")
             logging.info(wildcards_to_str(wildcards_force))
-        
+
         # Start with no wildcards, i.e. everything specified
         self.match.wildcards = 0
 
@@ -708,7 +708,7 @@ class Flow_Cfg:
         # For each qualifier Q,
         #   if (wildcarding is not supported for Q,
         #       or an exact flow is specified
-        #       or a coin toss comes up heads), 
+        #       or a coin toss comes up heads),
         #      specify Q
         #   else
         #      wildcard Q
@@ -724,7 +724,7 @@ class Flow_Cfg:
                                                 ofp.OFPFW_IN_PORT, \
                                                 1 \
                                                 )
-            
+
         if wildcard_get(wildcards_force, ofp.OFPFW_DL_DST) == 0 \
                 and (wildcard_get(valid_wildcards, ofp.OFPFW_DL_DST) == 0 \
                     or exact \
@@ -866,7 +866,7 @@ class Flow_Cfg:
                                                     ofp.OFPFW_DL_TYPE, \
                                                     0 \
                                                     )
-        else:            
+        else:
             self.match.wildcards = wildcard_set(self.match.wildcards, \
                                                 ofp.OFPFW_NW_PROTO, \
                                                 1 \
@@ -953,7 +953,7 @@ class Flow_Cfg:
     # - The IP mask values from 32 to 63 are equivalent. Canonicalize to 32.
     def canonical(self):
         result = copy.deepcopy(self)
-        
+
         if wildcard_get(result.match.wildcards, ofp.OFPFW_NW_SRC_MASK) > 32:
             result.match.wildcards = wildcard_set(result.match.wildcards, \
                                                   ofp.OFPFW_NW_SRC_MASK, \
@@ -1020,7 +1020,7 @@ class Flow_Cfg:
                                                   ofp.OFPFW_NW_PROTO, \
                                                   1 \
                                                   )
-            
+
         if wildcard_get(result.match.wildcards, ofp.OFPFW_NW_PROTO) != 0 \
                 or result.match.ip_proto not in [1, 6, 17]:
             # ip_proto is wildcarded, or specified as something other than ICMP,
@@ -1247,7 +1247,7 @@ class Switch:
             logging.info("Overriding ports to:")
             logging.info(ports_override)
             self.valid_ports = ports_override
-        
+
         # TBD - OFPP_LOCAL is returned by OVS is switch features --
         # is that universal?
 
@@ -1453,7 +1453,7 @@ class Switch:
     # modf == True <=> Verify for flow modify, else for add/delete
     def flow_tbl_verify(self, modf = False):
         result = True
-    
+
         # Verify flow count in switch
         logging.info("Reading table stats")
         logging.info("Expecting %d flows" % (self.flow_tbl.count()))
@@ -1469,7 +1469,7 @@ class Switch:
         if n != self.flow_tbl.count():
             logging.error("Incorrect number of active flows reported")
             result = False
-    
+
         # Read flows from switch
         logging.info("Retrieving flows from switch")
         logging.info("Expecting %d flows" % (self.flow_tbl.count()))
@@ -1477,13 +1477,13 @@ class Switch:
             logging.error("Get flow stats failed")
             return False
         logging.info("Retrieved %d flows" % (len(self.flow_stats.entries)))
-    
+
         # Verify flows returned by switch
-    
+
         if len(self.flow_stats.entries) != self.flow_tbl.count():
             logging.error("Switch reported incorrect number of flows")
             result = False
-    
+
         logging.info("Verifying received flows")
         for fc in self.flow_tbl.values():
             fc.matched = False
@@ -1509,7 +1509,7 @@ class Switch:
                 logging.info("matched")
                 if modf:
                     # Check for modify
-                    
+
                     if flow_in.cookie != fc.cookie:
                         logging.warning("Defined flow:")
                         logging.warning(str(fc))
@@ -1524,7 +1524,7 @@ class Switch:
                         logging.error("actions do not match")
                 else:
                     # Check for add/delete
-                    
+
                     if not flow_in == fc:
                         logging.error("Defined flow:")
                         logging.error(str(fc))
@@ -1539,7 +1539,7 @@ class Switch:
                 logging.error(str(fc))
                 logging.error("was not returned by switch")
                 result = False
-    
+
         return result
 
     def settle(self):
@@ -1578,7 +1578,7 @@ class Switch:
 class Flow_Add_5(base_tests.SimpleProtocol):
     """
     Test FLOW_ADD_5 from draft top-half test plan
-    
+
     INPUTS
     num_flows - Number of flows to generate
     """
@@ -1607,7 +1607,7 @@ class Flow_Add_5(base_tests.SimpleProtocol):
             for ts in sw.tbl_stats.entries:
                 num_flows = num_flows + ts.max_entries
 
-        logging.info("Generating %d flows" % (num_flows))        
+        logging.info("Generating %d flows" % (num_flows))
 
         # Dream up some flow information, i.e. space to chose from for
         # random flow parameter generation
@@ -1635,7 +1635,7 @@ class Flow_Add_5(base_tests.SimpleProtocol):
         result = True
 
         sw.settle()  # Allow switch to settle and generate any notifications
-        
+
         # Check for any error messages
 
         if not sw.errors_verify(0):
@@ -1688,7 +1688,7 @@ class Flow_Add_5_1(base_tests.SimpleProtocol):
         logging.info("Flow_Add_5_1 TEST BEGIN")
 
         num_flows = test_param_get("num_flows", 100)
-        
+
         # Clear all flows from switch
 
         logging.info("Deleting all flows from switch")
@@ -1706,7 +1706,7 @@ class Flow_Add_5_1(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config that will be canonicalized by the switch
 
         while True:
@@ -1795,7 +1795,7 @@ class Flow_Add_5_1(base_tests.SimpleProtocol):
 class Flow_Add_6(base_tests.SimpleProtocol):
     """
     Test FLOW_ADD_6 from draft top-half test plan
-    
+
     INPUTS
     num_flows - Number of flows to generate
     """
@@ -1819,8 +1819,8 @@ class Flow_Add_6(base_tests.SimpleProtocol):
         for ts in sw.tbl_stats.entries:
             num_flows = num_flows + ts.max_entries
 
-        logging.info("Switch capacity is %d flows" % (num_flows))        
-        logging.info("Generating %d flows" % (num_flows))        
+        logging.info("Switch capacity is %d flows" % (num_flows))
+        logging.info("Generating %d flows" % (num_flows))
 
         # Dream up some flow information, i.e. space to chose from for
         # random flow parameter generation
@@ -1926,7 +1926,7 @@ class Flow_Add_6(base_tests.SimpleProtocol):
 class Flow_Add_7(base_tests.SimpleProtocol):
     """
     Test FLOW_ADD_7 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -1951,7 +1951,7 @@ class Flow_Add_7(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -1986,7 +1986,7 @@ class Flow_Add_7(base_tests.SimpleProtocol):
                 break
 
         # Send that to the switch
-        
+
         logging.info("Sending flow add to switch:")
         logging.info(str(fc2))
         fc2.send_rem = False
@@ -2047,7 +2047,7 @@ class Flow_Add_7(base_tests.SimpleProtocol):
 class Flow_Add_8(base_tests.SimpleProtocol):
     """
     Test FLOW_ADD_8 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2072,7 +2072,7 @@ class Flow_Add_8(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config, with at least 1 qualifier specified
 
         fc = Flow_Cfg()
@@ -2118,7 +2118,7 @@ class Flow_Add_8(base_tests.SimpleProtocol):
         fc2 = fc2.canonical()
 
         # Send that to the switch, with overlap checking
-        
+
         logging.info("Sending flow add to switch:")
         logging.info(str(fc2))
         fc2.send_rem = False
@@ -2173,7 +2173,7 @@ class Flow_Add_8(base_tests.SimpleProtocol):
 class Flow_Mod_1(base_tests.SimpleProtocol):
     """
     Test FLOW_MOD_1 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2198,7 +2198,7 @@ class Flow_Mod_1(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -2233,7 +2233,7 @@ class Flow_Mod_1(base_tests.SimpleProtocol):
                 break
 
         # Send that to the switch
-        
+
         logging.info("Sending strict flow mod to switch:")
         logging.info(str(fc2))
         fc2.send_rem = False
@@ -2293,11 +2293,11 @@ class Flow_Mod_1(base_tests.SimpleProtocol):
 #    are returned in step 7 above, each with correct (original or modified)
 #    action list
 #    else test FAILED
-        
+
 class Flow_Mod_2(base_tests.SimpleProtocol):
     """
     Test FLOW_MOD_2 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2325,7 +2325,7 @@ class Flow_Mod_2(base_tests.SimpleProtocol):
         fi = Flow_Info()
         # Shrunk, to increase chance of meta-matches
         fi.rand(max(int(math.log(num_flows)) / 2, 1))
-        
+
         # Dream up some flows
 
         ft = Flow_Tbl()
@@ -2397,7 +2397,7 @@ class Flow_Mod_2(base_tests.SimpleProtocol):
             # If more than 1, we found our loose delete flow spec
             if n > 1:
                 break
-                    
+
         logging.info("Modifying %d flows" % (n))
         logging.info("Sending flow mod to switch:")
         logging.info(str(mfc))
@@ -2449,7 +2449,7 @@ class Flow_Mod_2(base_tests.SimpleProtocol):
 class Flow_Mod_3(base_tests.SimpleProtocol):
     """
     Test FLOW_MOD_3 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2474,7 +2474,7 @@ class Flow_Mod_3(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -2541,7 +2541,7 @@ class Flow_Mod_3(base_tests.SimpleProtocol):
 class Flow_Mod_3_1(base_tests.SimpleProtocol):
     """
     Test FLOW_MOD_3_1 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2566,7 +2566,7 @@ class Flow_Mod_3_1(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -2656,7 +2656,7 @@ class Flow_Mod_3_1(base_tests.SimpleProtocol):
 class Flow_Del_1(base_tests.SimpleProtocol):
     """
     Test FLOW_DEL_1 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2681,7 +2681,7 @@ class Flow_Del_1(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -2716,7 +2716,7 @@ class Flow_Del_1(base_tests.SimpleProtocol):
                 break
 
         # Delete strictly
-        
+
         logging.info("Sending strict flow del to switch:")
         logging.info(str(fc2))
         self.assertTrue(sw.flow_del(fc2, True), "Failed to delete flow")
@@ -2777,7 +2777,7 @@ class Flow_Del_1(base_tests.SimpleProtocol):
 class Flow_Del_2(base_tests.SimpleProtocol):
     """
     Test FLOW_DEL_2 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2805,7 +2805,7 @@ class Flow_Del_2(base_tests.SimpleProtocol):
         fi = Flow_Info()
         # Shrunk, to increase chance of meta-matches
         fi.rand(max(int(math.log(num_flows)) / 2, 1))
-        
+
         # Dream up some flows
 
         ft = Flow_Tbl()
@@ -2839,7 +2839,7 @@ class Flow_Del_2(base_tests.SimpleProtocol):
             result = False
 
         # Pick a random flow as a basis
-        
+
         dfc = copy.deepcopy(ft.values()[0])
         dfc.rand_mod(fi, \
                      sw.sw_features.actions, \
@@ -2877,7 +2877,7 @@ class Flow_Del_2(base_tests.SimpleProtocol):
             # If more than 1, we found our loose delete flow spec
             if n > 1:
                 break
-                    
+
         logging.info("Deleting %d flows" % (n))
         logging.info("Sending flow del to switch:")
         logging.info(str(dfc))
@@ -2935,7 +2935,7 @@ class Flow_Del_2(base_tests.SimpleProtocol):
 class Flow_Del_4(base_tests.SimpleProtocol):
     """
     Test FLOW_DEL_4 from draft top-half test plan
-    
+
     INPUTS
     None
     """
@@ -2960,7 +2960,7 @@ class Flow_Del_4(base_tests.SimpleProtocol):
 
         fi = Flow_Info()
         fi.rand(10)
-        
+
         # Dream up a flow config
 
         fc = Flow_Cfg()
@@ -2995,7 +2995,7 @@ class Flow_Del_4(base_tests.SimpleProtocol):
                 break
 
         # Delete strictly
-        
+
         logging.info("Sending strict flow del to switch:")
         logging.info(str(fc2))
         self.assertTrue(sw.flow_del(fc2, True), "Failed to delete flow")
@@ -3025,4 +3025,4 @@ class Flow_Del_4(base_tests.SimpleProtocol):
 
         self.assertTrue(result, "Flow_Del_4 TEST FAILED")
         logging.info("Flow_Del_4 TEST PASSED")
-        
+

@@ -67,7 +67,7 @@ class HandshakeNoHello(BaseHandshake):
                              config["controller_port"])
         self.controllers[0].connect(self.default_timeout)
 
-        logging.info("TCP Connected " + 
+        logging.info("TCP Connected " +
                      str(self.controllers[0].switch_addr))
         logging.info("Hello not sent, waiting for timeout")
 
@@ -85,7 +85,7 @@ class HandshakeNoFeaturesRequest(BaseHandshake):
                              config["controller_port"])
         self.controllers[0].connect(self.default_timeout)
 
-        logging.info("TCP Connected " + 
+        logging.info("TCP Connected " +
                      str(self.controllers[0].switch_addr))
         logging.info("Sending hello")
         self.controllers[0].message_send(ofp.message.hello())
@@ -102,7 +102,7 @@ class CompleteHandshake(BaseHandshake):
     Set up multiple controllers and complete handshake, but otherwise do nothing.
     """
 
-    def buildControllerList(self):                                             
+    def buildControllerList(self):
         # controller_list is a list of IP:port tuples
         con_list = test_param_get('controller_list')
         if con_list is not None:
@@ -120,7 +120,7 @@ class CompleteHandshake(BaseHandshake):
                                      config["controller_port"])]
 
     def __init__(self, keep_alive=True, cxn_cycles=5,
-                 controller_timeout=-1, hello_timeout=5, 
+                 controller_timeout=-1, hello_timeout=5,
                  features_req_timeout=5, disconnected_timeout=3,
                  report_pkts=False):
         BaseHandshake.__init__(self)
@@ -181,7 +181,7 @@ class CompleteHandshake(BaseHandshake):
             return
         print "Received %d pkt-ins over %d seconds" % (
             self.pkt_in_count, time.time() - self.start_time)
-        
+
     def runTest(self):
         for conspec in self.controller_list:
             self.controllerSetup(conspec[0], conspec[1])
@@ -215,7 +215,7 @@ class CompleteHandshake(BaseHandshake):
                         reply, pkt = con.poll(exp_msg=ofp.OFPT_HELLO,
                                               timeout=0)
                         if reply is not None:
-                            logging.info(condesc + 
+                            logging.info(condesc +
                                          "Hello received from " +
                                          str(con.switch_addr))
                             con.cstate = 2
@@ -223,7 +223,7 @@ class CompleteHandshake(BaseHandshake):
                             con.count = con.count + 1
                             # fall back to previous state on timeout
                             if con.count >= self.hello_timeout/tick:
-                                logging.info(condesc + 
+                                logging.info(condesc +
                                              "Timeout hello from " +
                                              str(con.switch_addr))
                                 con.cstate = 0
@@ -237,7 +237,7 @@ class CompleteHandshake(BaseHandshake):
                         reply, pkt = con.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
                                               timeout=0)
                         if reply is not None:
-                            logging.info(condesc + 
+                            logging.info(condesc +
                                          "Features reply received from " +
                                          str(con.switch_addr))
                             con.cstate = 4
@@ -260,14 +260,14 @@ class CompleteHandshake(BaseHandshake):
                                           str(con.switch_addr))
                             con.count = con.count + 1
                         else:
-                            logging.info(condesc + 
+                            logging.info(condesc +
                                          "Disconnecting from " +
                                          str(con.switch_addr))
                             con.disconnect()
                             con.cstate = 0
                 else:
                     con.cstate = 0
-            
+
                 states.append(con.cstate)
                 self.periodic_task_tick(con)
 

@@ -145,7 +145,7 @@ class BSNConfigIPMask(base_tests.SimpleDataPlane):
                 wildcards=wildcards))
 
         do_barrier(self.controller)
-            
+
         msg(ip0)
         self.dataplane.send(ports[0], str(pkt0))
         receive_pkt_verify(self, [ports[1]], pkt0, ports[0])

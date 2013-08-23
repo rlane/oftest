@@ -2,7 +2,7 @@
 Basic protocol and dataplane test cases
 
 It is recommended that these definitions be kept in their own
-namespace as different groups of tests will likely define 
+namespace as different groups of tests will likely define
 similar identifiers.
 
 Current Assumptions:
@@ -84,7 +84,7 @@ class PacketIn(base_tests.SimpleDataPlane):
         for of_port in config["port_map"].keys():
             for pkt, pt in [
                 (simple_tcp_packet(), "simple TCP packet"),
-                (simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vid, pktlen=108), 
+                (simple_tcp_packet(dl_vlan_enable=True, vlan_vid=vid, pktlen=108),
                 "simple tagged TCP packet"),
                 (simple_eth_packet(), "simple Ethernet packet"),
                 (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
@@ -213,7 +213,7 @@ class PacketOutMC(base_tests.SimpleDataPlane):
 
 class FlowStatsGet(base_tests.SimpleProtocol):
     """
-    Get stats 
+    Get stats
 
     Simply verify stats get transaction
     """
@@ -223,7 +223,7 @@ class FlowStatsGet(base_tests.SimpleProtocol):
         logging.info("Inserting trial flow")
         request = flow_mod_gen(config["port_map"], True)
         self.controller.message_send(request)
-        
+
         logging.info("Sending flow request")
         request = ofp.message.flow_stats_request(out_port=ofp.OFPP_NONE,
                                              table_id=0xff)
@@ -235,7 +235,7 @@ class FlowStatsGet(base_tests.SimpleProtocol):
 
 class TableStatsGet(base_tests.SimpleProtocol):
     """
-    Get table stats 
+    Get table stats
 
     Simply verify table stats get transaction
     """
@@ -244,7 +244,7 @@ class TableStatsGet(base_tests.SimpleProtocol):
         logging.info("Inserting trial flow")
         request = flow_mod_gen(config["port_map"], True)
         self.controller.message_send(request)
-        
+
         logging.info("Sending table stats request")
         request = ofp.message.table_stats_request()
         response, pkt = self.controller.transact(request)
@@ -254,13 +254,13 @@ class TableStatsGet(base_tests.SimpleProtocol):
 
 class DescStatsGet(base_tests.SimpleProtocol):
     """
-    Get stats 
+    Get stats
 
     Simply verify stats get transaction
     """
     def runTest(self):
         logging.info("Running DescStatsGet")
-        
+
         logging.info("Sending stats request")
         request = ofp.message.desc_stats_request()
         response, pkt = self.controller.transact(request)
@@ -299,7 +299,7 @@ class PortConfigMod(base_tests.SimpleProtocol):
             port_config_get(self.controller, of_port)
         self.assertTrue(port_config is not None, "Did not get port config")
 
-        logging.debug("No flood bit port " + str(of_port) + " is now " + 
+        logging.debug("No flood bit port " + str(of_port) + " is now " +
                            str(port_config & ofp.OFPPC_NO_FLOOD))
 
         rv = port_config_set(self.controller, of_port,
@@ -310,7 +310,7 @@ class PortConfigMod(base_tests.SimpleProtocol):
         # Verify change took place with same feature request
         (hw_addr, port_config2, advert) = \
             port_config_get(self.controller, of_port)
-        logging.debug("No flood bit port " + str(of_port) + " is now " + 
+        logging.debug("No flood bit port " + str(of_port) + " is now " +
                            str(port_config2 & ofp.OFPPC_NO_FLOOD))
         self.assertTrue(port_config2 is not None, "Did not get port config2")
         self.assertTrue(port_config2 & ofp.OFPPC_NO_FLOOD !=

@@ -2,7 +2,7 @@
 Prototype test cases related to operation under load
 
 It is recommended that these definitions be kept in their own
-namespace as different groups of tests will likely define 
+namespace as different groups of tests will likely define
 similar identifiers.
 
 The switch is actively attempting to contact the controller at the address
@@ -36,7 +36,7 @@ class LoadBarrier(base_tests.SimpleProtocol):
     This test assumes there is a pair of ports on the switch with
     a loopback cable connected and that spanning tree is disabled.
     A flow is installed to cause a storm of packet-in messages
-    when a packet is sent to the loopbacked interface.  After causing 
+    when a packet is sent to the loopbacked interface.  After causing
     this storm, a barrier request is sent.
 
     The test succeeds if the barrier response is received.  Otherwise
@@ -47,7 +47,7 @@ class LoadBarrier(base_tests.SimpleProtocol):
         # Set up flow to send from port 1 to port 2 and copy to CPU
         # Test parameter gives LB port base (assumes consecutive)
         lb_port = test_param_get('lb_port', default=1)
-        barrier_count = test_param_get('barrier_count', 
+        barrier_count = test_param_get('barrier_count',
                                        default=10)
 
         # Set controller to filter packet ins
@@ -119,7 +119,7 @@ class PacketInLoad(base_tests.SimpleDataPlane):
         for of_port in of_ports:
             for pkt, pt in [
                 (simple_tcp_packet(), "simple TCP packet"),
-                (simple_tcp_packet(dl_vlan_enable=True, pktlen=108), 
+                (simple_tcp_packet(dl_vlan_enable=True, pktlen=108),
                 "simple tagged TCP packet"),
                 (simple_eth_packet(), "simple Ethernet packet"),
                 (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
@@ -134,7 +134,7 @@ class PacketInLoad(base_tests.SimpleDataPlane):
                 break
             in_count += 1
         logging.info("PacketInLoad Sent %d. Got %d." % (out_count, in_count))
-        
+
 
 
 class PacketOutLoad(base_tests.SimpleDataPlane):
@@ -142,8 +142,8 @@ class PacketOutLoad(base_tests.SimpleDataPlane):
     Generate lots of packet-out messages
 
     Test packet-out function by sending lots of packet-out msgs
-    to the switch.  This test tracks the number of packets received in 
-    the dataplane, but does not enforce any requirements about the 
+    to the switch.  This test tracks the number of packets received in
+    the dataplane, but does not enforce any requirements about the
     number received.
     """
     def runTest(self):

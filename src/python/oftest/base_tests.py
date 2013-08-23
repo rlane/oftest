@@ -71,7 +71,7 @@ class SimpleProtocol(unittest.TestCase):
                           + str(parent))
         self.controller = parent.controller
         self.supported_actions = parent.supported_actions
-        
+
     def tearDown(self):
         logging.info("** END TEST CASE " + str(self))
         self.controller.shutdown()

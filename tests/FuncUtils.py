@@ -26,7 +26,7 @@ def match_send_flowadd(self, match, priority, port):
     if priority != None :
         msg.priority = priority
     act = ofp.action.output()
-    act.port = port 
+    act.port = port
     msg.actions.append(act)
     self.controller.message_send(msg)
     do_barrier(self.controller)
@@ -55,12 +55,12 @@ def exact_match_with_prio(self, of_ports, priority=None):
     #match.ipv4_src = 1
     match.wildcards = 0
     match_send_flowadd(self, match, priority, of_ports[2])
-    return (pkt_exactflow, match)         
-       
+    return (pkt_exactflow, match)
+
 
 def match_all_except_source_address(self, of_ports, priority=None):
 # Generate Match_All_Except_Source_Address flow
-        
+
     #Create a simple tcp packet and generate match all except src address flow.
     pkt_wildcardsrc = simple_tcp_packet()
     match1 = parse.packet_to_flow_match(pkt_wildcardsrc)
@@ -81,7 +81,7 @@ def match_ethernet_src_address(self, of_ports, priority=None):
     match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_SRC
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_MatchSrc, match)
-      
+
 def match_ethernet_dst_address(self, of_ports, priority=None):
     #Generate Match_Ethernet_Dst_Address flow
 
@@ -95,9 +95,9 @@ def match_ethernet_dst_address(self, of_ports, priority=None):
     return (pkt_matchdst, match)
 
 def wildcard_all(self, of_ports, priority=None):
-# Generate a Wildcard_All Flow 
+# Generate a Wildcard_All Flow
 
-    #Create a simple tcp packet and generate wildcard all flow match from it.  
+    #Create a simple tcp packet and generate wildcard all flow match from it.
     pkt_wildcard = simple_tcp_packet()
     match2 = parse.packet_to_flow_match(pkt_wildcard)
     self.assertTrue(match2 is not None, "Could not generate flow match from pkt")
@@ -119,7 +119,7 @@ def wildcard_all_except_ingress(self, of_ports, priority=None):
     return (pkt_matchingress, match3)
 
 def wildcard_all_except_ingress1(self, of_ports, priority=None):
-# Generate Wildcard_All_Except_Ingress_port flow with action output to port egress_port 2 
+# Generate Wildcard_All_Except_Ingress_port flow with action output to port egress_port 2
 
     #Create a simple tcp packet and generate wildcard all except ingress_port flow.
     pkt_matchingress = simple_tcp_packet()
@@ -151,7 +151,7 @@ def match_vlan_pcp(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_matchvlanpcp)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_DL_VLAN^ofp.OFPFW_DL_VLAN_PCP 
+    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_DL_VLAN^ofp.OFPFW_DL_VLAN_PCP
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_matchvlanpcp, match)
 
@@ -176,14 +176,14 @@ def match_mul_l4(self, of_ports, priority=None):
     pkt_mulL4 = simple_tcp_packet(tcp_sport=111, tcp_dport=112)
     match = parse.packet_to_flow_match(pkt_mulL4)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
-    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_SRC ^ofp.OFPFW_TP_DST 
+    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_SRC ^ofp.OFPFW_TP_DST
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_mulL4, match)  
+    return (pkt_mulL4, match)
 
 def match_ip_tos(self, of_ports, priority=None):
     #Generate a Match on IP Type of service flow
 
-    #Create a simple tcp packet and generate match on Type of service 
+    #Create a simple tcp packet and generate match on Type of service
     pkt_iptos = simple_tcp_packet(ip_tos=28)
     match = parse.packet_to_flow_match(pkt_iptos)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
@@ -195,12 +195,12 @@ def match_ip_tos(self, of_ports, priority=None):
 def match_ip_protocol(self, of_ports, priority=None):
     #Generate a Match on IP Protocol
 
-    #Create a simple tcp packet and generate match on Type of service 
+    #Create a simple tcp packet and generate match on Type of service
     pkt_iptos = simple_tcp_packet()
     match = parse.packet_to_flow_match(pkt_iptos)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO 
+    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_iptos, match)
 
@@ -212,9 +212,9 @@ def match_tcp_src(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_matchtSrc)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC  
+    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_matchtSrc, match)  
+    return (pkt_matchtSrc, match)
 
 def match_tcp_dst(self, of_ports, priority=None):
     #Generate Match_Tcp_Dst
@@ -224,9 +224,9 @@ def match_tcp_dst(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_matchdst)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_DST  
+    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_DST
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_matchdst, match)        
+    return (pkt_matchdst, match)
 
 
 def match_udp_src(self, of_ports, priority=None):
@@ -237,9 +237,9 @@ def match_udp_src(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_matchtSrc)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC  
+    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_matchtSrc, match)  
+    return (pkt_matchtSrc, match)
 
 def match_udp_dst(self, of_ports, priority=None):
     #Generate Match_Udp_Dst
@@ -249,9 +249,9 @@ def match_udp_dst(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_matchdst)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_DST  
+    match.wildcards = ofp.OFPFW_ALL ^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO^ofp.OFPFW_TP_DST
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_matchdst, match)        
+    return (pkt_matchdst, match)
 
 
 def match_icmp_type(self, of_ports, priority=None):
@@ -262,7 +262,7 @@ def match_icmp_type(self, of_ports, priority=None):
     match = parse.packet_to_flow_match(pkt_match)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
-    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC  
+    match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_SRC
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_match, match)
 
@@ -276,19 +276,19 @@ def match_icmp_code(self, of_ports, priority=None):
 
     match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_TP_DST
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_match, match)  
+    return (pkt_match, match)
 
 def match_arp_opcode(self, of_ports, priority=None):
     #Generate Match_Arp_Opcode
 
-    #Create a simple arp packet and generate match on arp opcode 
+    #Create a simple arp packet and generate match on arp opcode
     pkt_match = simple_arp_packet(arp_op=1)
     match = parse.packet_to_flow_match(pkt_match)
     self.assertTrue(match is not None, "Could not generate flow match from pkt")
 
     match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE^ofp.OFPFW_NW_PROTO
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_match, match)  
+    return (pkt_match, match)
 
 def match_arp_sender(self, of_ports, priority=None):
     #Generate Match_Arp_Sender
@@ -300,7 +300,7 @@ def match_arp_sender(self, of_ports, priority=None):
 
     match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_NW_SRC_MASK
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_match, match)  
+    return (pkt_match, match)
 
 def match_arp_target(self, of_ports, priority=None):
     #Generate Match_Arp_Target
@@ -312,7 +312,7 @@ def match_arp_target(self, of_ports, priority=None):
 
     match.wildcards = ofp.OFPFW_ALL^ofp.OFPFW_DL_TYPE ^ofp.OFPFW_NW_PROTO ^ofp.OFPFW_NW_DST_MASK
     match_send_flowadd(self, match, priority, of_ports[1])
-    return (pkt_match, match)  
+    return (pkt_match, match)
 
 
 def match_ethernet_type(self, of_ports, priority=None):
@@ -327,12 +327,12 @@ def match_ethernet_type(self, of_ports, priority=None):
     match_send_flowadd(self, match, priority, of_ports[1])
     return (pkt_matchtype, match)
 
-   
-   
+
+
 
 def strict_modify_flow_action(self, egress_port, match, priority=None):
-# Strict Modify the flow Action 
-        
+# Strict Modify the flow Action
+
     #Create a flow_mod message , command MODIFY_STRICT
     msg5 = ofp.message.flow_modify_strict()
     msg5.match = match
@@ -351,8 +351,8 @@ def strict_modify_flow_action(self, egress_port, match, priority=None):
 
 def modify_flow_action(self, of_ports, match, priority=None):
 # Modify the flow action
-        
-    #Create a flow_mod message , command MODIFY 
+
+    #Create a flow_mod message , command MODIFY
     msg8 = ofp.message.flow_modify()
     msg8.match = match
     msg8.cookie = random.randint(0, 9007199254740992)
@@ -376,9 +376,9 @@ def enqueue(self, ingress_port, egress_port, egress_queue_id):
     pkt = simple_tcp_packet()
     match = packet_to_flow_match(self, pkt)
     match.wildcards &= ~ofp.OFPFW_IN_PORT
-    self.assertTrue(match is not None, 
+    self.assertTrue(match is not None,
             "Could not generate flow match from pkt")
-    
+
     match.in_port = ingress_port
     request = ofp.message.flow_add()
     request.match = match
@@ -387,7 +387,7 @@ def enqueue(self, ingress_port, egress_port, egress_queue_id):
     act.port     = egress_port
     act.queue_id = egress_queue_id
     request.actions.append(act)
-    
+
     logging.info("Inserting flow")
     self.controller.message_send(request)
     do_barrier(self.controller)
@@ -397,7 +397,7 @@ def enqueue(self, ingress_port, egress_port, egress_queue_id):
 ###########################   Verify Stats Functions   ###########################################################################################
 def get_flowstats(self, match):
     # Generate flow_stats request
-    
+
     stat_req = ofp.message.flow_stats_request()
     stat_req.match = match
     stat_req.table_id = 0xff
@@ -411,11 +411,11 @@ def get_flowstats(self, match):
 
 def get_portstats(self, port_num):
 
-# Return all the port counters in the form a tuple 
+# Return all the port counters in the form a tuple
     port_stats_req = ofp.message.port_stats_request()
-    port_stats_req.port_no = port_num  
+    port_stats_req.port_no = port_num
     response, pkt = self.controller.transact(port_stats_req)
-    self.assertTrue(response is not None, "No response received for port stats request") 
+    self.assertTrue(response is not None, "No response received for port stats request")
     rx_pkts = 0
     tx_pkts = 0
     rx_byts = 0
@@ -423,7 +423,7 @@ def get_portstats(self, port_num):
     rx_drp = 0
     tx_drp = 0
     rx_err = 0
-    tx_err = 0 
+    tx_err = 0
     rx_fr_err = 0
     rx_ovr_err = 0
     rx_crc_err = 0
@@ -448,7 +448,7 @@ def get_portstats(self, port_num):
     return (rx_pkts, tx_pkts, rx_byts, tx_byts, rx_drp, tx_drp, rx_err, tx_err, rx_fr_err, rx_ovr_err, rx_crc_err, collisions, tx_err)
 
 def get_queuestats(self, port_num, queue_id):
-#Generate Queue Stats request 
+#Generate Queue Stats request
 
     request = ofp.message.queue_stats_request()
     request.port_no  = port_num
@@ -464,11 +464,11 @@ def get_tablestats(self):
     stat_req = ofp.message.table_stats_request()
     response, pkt = self.controller.transact(stat_req,
                                                      timeout=5)
-    self.assertTrue(response is not None, 
+    self.assertTrue(response is not None,
                             "No response to stats request")
     current_lookedup = 0
     current_matched = 0
-    current_active = 0 
+    current_active = 0
 
     for obj in response.entries:
         current_lookedup += obj.lookup_count
@@ -482,7 +482,7 @@ def get_tablestats(self):
 def verify_tablestats(self, expect_lookup=None, expect_match=None, expect_active=None):
 
     stat_req = ofp.message.table_stats_request()
-    
+
     for i in range(0, 100):
 
         logging.info("Sending stats request")
@@ -491,10 +491,10 @@ def verify_tablestats(self, expect_lookup=None, expect_match=None, expect_active
                                                      timeout=5)
         self.assertTrue(response is not None, "No response to stats request")
 
-        lookedup = 0 
-        matched = 0 
+        lookedup = 0
+        matched = 0
         active = 0
-        
+
         for item in response.entries:
             lookedup += item.lookup_count
             matched += item.matched_count
@@ -522,8 +522,8 @@ def verify_tablestats(self, expect_lookup=None, expect_match=None, expect_active
 ############################## Various delete commands #############################################################################################
 
 def strict_delete(self, match, priority=None):
-# Issue Strict Delete 
-        
+# Issue Strict Delete
+
     #Create flow_mod message, command DELETE_STRICT
     msg4 = ofp.message.flow_delete_strict()
     msg4.out_port = ofp.OFPP_NONE
@@ -538,8 +538,8 @@ def strict_delete(self, match, priority=None):
 
 
 def nonstrict_delete(self, match, priority=None):
-# Issue Non_Strict Delete 
-        
+# Issue Non_Strict Delete
+
     #Create flow_mod message, command DELETE
     msg6 = ofp.message.flow_delete()
     msg6.out_port = ofp.OFPP_NONE
@@ -562,7 +562,7 @@ def send_packet(obj, pkt, ingress_port, egress_port):
     exp_pkt_arg = pkt
     exp_port = egress_port
 
-    (rcv_port, rcv_pkt, pkt_time) = obj.dataplane.poll(timeout=2, 
+    (rcv_port, rcv_pkt, pkt_time) = obj.dataplane.poll(timeout=2,
                                                        port_number=exp_port,
                                                        exp_pkt=exp_pkt_arg)
     obj.assertTrue(rcv_pkt is not None,

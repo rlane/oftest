@@ -40,7 +40,7 @@ class FlowExpire(base_tests.SimpleDataPlane):
         pkt = simple_tcp_packet()
         match = packet_to_flow_match(self, pkt)
         match.wildcards &= ~ofp.OFPFW_IN_PORT
-        self.assertTrue(match is not None, 
+        self.assertTrue(match is not None,
                         "Could not generate flow match from pkt")
         act = ofp.action.output()
 
@@ -50,11 +50,11 @@ class FlowExpire(base_tests.SimpleDataPlane):
 
         ingress_port = of_ports[0]
         egress_port  = of_ports[1]
-        logging.info("Ingress " + str(ingress_port) + 
+        logging.info("Ingress " + str(ingress_port) +
                        " to egress " + str(egress_port))
-        
+
         match.in_port = ingress_port
-        
+
         request = ofp.message.flow_add()
         request.match = match
         request.cookie = random.randint(0, 9007199254740992)
@@ -63,7 +63,7 @@ class FlowExpire(base_tests.SimpleDataPlane):
         request.flags |= ofp.OFPFF_SEND_FLOW_REM
         act.port = egress_port
         request.actions.append(act)
-        
+
         logging.info("Inserting flow")
         self.controller.message_send(request)
         do_barrier(self.controller)
@@ -71,7 +71,7 @@ class FlowExpire(base_tests.SimpleDataPlane):
         (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_FLOW_REMOVED,
                                                timeout=test_timeout)
 
-        self.assertTrue(response is not None, 
+        self.assertTrue(response is not None,
                         'Did not receive flow removed message ')
 
         self.assertEqual(request.cookie, response.cookie,
@@ -82,4 +82,4 @@ class FlowExpire(base_tests.SimpleDataPlane):
 
         self.assertEqual(match, response.match,
                          'Flow table entry does not match')
-        
+

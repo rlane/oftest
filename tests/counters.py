@@ -1,5 +1,5 @@
 """These tests fall under Conformance Test-Suite (OF-SWITCH-1.0.0 TestCases).
-    Refer Documentation -- Detailed testing methodology 
+    Refer Documentation -- Detailed testing methodology
     <Some of test-cases are directly taken from oftest> """
 
 "Test Suite 5 --> Counters"
@@ -43,19 +43,19 @@ class PktPerFlow(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
-        #Clear switch state      
+
+        #Clear switch state
         delete_all_flows(self.controller)
 
         logging.info("Insert any flow")
         logging.info("Sending N Packets matching the flow")
         logging.info("Verify packet counters increment in accordance")
-        
+
         #Create a Match on Ingress flow
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
-       
-        #Send Packets matching the flow 
-        num_pkts = 5 
+
+        #Send Packets matching the flow
+        num_pkts = 5
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
 
@@ -75,19 +75,19 @@ class BytPerFlow(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
-        #Clear switch state      
+
+        #Clear switch state
         delete_all_flows(self.controller)
 
         logging.info("Insert any flow")
         logging.info("Sending N Packets matching the flow")
         logging.info("Verify byte counters increment in accordance")
-        
+
         #Create a Match on Ingress flow
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
-       
-        #Send Packets matching the flow 
-        num_pkts = 5 
+
+        #Send Packets matching the flow
+        num_pkts = 5
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
@@ -97,18 +97,18 @@ class BytPerFlow(base_tests.SimpleDataPlane):
 
 
 class DurationPerFlow(base_tests.SimpleDataPlane):
-    
-    """Verify Duration_sec and Duration_nsec counters per flow varies in accordance with the amount of 
+
+    """Verify Duration_sec and Duration_nsec counters per flow varies in accordance with the amount of
     time the flow was alive"""
 
     def runTest(self):
-        
+
         logging.info("Running DurationPerFlow test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
+
         #Clear switch state
         delete_all_flows(self.controller)
 
@@ -118,8 +118,8 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
 
         #Create a flow with match on ingress_port
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
-    
-        #Create flow_stats request 
+
+        #Create flow_stats request
         stat_req = ofp.message.flow_stats_request()
         stat_req.match = match
         stat_req.table_id = 0xff
@@ -129,12 +129,12 @@ class DurationPerFlow(base_tests.SimpleDataPlane):
         sleep(expected_duration)
 
         response, pkt = self.controller.transact(stat_req)
-        
+
         self.assertTrue(response is not None, "No response to stats request")
         self.assertTrue(len(response.entries) == 1, "Did not receive flow stats reply")
-        
+
         stat = response.entries[0]
-        logging.info("Duration of flow is %d s %d ns", stat.duration_sec, stat.duration_nsec) 
+        logging.info("Duration of flow is %d s %d ns", stat.duration_sec, stat.duration_nsec)
         self.assertTrue(stat.duration_sec == expected_duration, "Flow stats reply incorrect")
 
 
@@ -142,7 +142,7 @@ class RxPktPerPort(base_tests.SimpleDataPlane):
 
     """Verify that rx_packets counter in the Port_Stats reply
         increments when packets are received on a port"""
-    
+
     def runTest(self):
 
         logging.info("Running RxPktPerPort test")
@@ -150,14 +150,14 @@ class RxPktPerPort(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
+
         # Clear Switch State
         delete_all_flows(self.controller)
 
         logging.info("Insert a flow with match on ingress_port")
         logging.info("Send N Packets on an ingress_port P ")
         logging.info("Send Port_Stats Request for Port P , verify recieved packets counters are incrementing in accordance")
-        
+
         #Insert a flow with match on all ingress port
         (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
@@ -165,17 +165,17 @@ class RxPktPerPort(base_tests.SimpleDataPlane):
         initial_stats = get_port_stats(self, of_ports[0])
 
         # Send packets matching the flow
-        num_pkts = 5 
+        num_pkts = 5
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
 
-        #Verify recieved packet counters 
+        #Verify recieved packet counters
         verify_port_stats(self, of_ports[0], initial=initial_stats, rx_pkts=num_pkts)
 
 class TxPktPerPort(base_tests.SimpleDataPlane):
 
     """Verify that tx_packets counter in the Port_Stats reply , increments when packets are transmitted by a port"""
-      
+
     def runTest(self):
 
         logging.info("Running TxPktPerPort test")
@@ -183,26 +183,26 @@ class TxPktPerPort(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
+
         #Clear switch state
         delete_all_flows(self.controller)
 
         logging.info("Insert any flow matching on in_port=ingress_port, action output to egress_port T ")
         logging.info("Send N Packets matching the flow on ingress_port P ")
         logging.info("Send Port_Stats Request for Port T , verify transmitted packets counters are incrementing in accordance")
-        
+
         #Insert a flow with match on all ingress port
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
-        
+
         # Send Port_Stats request for the egress port (retrieve old counter state)
         initial_stats = get_port_stats(self, of_ports[1])
-        
+
         #Send packets matching the flow
         num_pkts = 5
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
-        
-        #Verify transmitted_packet counters 
+
+        #Verify transmitted_packet counters
         verify_port_stats(self, of_ports[1], initial=initial_stats,
                           tx_pkts=num_pkts)
 
@@ -213,33 +213,33 @@ class RxBytPerPort(base_tests.SimpleDataPlane):
     """Verify that recieved bytes counter in the Port_Stats reply , increments in accordance with the bytes recieved on a port"""
 
     def runTest(self):
-        
+
         logging.info("Running RxBytPerPort test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Insert any flow matching on in_port=ingress_port")
         logging.info("Send N Packets matching the flow on ingress_port P ")
         logging.info("Send Port_Stats Request for Port P , verify recieved bytes counters are incrementing in accordance")
-        
+
         #Insert a flow with match on all ingress port
         (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         initial_stats = get_port_stats(self, of_ports[0])
-           
+
         #Send packets matching the flow.
         num_pkts = 5
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
 
-        #Verify recieved_bytes counters 
+        #Verify recieved_bytes counters
         verify_port_stats(self, of_ports[0], initial=initial_stats,
                           rx_bytes=byte_count)
 
@@ -249,33 +249,33 @@ class TxBytPerPort(base_tests.SimpleDataPlane):
     """Verify that trasnsmitted bytes counter in the Port_Stats reply , increments in accordance with the bytes trasmitted by a port"""
 
     def runTest(self):
-        
+
         logging.info("Running TxBytPerPort test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Insert any flow matching on in_port=ingress_port, action = output to egress_port T")
         logging.info("Send N Packets matching the flow on ingress_port P ")
         logging.info("Send Port_Stats Request for Port T , verify trasmitted bytes counters are incrementing in accordance")
-        
+
         #Insert a flow with match on all ingress port
         (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
 
         # Send Port_Stats request for the egress port (retrieve current counter state)
         initial_stats = get_port_stats(self, of_ports[1])
-        
+
         #Send packets matching the flow.
         num_pkts = 5
         byte_count = num_pkts*len(str(pkt))
         for pkt_cnt in range(num_pkts):
             self.dataplane.send(of_ports[0], str(pkt))
-        
-        #Verify trasmitted_bytes counters 
+
+        #Verify trasmitted_bytes counters
         verify_port_stats(self, of_ports[1], initial=initial_stats,
                           tx_bytes=byte_count)
 
@@ -290,7 +290,7 @@ class ActiveCount(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
+
         #Clear Switch state
         delete_all_flows(self.controller)
 
@@ -305,8 +305,8 @@ class ActiveCount(base_tests.SimpleDataPlane):
 
 
 class LookupMatchedCount(base_tests.SimpleDataPlane):
-    
-    """Verify that lookup_count and matched_count counter in the Table_Stats reply 
+
+    """Verify that lookup_count and matched_count counter in the Table_Stats reply
         increments in accordance with the packets looked up and matched with the flows in the table"""
 
     def runTest(self):
@@ -316,7 +316,7 @@ class LookupMatchedCount(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
+
         #Clear Switch state
         delete_all_flows(self.controller)
 
@@ -349,17 +349,17 @@ class LookupMatchedCount(base_tests.SimpleDataPlane):
 class TxPktPerQueue(base_tests.SimpleDataPlane):
 
     """Verify that tx_packets in the queue_stats reply increments in accordance with the number of transmitted packets"""
-    
+
     def runTest(self):
         logging.info("Running TxPktPerQueue test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
+
         # Get queue stats from switch (retrieve current state)
         (queue_stats, p) = get_queuestats(self, ofp.OFPP_ALL, ofp.OFPQ_ALL)
-  
+
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]
             egress_port = of_ports[(idx + 1) % len(of_ports)]
@@ -376,28 +376,28 @@ class TxPktPerQueue(base_tests.SimpleDataPlane):
 
                 #Insert a flow with enqueue action to queues configured on egress_port
                 (pkt, match) = enqueue(self, ingress_port, egress_port, egress_queue_id)
-              
+
                 #Send packet on the ingress_port and verify its received on egress_port
                 send_packet(self, pkt, ingress_port, egress_port)
-                
+
                 verify_queue_stats(self, egress_port, egress_queue_id,
                                    initial=initial_stats, pkts=1)
-       
+
 
 class TxBytPerQueue(base_tests.SimpleDataPlane):
 
     """Verify that tx_bytes in the queue_stats reply increments in accordance with the number of transmitted bytes"""
-    
+
     def runTest(self):
         logging.info("Running TxBytPerQueue test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-        
+
         # Get queue stats from switch (retrieve current state)
         (queue_stats, p) = get_queuestats(self, ofp.OFPP_ALL, ofp.OFPQ_ALL)
-  
+
         for idx in range(len(of_ports)):
             ingress_port = of_ports[idx]
             egress_port = of_ports[(idx + 1) % len(of_ports)]
@@ -414,28 +414,28 @@ class TxBytPerQueue(base_tests.SimpleDataPlane):
 
                 #Insert a flow with enqueue action to queues configured on egress_port
                 (pkt, match) = enqueue(self, ingress_port, egress_port, egress_queue_id)
-              
+
                 #Send packet on the ingress_port and verify its received on egress_port
                 send_packet(self, pkt, ingress_port, egress_port)
-                
+
                 verify_queue_stats(self, egress_port, egress_queue_id,
                                    initial=initial_stats,
                                    bytes=len(str(pkt)))
-       
-       
+
+
 class RxDrops(base_tests.SimpleDataPlane):
 
     """Verify that rx_dropped counters in the Port_Stats reply increments in accordance with the packets dropped by RX"""
 
     def runTest(self):
-        
+
         logging.info("Running Rx_Drops test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -454,14 +454,14 @@ class TxDrops(base_tests.SimpleDataPlane):
     """Verify that tx_dropped counters in the Port_Stats reply increments in accordance with the packets dropped by TX"""
 
     def runTest(self):
-        
+
         logging.info("Running Tx_Drops test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -469,26 +469,26 @@ class TxDrops(base_tests.SimpleDataPlane):
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[1])
-        
+
         tx_drp = counter[5]
         logging.info("Transmitted dropped count is :" + str(tx_drp))
 
 
 class RxErrors(base_tests.SimpleDataPlane):
 
-    """Verify that rx_errors counters in the Port_Stats reply increments in accordance with number of recieved error  
+    """Verify that rx_errors counters in the Port_Stats reply increments in accordance with number of recieved error
           This is a super-set of more specific receive errors and should be greater than or equal to the sum of all
                     rx_*_err values"""
 
     def runTest(self):
-        
+
         logging.info("Running Rx_Errors test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -497,7 +497,7 @@ class RxErrors(base_tests.SimpleDataPlane):
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[0])
 
-        rx_err = counter[6]    
+        rx_err = counter[6]
         logging.info("Recieve Errors count is :" + str(rx_err))
 
 
@@ -506,14 +506,14 @@ class TxErrors(base_tests.SimpleDataPlane):
     """Verify that Tx_errors counters in the Port_Stats reply increments in accordance with number of trasmit error"""
 
     def runTest(self):
-        
+
         logging.info("Running Tx_Errors test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -521,7 +521,7 @@ class TxErrors(base_tests.SimpleDataPlane):
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[0])
-        
+
         tx_err = counter[7]
         logging.info("Trasmit Error count is :" + str(tx_err))
 
@@ -531,14 +531,14 @@ class RxFrameErr(base_tests.SimpleDataPlane):
     """Verify that rx_frm_err counters in the Port_Stats reply increments in accordance with the number of frame alignment errors"""
 
     def runTest(self):
-        
+
         logging.info("Running Rx_Frame_Err test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -546,7 +546,7 @@ class RxFrameErr(base_tests.SimpleDataPlane):
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[0])
-        
+
         rx_fr_err = counter[8]
         logging.info("Recieve Frame Errors count is :" + str(rx_fr_err))
 
@@ -557,14 +557,14 @@ class RxOErr(base_tests.SimpleDataPlane):
     """Verify that rx_over_err counters in the Port_Stats reply increments in accordance with the number of with RX overrun"""
 
     def runTest(self):
-        
+
         logging.info("Running Rx_O_Err test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -572,7 +572,7 @@ class RxOErr(base_tests.SimpleDataPlane):
 
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[0])
-        
+
         rx_over_err = counter[9]
         logging.info("Recieve Overrun Errors  count is :" + str(rx_over_err))
 
@@ -584,14 +584,14 @@ class RxCrcErr(base_tests.SimpleDataPlane):
     """Verify that rx_crc_err counters in the Port_Stats reply increments in accordance with the number of crc errors"""
 
     def runTest(self):
-        
+
         logging.info("Running Port_Counter_9 test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -600,7 +600,7 @@ class RxCrcErr(base_tests.SimpleDataPlane):
         # Send Port_Stats request for the ingress port (retrieve current counter state)
         (counter) = get_portstats(self, of_ports[0])
 
-        rx_crc_err = counter[10]   
+        rx_crc_err = counter[10]
         logging.info("Recieve CRC Errors  count is :" + str(rx_crc_err))
 
 
@@ -610,14 +610,14 @@ class Collisions(base_tests.SimpleDataPlane):
     """Verify that collisons counters in the Port_Stats reply increments in accordance with the collisions encountered by the switch """
 
     def runTest(self):
-        
+
         logging.info("Running Collisions test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Port_Stats Request")
@@ -637,14 +637,14 @@ class TxErrorPerQueue(base_tests.SimpleDataPlane):
     """Verify that tx_errors in the queue_stats reply increments in accordance with the number of packets dropped due to overrun """
 
     def runTest(self):
-        
+
         logging.info("Running TxErrorPerQueue test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) > 1, "Not enough ports for test")
-         
-        #Clear switch State        
+
+        #Clear switch State
         delete_all_flows(self.controller)
 
         logging.info("Send Queue_Stats Request")

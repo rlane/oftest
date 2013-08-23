@@ -169,17 +169,17 @@ class DataPlane(Thread):
         if config is None:
             self.config = {}
         else:
-            self.config = config 
+            self.config = config
 
         ############################################################
         #
         # The platform/config can provide a custom DataPlanePort class
         # here if you have a custom implementation with different
-        # behavior. 
+        # behavior.
         #
         # Set config.dataplane.portclass = MyDataPlanePortClass
         # where MyDataPlanePortClass has the same interface as the class
-        # DataPlanePort defined here. 
+        # DataPlanePort defined here.
         #
         if "dataplane" in self.config and "portclass" in self.config["dataplane"]:
             self.dppclass = self.config["dataplane"]["portclass"]

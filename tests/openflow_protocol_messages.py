@@ -1,5 +1,5 @@
 """These tests fall under Conformance Test-Suite (OF-SWITCH-1.0.0 TestCases).
-    Refer Documentation -- Detailed testing methodology 
+    Refer Documentation -- Detailed testing methodology
     <Some of test-cases are directly taken from oftest> """
 
 "Test Suite 2 --> Openflow Protocol messages"
@@ -21,35 +21,35 @@ from oftest.testutils import *
 from time import sleep
 from FuncUtils import *
 
-class FeaturesRequest(base_tests.SimpleProtocol): 
+class FeaturesRequest(base_tests.SimpleProtocol):
 
-    """Verify Features_Request-Reply is implemented 
+    """Verify Features_Request-Reply is implemented
     a) Send OFPT_FEATURES_REQUEST
 	b) Verify OFPT_FEATURES_REPLY is received without errors"""
 
     def runTest(self):
         logging.info("Running Features_Request test")
-        
+
         of_ports = config["port_map"].keys()
         of_ports.sort()
-        
+
         #Clear switch state
         delete_all_flows(self.controller)
-        
+
         logging.info("Sending Features_Request")
         logging.info("Expecting Features_Reply")
 
         request = ofp.message.features_request()
         self.controller.message_send(request)
-        
+
         (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_FEATURES_REPLY,
                                                timeout=2)
-        self.assertTrue(response is not None, 
+        self.assertTrue(response is not None,
                         'Did not receive Features Reply')
 
 
 class ConfigurationRequest(base_tests.SimpleProtocol):
-    
+
     """Check basic Get Config request is implemented
     a) Send OFPT_GET_CONFIG_REQUEST
     b) Verify OFPT_GET_CONFIG_REPLY is received without errors"""
@@ -57,7 +57,7 @@ class ConfigurationRequest(base_tests.SimpleProtocol):
     def runTest(self):
 
         logging.info("Running Configuration_Request test ")
-        
+
         of_ports = config["port_map"].keys()
         of_ports.sort()
 
@@ -69,16 +69,16 @@ class ConfigurationRequest(base_tests.SimpleProtocol):
 
         request = ofp.message.get_config_request()
         self.controller.message_send(request)
-        
+
         (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_GET_CONFIG_REPLY,
                                                timeout=2)
-        self.assertTrue(response is not None, 
+        self.assertTrue(response is not None,
                         'Did not receive OFPT_GET_CONFIG_REPLY')
 
 class ModifyStateAdd(base_tests.SimpleProtocol):
-    
+
     """Check basic Flow Add request is implemented
-    a) Send  OFPT_FLOW_MOD , command = OFPFC_ADD 
+    a) Send  OFPT_FLOW_MOD , command = OFPFC_ADD
     c) Send ofp_table_stats request , verify active_count=1 in reply"""
 
     def runTest(self):
@@ -87,7 +87,7 @@ class ModifyStateAdd(base_tests.SimpleProtocol):
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
-        
+
         #Clear switch state
         delete_all_flows(self.controller)
 
@@ -102,7 +102,7 @@ class ModifyStateAdd(base_tests.SimpleProtocol):
 
 
 class ModifyStateDelete(base_tests.SimpleProtocol):
-    
+
     """Check Basic Flow Delete request is implemented
     a) Send OFPT_FLOW_MOD, command = OFPFC_ADD
     b) Send ofp_table_stats request , verify active_count=1 in reply
@@ -122,24 +122,24 @@ class ModifyStateDelete(base_tests.SimpleProtocol):
         logging.info("Inserting a flow entry and then deleting it")
         logging.info("Expecting the active_count=0 in table_stats_reply")
 
-        #Insert a flow matching on ingress_port 
+        #Insert a flow matching on ingress_port
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
 
         #Verify Flow inserted.
         verify_tablestats(self, expect_active=1)
 
-        #Delete the flow 
+        #Delete the flow
         nonstrict_delete(self, match)
 
         # Send Table_Stats_Request and verify flow deleted.
         verify_tablestats(self, expect_active=0)
 
-      
+
 
 class ModifyStateModify(base_tests.SimpleDataPlane):
-    
+
     """Verify basic Flow Modify request is implemented
-    a) Send OFPT_FLOW_MOD, command = OFPFC_ADD, Action A 
+    a) Send OFPT_FLOW_MOD, command = OFPFC_ADD, Action A
     b) Send OFPT_FLOW_MOD, command = OFPFC_MODIFY , with output action A'
     c) Send a packet matching the flow, verify packet implements action A' """
 
@@ -156,18 +156,18 @@ class ModifyStateModify(base_tests.SimpleDataPlane):
         logging.info("Inserting a flow entry and then modifying it")
         logging.info("Expecting the Test Packet to implement the modified action")
 
-        # Insert a flow matching on ingress_port with action A (output to of_port[1])    
+        # Insert a flow matching on ingress_port with action A (output to of_port[1])
         (pkt, match) = wildcard_all_except_ingress(self, of_ports)
-  
+
         # Modify the flow action (output to of_port[2])
         modify_flow_action(self, of_ports, match)
-        
+
         # Send the Test Packet and verify action implemented is A' (output to of_port[2])
         send_packet(self, pkt, of_ports[0], of_ports[2])
-                       
+
 
 class ReadState(base_tests.SimpleProtocol):
-    
+
     """Test that a basic Read state request (like flow_stats_get request) does not generate an error
     a) Send OFPT_FLOW_MOD, command = OFPFC_ADD
     b) Send ofp_flow_stats request
@@ -188,23 +188,23 @@ class ReadState(base_tests.SimpleProtocol):
 
         # Insert a flow with match on ingress_port
         (pkt, match ) = wildcard_all_except_ingress(self, of_ports)
-        
+
         #Verify Flow_Stats request does not generate errors
         get_flowstats(self, match)
-        
+
 class PacketOut(base_tests.SimpleDataPlane):
-    
+
     """Test packet out function
     a) Send packet out message for each dataplane port.
     b) Verify the packet appears on the appropriate dataplane port"""
-    
+
     def runTest(self):
 
         logging.info("Running Packet_Out test")
 
         of_ports = config["port_map"].keys()
         of_ports.sort()
-       
+
         #Clear Switch state
         delete_all_flows(self.controller)
 
@@ -216,7 +216,7 @@ class PacketOut(base_tests.SimpleDataPlane):
                 (simple_tcp_packet(), "simple TCP packet"),
                 (simple_eth_packet(), "simple Ethernet packet"),
                 (simple_eth_packet(pktlen=40), "tiny Ethernet packet")]:
-            
+
                 msg = ofp.message.packet_out()
                 msg.data = str(outpkt)
                 act = ofp.action.output()
@@ -232,10 +232,10 @@ class PacketOut(base_tests.SimpleDataPlane):
                 if config["relax"]:
                     exp_pkt_arg = outpkt
                     exp_port = dp_port
-                (of_port, pkt, pkt_time) = self.dataplane.poll(timeout=2, 
+                (of_port, pkt, pkt_time) = self.dataplane.poll(timeout=2,
                                                                 port_number=exp_port,
                                                                 exp_pkt=exp_pkt_arg)
-                
+
                 self.assertTrue(pkt is not None, 'Packet not received')
                 logging.info("PacketOut: got pkt from " + str(of_port))
                 if of_port is not None:
@@ -247,15 +247,15 @@ class PacketOut(base_tests.SimpleDataPlane):
                 self.assertEqual(str(outpkt), str(pkt)[:len(str(outpkt))],
                                     'Response packet does not match send packet')
 
-        
+
 class PacketIn(base_tests.SimpleDataPlane):
-    
+
     """Test basic packet_in function
-    a) Send a simple tcp packet to a dataplane port, without any flow-entry 
+    a) Send a simple tcp packet to a dataplane port, without any flow-entry
     b) Verify that a packet_in event is sent to the controller"""
-    
+
     def runTest(self):
-        
+
         logging.info("Running Packet_In test")
 
         of_ports = config["port_map"].keys()
@@ -274,40 +274,40 @@ class PacketIn(base_tests.SimpleDataPlane):
         self.dataplane.send(ingress_port, str(pkt))
         logging.info("Sending packet to dp port " + str(ingress_port) +
                     ", expecting packet_in on control plane" )
-      
+
         verify_packet_in(self, str(pkt), ingress_port, ofp.OFPR_NO_MATCH)
 
 
 class Hello(base_tests.SimpleDataPlane):
-    
+
     """Test Hello messages are implemented
     a) Create Hello messages from controller
     b) Verify switch also exchanges hello message -- (Poll the control plane)
     d) Verify the version field in the hello messages is openflow 1.0.0 """
 
     def runTest(self):
-        
+
         logging.info("Running Hello test")
 
         logging.info("Sending Hello")
         logging.info("Expecting a Hello on the control plane with version--1.0.0")
-        
+
         #Send Hello message
         request = ofp.message.hello()
         (response, pkt) = self.controller.poll(exp_msg=ofp.OFPT_HELLO,
                                                timeout=1)
-        self.assertTrue(response is not None, 
-                               'Switch did not exchange hello message in return') 
+        self.assertTrue(response is not None,
+                               'Switch did not exchange hello message in return')
         self.assertTrue(response.version == 0x01, 'switch openflow-version field is not 1.0.0')
 
 
 
 class EchoWithoutBody(base_tests.SimpleProtocol):
-    
+
     """Test basic echo-reply is implemented
     a)  Send echo-request from the controller side, note echo body is empty here.
     b)  Verify switch responds back with echo-reply with same xid """
-    
+
     def runTest(self):
 
         logging.info("Running Echo_Without_Body test")
@@ -330,7 +330,7 @@ class BarrierRequestReply(base_tests.SimpleProtocol):
     """ Check basic Barrier request is implemented
     a) Send OFPT_BARRIER_REQUEST
     c) Verify OFPT_BARRIER_REPLY is recieved"""
-    
+
     def runTest(self):
 
         logging.info("Running Barrier_Request_Reply test")

@@ -18,7 +18,7 @@ from oftest.testutils import *
 
 def flow_caps_common(obj, is_exact=True):
     """
-    The common function for 
+    The common function for
 
     @param obj The calling object
     @param is_exact If True, checking exact match; else wildcard
@@ -102,7 +102,7 @@ class FillTableExact(base_tests.SimpleProtocol):
     count_check variable.
 
     A switch may have multiple tables.  The default behaviour
-    is to count all the flows in all the tables.  By setting 
+    is to count all the flows in all the tables.  By setting
     the parameter "caps_table_idx" in the configuration array,
     you can control which table to check.
     """
@@ -126,7 +126,7 @@ class FillTableWC(base_tests.SimpleProtocol):
     count_check variable.
 
     A switch may have multiple tables.  The default behaviour
-    is to count all the flows in all the tables.  By setting 
+    is to count all the flows in all the tables.  By setting
     the parameter "caps_table_idx" in the configuration array,
     you can control which table to check.
 
