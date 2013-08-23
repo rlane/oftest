@@ -50,31 +50,31 @@ class AllWildcardMatch(base_tests.SimpleDataPlane):
         wildcard_all(self, of_ports)
 
         #check for different  match fields and verify packet implements the action specified in the flow
-        pkt1 = simple_tcp_packet(eth_src="00:01:01:01:01:01");
+        pkt1 = simple_tcp_packet(eth_src="00:01:01:01:01:01")
         self.dataplane.send(of_ports[0], str(pkt1))
         receive_pkt_check(self.dataplane, pkt1, [yes_ports], no_ports, self)
        
-        pkt2 = simple_tcp_packet(eth_dst="00:01:01:01:01:01");    
+        pkt2 = simple_tcp_packet(eth_dst="00:01:01:01:01:01")    
         self.dataplane.send(of_ports[0], str(pkt2))
         receive_pkt_check(self.dataplane, pkt2, [yes_ports], no_ports, self)
         
-        pkt3 = simple_tcp_packet(ip_src="192.168.2.1");
+        pkt3 = simple_tcp_packet(ip_src="192.168.2.1")
         self.dataplane.send(of_ports[0], str(pkt3))
         receive_pkt_check(self.dataplane, pkt3, [yes_ports], no_ports, self)
         
-        pkt4 = simple_tcp_packet(ip_dst="192.168.2.2");
+        pkt4 = simple_tcp_packet(ip_dst="192.168.2.2")
         self.dataplane.send(of_ports[0], str(pkt4))
         receive_pkt_check(self.dataplane, pkt4, [yes_ports], no_ports, self)
         
-        pkt5 = simple_tcp_packet(ip_tos=2);
+        pkt5 = simple_tcp_packet(ip_tos=2)
         self.dataplane.send(of_ports[0], str(pkt5))
         receive_pkt_check(self.dataplane, pkt5, [yes_ports], no_ports, self)
        
-        pkt6 = simple_tcp_packet(tcp_sport=8080);
+        pkt6 = simple_tcp_packet(tcp_sport=8080)
         self.dataplane.send(of_ports[0], str(pkt6))
         receive_pkt_check(self.dataplane, pkt6, [yes_ports], no_ports, self)
               
-        pkt7 = simple_tcp_packet(tcp_dport=8081);
+        pkt7 = simple_tcp_packet(tcp_dport=8081)
         self.dataplane.send(of_ports[0], str(pkt7))
         receive_pkt_check(self.dataplane, pkt7, [yes_ports], no_ports, self)
 
@@ -113,7 +113,7 @@ class EthernetSrcAddress(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_src='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_src='00:01:01:01:01:02')
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -150,7 +150,7 @@ class EthernetDstAddress(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send Non-matching packet
-        pkt2 = simple_eth_packet(eth_dst='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_dst='00:01:01:01:01:02')
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #Verify PacketIn event gets triggered
@@ -190,7 +190,7 @@ class EthernetType(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , 
-        pkt2 = simple_eth_packet(eth_type=0x0806);
+        pkt2 = simple_eth_packet(eth_type=0x0806)
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #verify Packetin event gets triggered.
@@ -266,7 +266,7 @@ class VlanId(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send Non-matching packet, i.e packet with different Vlan Id
-        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=4);
+        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=4)
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #Verify PacketIn event gets triggered
@@ -305,7 +305,7 @@ class VlanPCP(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Send tagged packet with same vlan_id but different vlan priority
-        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=1, vlan_pcp=20);
+        pkt2 = simple_tcp_packet(dl_vlan_enable=True, vlan_vid=1, vlan_pcp=20)
         self.dataplane.send(of_ports[0], str(pkt2))
 
         #Verify Packet_In event gets triggered
@@ -343,17 +343,17 @@ class MultipleHeaderFieldL2(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet (only eth_dst is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:02:01:01');
+        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:02:01:01')
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (only eth_src is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:02', eth_dst='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_type=0x88cc, eth_src='00:01:01:01:01:02', eth_dst='00:01:01:01:01:02')
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (only ether_type is different) , verify Packetin event gets triggered.
-        pkt2 = simple_eth_packet(eth_type=0x0806, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:01:01:02');
+        pkt2 = simple_eth_packet(eth_type=0x0806, eth_src='00:01:01:01:01:01', eth_dst='00:01:01:01:01:02')
         self.dataplane.send(of_ports[0], str(pkt2))
         
         #Verify packet_in event gets triggered
@@ -392,7 +392,7 @@ class IpTos(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
-        pkt2 = simple_tcp_packet(ip_tos=4);
+        pkt2 = simple_tcp_packet(ip_tos=4)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -429,7 +429,7 @@ class IpProtocol(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
-        pkt2 = simple_icmp_packet();
+        pkt2 = simple_icmp_packet()
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -466,7 +466,7 @@ class TcpSrcPort(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=540);
+        pkt2 = simple_tcp_packet(tcp_sport=540)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -502,7 +502,7 @@ class TcpDstPort(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_dport=541);
+        pkt2 = simple_tcp_packet(tcp_dport=541)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -538,7 +538,7 @@ class UdpSrcPort(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_udp_packet(udp_sport=540);
+        pkt2 = simple_udp_packet(udp_sport=540)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -574,7 +574,7 @@ class UdpDstPort(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_udp_packet(udp_dport=541);
+        pkt2 = simple_udp_packet(udp_dport=541)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -610,7 +610,7 @@ class ICMPType(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_icmp_packet(icmp_type=10);
+        pkt2 = simple_icmp_packet(icmp_type=10)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -646,7 +646,7 @@ class ICMPCode(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_icmp_packet(icmp_code=10);
+        pkt2 = simple_icmp_packet(icmp_code=10)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -720,7 +720,7 @@ class ArpSenderIP(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
-        pkt2 = simple_arp_packet(ip_snd="10.10.0.10");
+        pkt2 = simple_arp_packet(ip_snd="10.10.0.10")
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -757,7 +757,7 @@ class ArpTargetIP(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
         
         #Create a non-matching packet , verify packet_in get generated
-        pkt2 = simple_arp_packet(ip_tgt="10.10.0.10");
+        pkt2 = simple_arp_packet(ip_tgt="10.10.0.10")
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -794,7 +794,7 @@ class ExactMatch(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet , verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=540);
+        pkt2 = simple_tcp_packet(tcp_sport=540)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -831,12 +831,12 @@ class MultipleHeaderFieldL4(base_tests.SimpleDataPlane):
         receive_pkt_check(self.dataplane, pkt, [yes_ports], no_ports, self)
 
         #Sending non matching packet (tcp_dport different), verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=111, tcp_dport=541);
+        pkt2 = simple_tcp_packet(tcp_sport=111, tcp_dport=541)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
         #Sending non matching packet (tcp_sport different), verify Packetin event gets triggered.
-        pkt2 = simple_tcp_packet(tcp_sport=100, tcp_dport=112);
+        pkt2 = simple_tcp_packet(tcp_sport=100, tcp_dport=112)
         self.dataplane.send(of_ports[0], str(pkt2))
         verify_packet_in(self, str(pkt2), of_ports[0], ofp.OFPR_NO_MATCH)
 
@@ -867,7 +867,7 @@ class ExactMatchPrio(base_tests.SimpleDataPlane):
 
         #Insert two Overlapping Flows : Exact Match and Wildcard All.
         (pkt, match) = exact_match_with_prio(self, of_ports, priority=10) 
-        (pkt2, match2) = wildcard_all(self, of_ports, priority=20);  
+        (pkt2, match2) = wildcard_all(self, of_ports, priority=20)  
         
         #Sending packet matching both the flows , 
         self.dataplane.send(of_ports[0], str(pkt2))

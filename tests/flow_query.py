@@ -1336,7 +1336,7 @@ class Switch:
         query_match.wildcards = ofp.OFPFW_ALL
         request.match    = query_match
         request.table_id = 0xff
-        request.out_port = ofp.OFPP_NONE;
+        request.out_port = ofp.OFPP_NONE
         self.controller.message_send(request)
         # <TBD>
         # Glue together successive reponse messages for stats reply.
@@ -1625,7 +1625,7 @@ class Flow_Add_5(base_tests.SimpleProtocol):
         logging.info("Sending flow adds to switch")
         for fc in ft.values():          # Randomizes order of sending
             logging.info("Adding flow:")
-            logging.info(str(fc));
+            logging.info(str(fc))
             self.assertTrue(sw.flow_add(fc), "Failed to add flow")
 
         # Do barrier, to make sure all flows are in
@@ -1838,7 +1838,7 @@ class Flow_Add_6(base_tests.SimpleProtocol):
         logging.info("Sending flow adds to switch")
         for fc in ft.values():          # Randomizes order of sending
             logging.info("Adding flow:")
-            logging.info(str(fc));
+            logging.info(str(fc))
             self.assertTrue(sw.flow_add(fc), "Failed to add flow")
 
         # Do barrier, to make sure all flows are in
@@ -1874,7 +1874,7 @@ class Flow_Add_6(base_tests.SimpleProtocol):
 
         fc.send_rem = False
         logging.info("Sending flow add switch")
-        logging.info(str(fc));
+        logging.info(str(fc))
         self.assertTrue(sw.flow_add(fc), "Failed to add flow")
 
         # Do barrier, to make sure all flows are in
@@ -1920,7 +1920,7 @@ class Flow_Add_6(base_tests.SimpleProtocol):
 #    but with different actions
 # 4. Send flow adds for F1 and F2 to switch
 # 5. Verify flow definitions in switch
-# 6. Test PASSED iff 1 flow returned by switch, matching configuration of F2;
+# 6. Test PASSED iff 1 flow returned by switch, matching configuration of F2
 #    else test FAILED
 
 class Flow_Add_7(base_tests.SimpleProtocol):
@@ -2291,7 +2291,7 @@ class Flow_Mod_1(base_tests.SimpleProtocol):
 # 7. Verify flow table in swtich
 # 8. Test PASSED iff all flows sent to switch in steps 3 and 6 above,
 #    are returned in step 7 above, each with correct (original or modified)
-#    action list;
+#    action list
 #    else test FAILED
         
 class Flow_Mod_2(base_tests.SimpleProtocol):
@@ -2336,7 +2336,7 @@ class Flow_Mod_2(base_tests.SimpleProtocol):
         logging.info("Sending flow adds to switch")
         for fc in ft.values():          # Randomizes order of sending
             logging.info("Adding flow:")
-            logging.info(str(fc));
+            logging.info(str(fc))
             self.assertTrue(sw.flow_add(fc), "Failed to add flow")
 
         # Do barrier, to make sure all flows are in
@@ -2650,7 +2650,7 @@ class Flow_Mod_3_1(base_tests.SimpleProtocol):
 # 3. Send strict flow delete for F to switch
 # 4. Verify flow table in swtich
 # 6. Test PASSED iff all flows sent to switch in step 2 above,
-#    less flow removed in step 3 above, are returned in step 4 above;
+#    less flow removed in step 3 above, are returned in step 4 above
 #    else test FAILED
 
 class Flow_Del_1(base_tests.SimpleProtocol):
@@ -2771,7 +2771,7 @@ class Flow_Del_1(base_tests.SimpleProtocol):
 # 7. Verify flow table in switch
 # 8. Test PASSED iff all flows sent to switch in step 3 above, less flows
 #    removed in step 6 above (i.e. those that match F'), are returned
-#    in step 7 above;
+#    in step 7 above
 #    else test FAILED
 
 class Flow_Del_2(base_tests.SimpleProtocol):
@@ -2816,7 +2816,7 @@ class Flow_Del_2(base_tests.SimpleProtocol):
         logging.info("Sending flow adds to switch")
         for fc in ft.values():          # Randomizes order of sending
             logging.info("Adding flow:")
-            logging.info(str(fc));
+            logging.info(str(fc))
             self.assertTrue(sw.flow_add(fc), "Failed to add flow")
 
         # Do barrier, to make sure all flows are in

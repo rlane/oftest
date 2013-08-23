@@ -169,7 +169,7 @@ class DataPlane(Thread):
         if config is None:
             self.config = {}
         else:
-            self.config = config; 
+            self.config = config 
 
         ############################################################
         #

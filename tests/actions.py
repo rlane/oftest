@@ -389,7 +389,7 @@ class ForwardTable(base_tests.SimpleDataPlane):
         (pkt, match) = wildcard_all(self, of_ports)
         
         #Create a packet out message
-        pkt_out = ofp.message.packet_out();
+        pkt_out = ofp.message.packet_out()
         pkt_out.data = str(pkt)
         pkt_out.in_port = of_ports[0]
         pkt_out.buffer_id = 0xffffffff

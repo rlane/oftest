@@ -33,7 +33,7 @@ def flow_caps_common(obj, is_exact=True):
     match = packet_to_flow_match(obj, pkt)
     obj.assertTrue(match is not None, "Could not generate flow match from pkt")
     for port in of_ports:
-        break;
+        break
     match.in_port = port
     match.ipv4_src = 1
     request = ofp.message.flow_add()

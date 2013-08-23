@@ -158,8 +158,8 @@ class SingleFlowStats(base_tests.SimpleDataPlane):
         act = ofp.action.output()
 
         # build flow
-        ingress_port = of_ports[0];
-        egress_port = of_ports[1];
+        ingress_port = of_ports[0]
+        egress_port = of_ports[1]
         logging.info("Ingress " + str(ingress_port) + 
                        " to egress " + str(egress_port))
         match.in_port = ingress_port
@@ -230,9 +230,9 @@ class MultiFlowStats(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) >= 3, "Not enough ports for test")
-        ingress_port = of_ports[0];
-        egress_port1 = of_ports[1];
-        egress_port2 = of_ports[2];
+        ingress_port = of_ports[0]
+        egress_port1 = of_ports[1]
+        egress_port2 = of_ports[2]
 
         delete_all_flows(self.controller)
 
@@ -307,9 +307,9 @@ class AllPortStats(base_tests.SimpleDataPlane):
         of_ports = config["port_map"].keys()
         of_ports.sort()
         self.assertTrue(len(of_ports) >= 3, "Not enough ports for test")
-        port0 = of_ports[0];
-        port1 = of_ports[1];
-        port2 = of_ports[2];
+        port0 = of_ports[0]
+        port1 = of_ports[1]
+        port2 = of_ports[2]
 
         # construct some packets and flows, send to switch
         pkt1 = simple_tcp_packet()
